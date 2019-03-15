@@ -1,0 +1,25 @@
+.search-banner-row{
+    width: 80%;
+    position: absolute;
+    left: 10%;
+    bottom: 100px;
+    z-index: 1;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 5px;
+    padding: 10px
+}
+
+.price-search-content{
+    width: 400px
+}
+
+.ant-select-selection{
+    height: 100%;
+    display: flex;
+    align-items: center
+}
+
+.ant-select-selection__rendered{
+    width: 100%
+}
