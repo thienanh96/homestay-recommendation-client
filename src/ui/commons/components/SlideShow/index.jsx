@@ -157,13 +157,20 @@ export default class SlideShow extends React.Component {
         this.carousel.prev();
     }
 
-    componentDidMount() {
-        this.adjustSlideshowOnResize(window.innerWidth);
+    componentWillReceiveProps(nextProps) {
+        if (this.props.initialSlideToShow !== nextProps.initialSlideToShow) {
+            this.adjustSlideshowOnResize(window.innerWidth, nextProps.initialSlideToShow)
+        }
     }
 
-    adjustSlideshowOnResize(width) {
-        const { initialSlideToShow } = this.props;
-        let slidesToShow = initialSlideToShow ? initialSlideToShow : 4;
+    componentDidMount() {
+        this.adjustSlideshowOnResize(window.innerWidth, this.props.initialSlideToShow);
+    }
+
+    adjustSlideshowOnResize(width, initialSlideToShow) {
+		console.log("TCL: SlideShow -> adjustSlideshowOnResize -> initialSlideToShow", initialSlideToShow)
+        if(!initialSlideToShow) return;
+        let slidesToShow = initialSlideToShow 
         if (width <= 576) {
             this.setState({
                 slidesToShow: 1
@@ -185,7 +192,6 @@ export default class SlideShow extends React.Component {
 
     render() {
         const { url_cover, style, contentSlides } = this.props;
-        console.log('TCL: SlideShow -> render -> contentSlides', contentSlides)
         const props = {
             dots: true,
             infinite: true,

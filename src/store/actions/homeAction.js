@@ -4,7 +4,8 @@ import {
     GET_BEST_HOMESTAY_SUCCESS,
     GET_BEST_TRAVELLER_FAILURE,
     GET_BEST_TRAVELLER_REQUEST,
-    GET_BEST_TRAVELLER_SUCCESS
+    GET_BEST_TRAVELLER_SUCCESS,
+    GET_CONFORM_HOMESTAY_REQUEST
 } from "../constants/home";
 
 
@@ -22,5 +23,14 @@ export const getBestTravellerRequest = (params) => {
         params
     }
 }
+
+export const getConformHomstayRequest = (limit,offset) => {
+    return {
+        type: GET_CONFORM_HOMESTAY_REQUEST,
+        limit,
+        offset
+    }
+}
+
 
 

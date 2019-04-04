@@ -1,0 +1,22 @@
+.ant-modal-body{
+    padding-top: 10px !important;
+}
+
+.ant-modal-header{
+    background-color: rgb(255, 153, 0);
+    font-weight: 600
+}
+.ant-modal-title{
+    font-weight: 600;
+    font-size: 20px;
+    color: white
+}
+
+.ant-tabs-tab{
+    color: rgb(255, 153, 0);
+}
+
+.ant-tabs-tab-active{
+    color: rgb(255, 153, 0) !important;
+    border-bottom: 2px solid black !important;
+}

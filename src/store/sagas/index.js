@@ -1,12 +1,14 @@
 // import 'regenerator-runtime/runtime';
 import { put, fork, takeLatest, all } from "redux-saga/effects";
 
-import formActionSaga from "redux-form-saga";
-import { getHomestaySaga } from './homestay'
-import { getBestHomestaySaga } from './home'
-import { getDetailHomestaySaga } from './detailHomestay'
-
+import { getHomestaySaga, createHomestaySaga, createHomestaySimilaritySaga } from './homestay'
+import { getBestHomestaySaga, getConformHomestaysSaga } from './home'
+import { getDetailHomestaySaga, rateDetailHomestaySaga, getSimilarHomestaySaga } from './detailHomestay'
+import { getCommentsSaga, createCommentSaga } from './comments'
 import authSaga, { logoutSaga } from "./auth";
+import { getPostsSaga, createPostSaga } from './community'
+import { getRateHomestaySaga } from './rateHomestay'
+import { updateProfileSaga,getProfileSaga} from './profile'
 
 // Root sagas
 // Single entry point to start all sagas at once
@@ -15,6 +17,18 @@ export default function* rootSaga() {
     authSaga(),
     getHomestaySaga(),
     getBestHomestaySaga(),
-    getDetailHomestaySaga()
+    getDetailHomestaySaga(),
+    rateDetailHomestaySaga(),
+    getCommentsSaga(),
+    createCommentSaga(),
+    getSimilarHomestaySaga(),
+    getPostsSaga(),
+    getRateHomestaySaga(),
+    createPostSaga(),
+    getConformHomestaysSaga(),
+    createHomestaySaga(),
+    createHomestaySimilaritySaga(),
+    updateProfileSaga(),
+    getProfileSaga()
   ]);
 }

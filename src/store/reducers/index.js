@@ -5,6 +5,10 @@ import authReducer from './auth'
 import homeReducer from './home'
 import guiChangeReducer from './gui-change'
 import detailHomestayReducer from './detailHomestay'
+import commentsReducer from './comments'
+import communityReducer from './community'
+import rateHomestayReducer from './rateHomestay'
+import profileReducer from './profile'
 
 const IndexReducer = combineReducers({
   form,
@@ -12,7 +16,11 @@ const IndexReducer = combineReducers({
   authReducer,
   homeReducer,
   guiChangeReducer,
-  detailHomestayReducer
+  detailHomestayReducer,
+  commentsReducer,
+  communityReducer,
+  rateHomestayReducer,
+  profileReducer
 });
 
 export default IndexReducer;

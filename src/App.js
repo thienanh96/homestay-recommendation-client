@@ -17,6 +17,8 @@ import { Provider } from "react-redux";
 import Homepage from './ui/pages/homepage';
 import Homestays from './ui/pages/homestays'
 import DetailHomestay from './ui/pages/DetailHomestay'
+import Community from './ui/pages/Community'
+import Profile from './ui/pages/Profile'
 import "./App.css";
 
 var store = getStore();
@@ -36,6 +38,8 @@ export default class App extends Component {
                     <Route exact path="/" component={Homepage} />
                     <Route exact path="/homestays" component={Homestays} />
                     <Route exact path="/homestays/:id" component={DetailHomestay} />
+                    <Route exact path="/community" component={Community} />
+                    <Route exact path="/profile" component={Profile} />}
                   </Switch>
                 </LayoutWeb>
               </React.Fragment>

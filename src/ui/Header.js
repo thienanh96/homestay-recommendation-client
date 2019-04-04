@@ -61,20 +61,20 @@ class HeaderWeb extends React.Component {
 
     render() {
         return (
-            <React.Fragment>
+            <React.Fragment >
                 <ModalLogin
                     close={this.closeModalLogin}
                     show={this.state.showModalLogin}
                 />
                 <Affix>
-                    <Header className="nav-header">
+                    <Header className="nav-header" style={{ marginBottom: '20px' }}>
                         <Row>
-                            <Col sm={0} md={4}>
+                            <Col sm={0} md={3}>
                             </Col>
-                            <Col sm={24} md={16}>
+                            <Col sm={24} md={18}>
                                 {
                                     this.props.showStatusHeader && <Row>
-                                        <Col md={12} sm={8}>
+                                        <Col md={12} sm={6}>
                                             <div className="search-logo">
                                                 <div className="logo">
                                                     <div>HomestayHub</div>
@@ -82,7 +82,7 @@ class HeaderWeb extends React.Component {
                                                 {/* <SearchBar /> */}
                                             </div>
                                         </Col>
-                                        <Col md={12} sm={16}>
+                                        <Col md={12} sm={18} style={{ height: '64px' }}>
                                             <Menu
                                                 //   theme="dark"
                                                 mode="horizontal"
@@ -99,7 +99,7 @@ class HeaderWeb extends React.Component {
                                                     <NavLink to="/community">Cộng đồng</NavLink>
                                                 </Menu.Item>
                                                 <Menu.Item key="4">
-                                                    <NavLink to="/travellers">Phượt thủ</NavLink>
+                                                    <NavLink to="/profile?type=update-profile">Tài khoản</NavLink>
                                                 </Menu.Item>
                                                 {this.props.isAuthenticated ? (
                                                     <React.Fragment>
@@ -107,6 +107,7 @@ class HeaderWeb extends React.Component {
                                                         <Avatar
                                                             style={{ marginLeft: "20px" }}
                                                             size={40}
+                                                            src={this.props.user.avatar}
                                                             icon="user"
                                                         />
                                                         <div style={{ float: 'right' }}>{this.props.user.username}</div>
@@ -133,7 +134,7 @@ class HeaderWeb extends React.Component {
                                 }
 
                             </Col>
-                            <Col sm={0} md={4}>
+                            <Col sm={0} md={3}>
                             </Col>
 
 

@@ -19,7 +19,7 @@ import history from '../../../lib/history'
 import SearchBanner from "../../commons/components/SearchBanner";
 import SlideShow from '../../commons/components/SlideShow'
 import CardHomestay from '../../commons/components/HomestayCard'
-import { getBestHomestayRequest } from '../../../store/actions/homeAction'
+import { getBestHomestayRequest, getConformHomstayRequest } from '../../../store/actions/homeAction'
 import { resolve } from "path";
 import './index.css'
 import DestinationCard from '../../commons/components/DestinationCard'
@@ -69,12 +69,12 @@ class Homepage extends React.Component {
     }
 
     componentWillMount() {
-        console.log('jkjkjkjk')
         this.props.getBestHomestayRequest({
             limitParams: 10,
             offsetParams: 0,
             orderByParams: 'likes'
         })
+        this.props.getConformHomstayRequest(10, 0)
     }
 
     // componentWillReceiveProps() {
@@ -86,7 +86,7 @@ class Homepage extends React.Component {
     // }
 
     handleChangeOnSelectHomestay(items) {
-        if(!items){
+        if (!items) {
             return this.setState({
                 homestayIDs: null
             })
@@ -129,8 +129,8 @@ class Homepage extends React.Component {
 
 
     render() {
-        const { bestHomestays } = this.props
-        console.log('TCL: Homepage -> render -> bestHomestays', bestHomestays)
+        const { bestHomestays, conformHomestays } = this.props
+        console.log("TCL: Homepage -> render -> conformHomestays", conformHomestays)
         return (
             <Row>
                 <Col sm={0} md={4}>
@@ -146,7 +146,7 @@ class Homepage extends React.Component {
                         />
                     </div>
                     <div className='best-choice-homepage'>
-                        <div style={{ width: '100%', color: 'black', fontSize: '32px', fontWeight: '600' }}>
+                        <div style={{ width: '100%', color: 'black', fontSize: '32px', fontWeight: '600', marginBottom: '30px' }}>
                             Lựa chọn tốt nhất
                         </div>
                         <div style={{ width: '100%' }}>
@@ -159,6 +159,25 @@ class Homepage extends React.Component {
                                 style={{
                                     // height: '150px'
                                 }}
+                                initialSlideToShow={4}
+                            />
+                        </div>
+                    </div>
+                    <div className='best-choice-homepage'>
+                        <div style={{ width: '100%', color: 'black', fontSize: '32px', fontWeight: '600', marginBottom: '30px' }}>
+                            Lựa chọn phù hợp nhất
+                        </div>
+                        <div style={{ width: '100%' }}>
+                            <SlideShow
+                                contentSlides={conformHomestays.map((homestay, index) => <CardHomestay
+                                    key={index}
+                                    homestay={homestay}
+                                    customStyle={{ width: '100%', float: 'left', padding: '10px' }}
+                                />)}
+                                style={{
+                                    // height: '150px'
+                                }}
+                                initialSlideToShow={4}
                             />
                         </div>
                     </div>
@@ -167,14 +186,14 @@ class Homepage extends React.Component {
                             Điểm đến hàng đầu
                         </div>
                         <div style={{ width: '100%' }}>
-                                {
-                                    this.state.topDestinations.map(dest => <DestinationCard
-                                        imgSrc={dest.imgCover}
-                                        cityName={dest.name}
-                                        countHomestay={dest.countHomestay}
-                                        customStyle={{width: '25%',padding: '10px'}}
-                                    />)
-                                }
+                            {
+                                this.state.topDestinations.map(dest => <DestinationCard
+                                    imgSrc={dest.imgCover}
+                                    cityName={dest.name}
+                                    countHomestay={dest.countHomestay}
+                                    customStyle={{ width: '25%', padding: '10px' }}
+                                />)
+                            }
                         </div>
                     </div>
                 </Col>
@@ -189,7 +208,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-    getBestHomestayRequest
+    getBestHomestayRequest,
+    getConformHomstayRequest
 }
 export default Homepage = connect(
     mapStateToProps,

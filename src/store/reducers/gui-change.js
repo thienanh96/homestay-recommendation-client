@@ -9,7 +9,7 @@ const initialState = {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case CHANGE_HEADER_STATUS:
-            return { ...state, showHeaderStatus: !state.showHeaderStatus }
+            return { ...state, showHeaderStatus: action.show }
         default:
             return state;
     }

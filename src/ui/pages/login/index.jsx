@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button, Row, Content, Form, Input } from "antd";
+import { Modal, Button, Row, Content, Form, Input, message } from "antd";
 import { reduxForm, reset } from "redux-form/immutable";
 import { connect } from "react-redux";
 import { loginRequest } from "../../../store/actions/authAction";
@@ -83,9 +83,7 @@ class Login extends React.Component {
                 self.props.close();
             },
             err => {
-                console.log('TCL: Login -> err', err)
-                let errors = err.response.data.errors;
-                throw new SubmissionError(errors);
+                return message.error('Sai tên tài khoản hoặc mật khẩu!')
             }
         );
     };

@@ -1,0 +1,9 @@
+.likes-detail-homestay-card{
+    font-size: 14px;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    margin-top: 20px
+  }

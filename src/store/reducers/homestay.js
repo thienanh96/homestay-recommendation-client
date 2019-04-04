@@ -1,12 +1,17 @@
 import {
     GET_HOMESTAY_REQUEST,
     GET_HOMESTAY_FAILURE,
-    GET_HOMESTAY_SUCCESS
+    GET_HOMESTAY_SUCCESS,
+    CREATE_HOMESTAY_REQUEST,
+    CREATE_HOMESTAY_FAILURE,
+    CREATE_HOMESTAY_SUCCESS
 } from "../constants/homestay";
 // reducer with initial state
 const initialState = {
     startHomestayRequest: false,
+    startCreateHomestayRequest: false,
     homestays: [],
+    similarHomestays: [],
     total: 0
 };
 
@@ -15,9 +20,15 @@ export default function reducer(state = initialState, action) {
         case GET_HOMESTAY_REQUEST:
             return { ...state, startHomestayRequest: true }
         case GET_HOMESTAY_SUCCESS:
-            return { ...state, homestays: action.homestays, startHomestayRequest: false,total: action.total }
+            return { ...state, homestays: action.homestays, startHomestayRequest: false, total: action.total }
         case GET_HOMESTAY_FAILURE:
             return { ...state, homestays: [], startHomestayRequest: false }
+        case CREATE_HOMESTAY_REQUEST:
+            return { ...state, startCreateHomestayRequest: true }
+        case CREATE_HOMESTAY_SUCCESS:
+            return { ...state, startCreateHomestayRequest: false }
+        case CREATE_HOMESTAY_FAILURE:
+            return { ...state, startCreateHomestayRequest: false }
         default:
             return state;
     }

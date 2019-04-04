@@ -13,34 +13,64 @@ import {
     Avatar,
     Select,
     Affix,
-    Pagination
+    Pagination,
+    message
 } from "antd";
 import { connect } from "react-redux";
+import { compose } from 'redux'
 import history from '../../../lib/history'
 import './index.css'
-import { getDetailHomestayRequest } from '../../../store/actions/detailHomestayAction'
+import { getDetailHomestayRequest, rateDetailHomestay, getSimilarHomestayRequest } from '../../../store/actions/detailHomestayAction'
 import SlideShow from '../../commons/components/SlideShow'
 import { changeStatusHeader } from '../../../store/actions/guiChangeAction'
+import { getCommentsRequest, createCommentRequest } from '../../../store/actions/commentAction'
 import { resolve } from "path";
 import SearchBanner from "../../commons/components/SearchBanner";
 import ImageHomestay from '../../commons/components/ImageHomestay'
 import Header from './components/Header'
+import BoxHightlight from './components/BoxHightlight'
+import Description from './components/Description'
+import Amenity from './components/Amenity'
+import AmenityAround from './components/AmenityAround'
+import PriceRoom from './components/PriceRoom'
+import Host from './components/Host'
+import Comment from './components/Comments'
+import SimilarHomestays from './components/SimilarHomestay'
+import withSearch from '../WithSearch/index'
+import { createPostsRequest } from '../../../store/actions/communityAction'
+import { reject } from "q";
+
 
 
 class DetailHomestay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchHomestay: {
-                homestayIDs: null,
-                city: null,
-                priceRange: null,
-            }
+            commentContent: null,
+            currentHomestayID: null
         }
+
+        this.onClickLike = this.onClickLike.bind(this)
+        this.onClickDislike = this.onClickDislike.bind(this)
     }
 
     componentWillMount() {
-        this.props.getDetailHomestayRequest(10003)
+        const id = this.props.match.params.id
+        if (id && !isNaN(id)) {
+            this.setState({
+                currentHomestayID: id
+            })
+            this.props.getDetailHomestayRequest(parseInt(id))
+            this.props.getCommentsRequest(id)
+            this.props.getSimilarHomestayRequest(id)
+        } else {
+            this.props.history.push('/')
+        }
+
+    }
+
+    componentDidMount() {
+        window.scrollTo(0, 0)
     }
 
 
@@ -57,144 +87,230 @@ class DetailHomestay extends React.Component {
 
     }
 
-    handleChangeOnSelectHomestay(items) {
-        if (!items) {
-            return this.setState({
-                searchHomestay: {
-                    ...this.state.searchHomestay, homestayIDs: null
-                }
+    componentWillReceiveProps(nextProps) {
+        if (
+            this.props.location.pathname !== nextProps.location.pathname
+        ) {
+            const id = nextProps.match.params.id
+            if (id && !isNaN(id)) {
+                this.setState({
+                    currentHomestayID: id
+                })
+                this.props.getDetailHomestayRequest(parseInt(id))
+                this.props.getCommentsRequest(id)
+                this.props.getSimilarHomestayRequest(id)
+            } else {
+                this.props.history.push('/')
+            }
+        }
+    }
+
+
+    // onTypingComment(e) {
+    //     const text = e.target.value
+    //     if (text && text.trim() !== '') {
+    //         this.setState({
+    //             commentContent: text
+    //         })
+    //     }
+    // }
+
+    onPressEnterComment(e, content) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            e.target.value = null
+            const pm = new Promise((resolve, reject) => {
+                this.props.createCommentRequest(this.state.currentHomestayID, content, resolve, reject)
+            })
+            pm.then((comment) => {
+                message.success('Đăng bình luận thành công!')
+            }, () => {
+                message.error('Đăng bình luận thất bại!')
             })
         }
-        return this.setState({
-            searchHomestay: {
-                ...this.state.searchHomestay, homestayIDs: items.map(homestay => homestay.id).join(',')
-            }
+    }
+
+    toComments(dataRaw) {
+        console.log("TCL: DetailHomestay -> toComments -> dataRaw", dataRaw)
+        return dataRaw.map(raw => {
+            return {
+                author: (
+                    <div style={{ fontWeight: "600", fontSize: "14px", color: "black" }}>
+                        {raw.author}
+                    </div>
+                ),
+                avatar: raw.avatar,
+                content: <p>{raw.content}</p>,
+                sentiment: parseInt(raw.sentiment),
+                datetime: (
+                    <div style={{ fontWeight: "600", fontSize: "14px", color: "black" }}>
+                        {raw.datetime}
+                    </div>
+                )
+            };
+        });
+    }
+
+    onClickLike(e, homestayID, userID) {
+        this.props.rateDetailHomestay(homestayID, userID, 1)
+    }
+
+    onClickDislike(e, homestayID, userID) {
+        this.props.rateDetailHomestay(homestayID, userID, 2)
+    }
+
+    onClickShare(e, content, homestayID, userID) {
+        const pm = new Promise((resolve, reject) => {
+            this.props.createPostsRequest(homestayID, content, resolve, reject)
         })
-
-    }
-
-    handleChangeOnSearchCity(city) {
-        if (!city) {
-            return this.setState({
-                searchHomestay: {
-                    ...this.state.searchHomestay, city: null
-                }
-            })
-        }
-        return this.setState({
-            searchHomestay: {
-                ...this.state.searchHomestay, city: city
-            }
+        pm.then(() => {
+            message.success('Chia sẻ thành công!')
+        }, () => {
+            message.error('Chia sẻ thất bại!')
+        }).catch(err => {
+            message.error('Chia sẻ thất bại!')
         })
     }
 
-    handleChangeOnPriceRange(startPrice, endPrice) {
-        if (!startPrice || !endPrice) {
-            return this.setState({
-                searchHomestay: {
-                    ...this.state.searchHomestay, priceRange: null
-                }
-            })
-        }
-        startPrice = startPrice * 100000
-        endPrice = endPrice * 100000
-        return this.setState({
-            searchHomestay: {
-                ...this.state.searchHomestay, priceRange: [startPrice, endPrice].join(',')
-            }
-        })
-    }
-
-    async onSearchSubmit(e) {
-        const { homestayIDs, city, priceRange } = this.state.searchHomestay
-        let api = '/homestays?limit=9&offset=0'
-        if (homestayIDs) {
-            api += '&ids=' + homestayIDs
-        }
-        if (city) {
-            api += '&city=' + city
-        }
-        if (priceRange) {
-            api += '&price_range=' + priceRange
-        }
-        this.props.history.push(api)
-    }
-
-    onChangeAffixScroll(aff) {
-        this.props.changeStatusHeader()
-    }
 
 
 
     render() {
-        const { detailHomestay } = this.props
-        console.log('TCL: DetailHomestay -> render -> detailHomestay', detailHomestay)
-        const images = detailHomestay.images ? detailHomestay.images.split(',') : []
+        const { homestay_info, host_info, me_rate } = this.props.detailHomestay
+        const similarHomestays = this.props.similarHomestays
+        const { username, avatar, user_id } = this.props.myProfile
+        const comments = this.props.comments
+        if (!homestay_info) return null
+        const dataRaw = comments.map(comment => {
+            return {
+                author: comment.user.user_name,
+                avatar: comment.user.avatar,
+                content: comment.content,
+                datetime: comment.user.join_date,
+                sentiment: comment.sentiment
+            }
+        })
+        let images = []
+        const dataComment = this.toComments(dataRaw);
+        if (homestay_info.homestay_id >= 19793) {
+            images = homestay_info.images ? homestay_info.images.split('$') : []
+        } else {
+            images = homestay_info.images ? homestay_info.images.split(',') : []
+        }
+        console.log('maimes: ', images.length)
         return (
-            <Row style={{ marginTop: '20px', height: '1000px' }}>
-                <Col sm={0} md={4}>
-                </Col>
-                <Col sm={24} md={16}>
-                    <div>
-                        <Affix onChange={this.onChangeAffixScroll.bind(this)}>
-                            <SearchBanner
-                                handleChangeOnSelectHomestay={this.handleChangeOnSelectHomestay.bind(this)}
-                                handleChangeOnSearchCity={this.handleChangeOnSearchCity.bind(this)}
-                                handleChangeOnPriceRange={this.handleChangeOnPriceRange.bind(this)}
-                                onSearchSubmit={this.onSearchSubmit.bind(this)}
-                                customStyle={{ position: 'unset', width: '100%' }}
-                            />
-                        </Affix>
-                    </div>
-                    <div style={{ width: '100%', marginTop: '20px' }}>
-                        <SlideShow
-                            contentSlides={images.map((imageUrl, index) => <ImageHomestay
-                                imageUrl={imageUrl}
-                            />)}
-                            style={{
-
-                            }}
-                            initialSlideToShow={3}
+            <div style={{ width: '100%', marginTop: '20px' }}>
+                <Row> 
+                    <SlideShow
+                        contentSlides={images.map((imageUrl, index) => <ImageHomestay
+                            imageUrl={imageUrl}
+                        />)}
+                        initialSlideToShow={images.length > 3 ? 3 : 1}
+                    />
+                </Row>
+                <Row gutter={30} style={{ marginTop: '20px' }}>
+                    <Col sm={24} md={17}>
+                        <Header
+                            title={homestay_info.name ? homestay_info.name : 'Homestay '}
+                            homestayId={homestay_info.homestay_id}
+                            countLike={homestay_info.likes ? homestay_info.likes : 0}
+                            countDislike={homestay_info.dislikes ? homestay_info.dislikes : 0}
+                            city={homestay_info.city ? homestay_info.city : 'Chưa rõ'}
+                            district={homestay_info.district ? homestay_info.district : 'Chưa rõ'}
+                            customStyle
+                            onClickLike={e => this.onClickLike(e, homestay_info.homestay_id, user_id)}
+                            onClickDislike={e => this.onClickDislike(e, homestay_info.homestay_id, user_id)}
+                            onClickShare={(e, content) => this.onClickShare(e, content, homestay_info.homestay_id, user_id)}
+                            meRate={me_rate}
+                            countShare={homestay_info.shares ? homestay_info.shares : 0}
+                            updateHomestayNode={user_id === (host_info ? host_info.id : '') ? <Icon style={{ fontSize: 20 }} type="edit" /> : null}
                         />
-                    </div>
-                    <div style={{ width: '100%', marginTop: '20px' }}>
-                        <Row>
-                            <Col sm={24} md={17}>
-                                <Header
-                                    title={detailHomestay.name ? detailHomestay.name : 'Homestay '}
-                                    homestayId={detailHomestay.homestay_id}
-                                    countLike={detailHomestay.likes ? detailHomestay.likes : 0}
-                                    countDislike={detailHomestay.dislikes ? detailHomestay.dislikes : 0}
-                                    city={detailHomestay.city ? detailHomestay.city : 'Chưa rõ'}
-                                    district = {detailHomestay.district ? detailHomestay.district : 'Chưa rõ'}
-                                    customStyle
-                                />
-                            </Col>
-                            <Col sm={24} md={7}>
-                                ew
-                                </Col>
-                        </Row>
-                    </div>
-                </Col>
-                <Col sm={0} md={4}>
-                </Col>
-            </Row>
+                        <div>
+                            <BoxHightlight
+                                content={homestay_info.highlight ? homestay_info.highlight : 'Chưa rõ'}
+                            />
+                        </div>
+                        <div>
+                            <Description
+                                content={homestay_info.descriptions ? homestay_info.descriptions : 'Chưa rõ'}
+                            />
+                        </div>
+                        <div>
+                            <Amenity
+                                content={homestay_info.amenities ? homestay_info.amenities : {}}
+                            />
+                        </div>
+                        <div>
+                            <PriceRoom
+                                content={homestay_info.price_detail ? homestay_info.price_detail : {}}
+                            />
+                        </div>
+                        <div>
+                            <AmenityAround
+                                content={homestay_info.amenities_around ? homestay_info.amenities_around : {}}
+                            />
+                        </div>
+                        <div>
+                            <Host
+                                username={host_info ? host_info.user_name : 'Ẩn danh'}
+                                avatar={host_info ? host_info.avatar : 'https://www.w3schools.com/howto/img_avatar.png'}
+                                joinDate={host_info ? host_info.join_date : 'Chưa xác định'}
+                            />
+                        </div>
+                        <div>
+                            <Comment
+                                myAvatarUrl={
+                                    avatar ? avatar : "https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png"
+                                }
+                                numberOfComments={20}
+                                customStyle={{ width: "800px", position: "absolute" }}
+                                dataComment={dataComment}
+                                onPressEnterComment={this.onPressEnterComment.bind(this)}
+                            />
+                        </div>
+                    </Col>
+
+                    <Col sm={24} md={7}>
+                        {
+                            similarHomestays && <SimilarHomestays
+                                homestays={similarHomestays}
+                                currentHomestayID={this.props.match.params.id}
+                            />
+                        }
+
+                    </Col>
+                </Row>
+            </div>
+
         )
     }
 }
 
 function mapStateToProps(state) {
+    console.log("TCL: mapStateToProps -> state", state)
     return {
-        detailHomestay: state.detailHomestayReducer.detailHomestay
+        detailHomestay: state.detailHomestayReducer.detailHomestay,
+        comments: state.commentsReducer.comments,
+        myProfile: state.authReducer.user,
+        similarHomestays: state.detailHomestayReducer.similarHomestays
     }
 }
 
 const mapDispatchToProps = {
     getDetailHomestayRequest,
-    changeStatusHeader
+    rateDetailHomestay,
+    getCommentsRequest,
+    changeStatusHeader,
+    createCommentRequest,
+    getSimilarHomestayRequest,
+    createPostsRequest
 }
-export default DetailHomestay = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(DetailHomestay);
+// export default connect(
+//     mapStateToProps,
+//     mapDispatchToProps
+// )(withSearch(DetailHomestay));
+
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps), withSearch
+)(DetailHomestay)
 

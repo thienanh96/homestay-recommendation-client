@@ -34,7 +34,7 @@ const browserHistory = createHistory();
 // const loginUrl = `${process.env.REACT_APP_API_URL}/api/Clients/login`
 
 function loginApi(username, password) {
-    return post("/api/auth/login", { username, password });
+    return post("/api/auth/login", { email: username, password });
 }
 function logoutApi() {
     return post("/api/auth/logout");

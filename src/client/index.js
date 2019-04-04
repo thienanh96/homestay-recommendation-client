@@ -14,6 +14,24 @@ var request = axios.create({
 //   baseURL: apiBase,
   headers
 });
+
+function validateData(data) {
+  for (var prop in data) {
+    let dataElement = data[prop];
+    if (
+      dataElement == null ||
+      dataElement == undefined ||
+      dataElement == "null" ||
+      dataElement == "" ||
+      dataElement == "undefined"
+    ) {
+      delete data[prop];
+    }
+  }
+
+  return data;
+}
+
 // axios.defaults.baseURL = apiBase;
 // axios.defaults.headers.common = { "X-Requested-With": "XMLHttpRequest" };
 // axios.defaults.baseURL = process.env.NODE_ENV !== "production" ? apiBase : "";
@@ -44,6 +62,21 @@ export const post = (
         Authorization: "Bearer " + localStorage.getItem("token")
       }
     };
+  }
+  data = validateData(data);
+
+  let formData = new FormData();
+  if (data && data.hasFile) {
+    config = {
+      ...config,
+      header: { ...config.headers, "Content-Type": "multipart/form-data" }
+    };
+    delete data["hasFile"];
+    for (var prop in data) {
+      formData.append(prop, data[prop]);
+      delete data[prop];
+    }
+    data = formData;
   }
   return request.post(endpoint, data, config);
 };

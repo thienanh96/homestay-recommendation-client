@@ -5,7 +5,6 @@ import {
     Menu,
     Breadcrumb,
     Icon,
-    Button,
     Input,
     Row,
     Col,
@@ -13,17 +12,21 @@ import {
     Avatar,
     Select,
     Affix,
-    Pagination
+    Pagination,
+    Button,
+    message,
+    List
 } from "antd";
 import { connect } from "react-redux";
 import history from '../../../lib/history'
 import './index.css'
-import { getHomestayRequest } from '../../../store/actions/homestayAction'
+import { getHomestayRequest, createHomestayRequest, createHomestaySimilarityRequest } from '../../../store/actions/homestayAction'
 import CardHomestay from '../../commons/components/HomestayCard'
 import { changeStatusHeader } from '../../../store/actions/guiChangeAction'
 import { resolve } from "path";
 import SearchBanner from "../../commons/components/SearchBanner";
 import { createQueryString } from '../../../lib/utils'
+import Tabs from './components/Tabs'
 
 
 
@@ -36,7 +39,10 @@ class Homestays extends React.Component {
             orderByParams: null,
             cityParams: null,
             nameParams: null,
-            priceRangeParams: null
+            priceRangeParams: null,
+            showModal: false,
+            completeCreateHomestay: false,
+            defaultPagination: 1
         }
     }
 
@@ -52,26 +58,54 @@ class Homestays extends React.Component {
             idsParams: params.get('ids'),
             priceRangeParams: params.get('price_range')
         }, () => {
+            this.setState({
+                defaultPagination: Math.round(parseInt(this.state.offsetParams) / parseInt(this.state.limitParams)) + 1
+            })
+
             this.props.getHomestayRequest(this.state)
         })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (
+            this.props.location.pathname === nextProps.location.pathname && this.props.location.search !== nextProps.location.search
+        ) {
+            console.log('chay lai__________________')
+            let location = nextProps.location.search
+            const params = new URLSearchParams(location)
+            this.setState({
+                limitParams: params.get('limit'),
+                offsetParams: params.get('offset'),
+                orderByParams: params.get('order_by'),
+                cityParams: params.get('city'),
+                nameParams: params.get('name'),
+                idsParams: params.get('ids'),
+                priceRangeParams: params.get('price_range')
+            }, () => {
+                if (!isNaN(this.state.offsetParams) && !isNaN(this.state.limitParams)) {
+                    this.setState({
+                        defaultPagination: Math.round(parseInt(this.state.offsetParams) / parseInt(this.state.limitParams)) + 1
+                    })
+                }
+                this.props.getHomestayRequest(this.state)
+            })
+        }
     }
 
 
 
 
     onChangePagination(page, pageSize) {
-        let location = this.state.location;
-        let newLocation = location.replace(/offset=\d+/i, 'offset=' + parseInt(pageSize * (page - 1)))
-        this.props.getHomestayRequest(newLocation)
-        this.props.history.push('/homestays' + newLocation)
         this.setState({
-            location: newLocation
+            offsetParams: parseInt(pageSize * (page - 1))
+        }, () => {
+            const api = createQueryString(this.state)
+            this.props.history.push('/homestays' + api)
         })
-
     }
 
     handleChangeOnSelectHomestay(items) {
-        if(!items){
+        if (!items) {
             return this.setState({
                 idsParams: null
             })
@@ -83,7 +117,7 @@ class Homestays extends React.Component {
     }
 
     handleChangeOnSearchCity(city) {
-        if(!city) return;
+        if (!city) return;
         this.setState({
             cityParams: city
         })
@@ -92,7 +126,7 @@ class Homestays extends React.Component {
     handleChangeOnPriceRange(startPrice, endPrice) {
         startPrice = startPrice * 100000
         endPrice = endPrice * 100000
-        if(!startPrice || !endPrice){
+        if (!startPrice || !endPrice) {
             return;
         }
         this.setState({
@@ -101,33 +135,52 @@ class Homestays extends React.Component {
     }
 
     onSearchSubmit(e) {
-        console.log('state: ',this.state)
         this.props.getHomestayRequest(this.state)
         const api = createQueryString(this.state)
-		console.log('TCL: Homestays -> onSearchSubmit -> api', api)
         this.props.history.push('/homestays' + api)
-        // this.setState({
-        //     limitParams: params.get('limit'),
-        //     offsetParams: params.get('offset'),
-        //     orderByParams: params.get('order_by'),
-        //     cityParams: params.get('city'),
-        //     nameParams: params.get('name'),
-        //     idsParams: params.get('ids'),
-        //     priceRangeParams: params.get('price_range')
-        // }, () => {
-        //     this.props.getHomestayRequest(this.state)
-        // })
     }
 
     onChangeAffixScroll(aff) {
-        this.props.changeStatusHeader()
+        this.props.changeStatusHeader(!aff)
+    }
+
+    getNewHomestay(newHomestay) {
+        if (newHomestay) {
+            const pm = new Promise((resolve, reject) => {
+                this.props.createHomestayRequest(newHomestay, resolve, reject)
+            })
+            pm.then(data => {
+                this.setState({
+                    completeCreateHomestay: true
+                })
+                if (data && data['homestay_id']) {
+                    message.success('Tạo mới homestay thành công. Xin chờ Admin phê duyệt!')
+                    this.props.createHomestaySimilarityRequest(data['homestay_id'])
+                    return this.setState({ showModal: false })
+                } else {
+                    message.error('Tạo mới homestay thất bại')
+                }
+            }, err => {
+                this.setState({
+                    completeCreateHomestay: true
+                })
+                return message.error('Tạo mới homestay thất bại')
+            }).catch(err => {
+                this.setState({
+                    completeCreateHomestay: true
+                })
+                return message.error('Tạo mới homestay thất bại')
+            })
+
+        }
     }
 
 
     render() {
         const { homestays, total } = this.props
+        console.log("TCL: Homestays -> render -> homestays", homestays)
         return (
-            <Row style={{ marginTop: '20px' }}>
+            <Row>
                 <Col sm={0} md={4}>
                 </Col>
                 <Col sm={24} md={16}>
@@ -142,18 +195,55 @@ class Homestays extends React.Component {
                             />
                         </Affix>
                     </div>
-                    {
-                        homestays.map((homestay, index) =>
-                            <CardHomestay
-                                key={index}
-                                homestay={homestay}
-                                customStyle={{ width: '33.333%', float: 'left', padding: '10px' }}
+                    <div style={{ marginTop: '40px', marginBottom: '20px', display: 'flex', justifyContent: 'flex-end', paddingRight: '10px' }}>
+                        <Button
+                            type={'primary'}
+                            style={{ background: 'rgb(255, 153, 0)', border: 'none', height: '38px', fontSize: '18px', color: 'black' }}
+                            onClick={() => {
+                                this.setState({
+                                    showModal: true
+                                })
+                            }}
+                        >Đăng Homestay</Button>
+                    </div>
+                    <div>
+                        {
+                            this.state.showModal && <Tabs
+                                listCity={['Hà Nội']}
+                                getData={this.getNewHomestay.bind(this)}
+                                close={() => { this.setState({ showModal: false }) }}
                             />
-                        )
+                        }
+
+                    </div>
+                    {
+                        homestays && <List
+                            grid={{
+                                gutter: 8,
+                                xs: 1,
+                                sm: 2,
+                                md: 2,
+                                lg: 3,
+                                xl: 3,
+                                xxl: 3
+                            }}
+                            dataSource={homestays}
+                            renderItem={(homestay = {}, index) => (
+                                <List.Item>
+                                    <CardHomestay
+                                        key={index}
+                                        homestay={homestay}
+                                    // customStyle={{ width: '33.333%', float: 'left', padding: '10px' }}
+                                    />
+                                </List.Item>
+
+                            )}
+                        />
                     }
-                    <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
                         <Pagination
-                            defaultCurrent={1}
+                            // defaultCurrent={this.state.defaultPagination}
+                            current={this.state.defaultPagination}
                             total={total}
                             pageSize={9}
                             onChange={this.onChangePagination.bind(this)}
@@ -173,7 +263,9 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
     getHomestayRequest,
-    changeStatusHeader
+    changeStatusHeader,
+    createHomestayRequest,
+    createHomestaySimilarityRequest
 }
 export default Homestays = connect(
     mapStateToProps,

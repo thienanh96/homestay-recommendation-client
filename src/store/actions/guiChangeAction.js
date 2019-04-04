@@ -4,9 +4,10 @@ import {
 
 
 
-export const changeStatusHeader = () => {
+export const changeStatusHeader = (show) => {
     return {
         type: CHANGE_HEADER_STATUS,
+        show
     }
 }
 
