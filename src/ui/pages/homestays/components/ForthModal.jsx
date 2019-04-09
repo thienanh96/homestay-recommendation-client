@@ -30,12 +30,23 @@ class ForthModal extends Component {
 
 
     componentDidMount() {
-        const { currentHomestay } = this.props;
-        if (currentHomestay) {
-            const { amenityAround } = currentHomestay
+        const { amenities_around,images } = this.props.currentHomestay;
+		console.log("TCL: ForthModal -> componentDidMount -> images", images)
+        let amenityAround = {}
+        amenities_around.data.map(el => {
+            amenityAround = {...amenityAround,...el}
+        })
+        if (amenityAround) {
             this.props.form.setFieldsValue({
-                amenityAround
+                cuisine: amenityAround['Ẩm thực'],
+                shopping: amenityAround['Mua sắm'],
+                transport: amenityAround['Giao thông'],
+                entertainment: amenityAround['Giải trí'],
+                office: amenityAround['Cơ quan ban ngành'],
             });
+            this.setState({
+                imagesURL: images.split('$')
+            })
         }
     }
 
@@ -69,7 +80,7 @@ class ForthModal extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { getImageURL } = this.props
+        const { getImageURL,currentHomestay = {images: ''} } = this.props
         const formItemLayout = {
             labelCol: {
                 xs: { span: 33 },
@@ -118,7 +129,7 @@ class ForthModal extends Component {
                 <FormItem {...formItemLayout} label="Images">
                     <UploadImages
                         imagesURL={getImageURL}
-                        initialImagesURL={this.state.imagesURL}
+                        initialImagesURL={currentHomestay.images.split('$')}
                     />
                 </FormItem>
             </Form>

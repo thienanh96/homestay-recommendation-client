@@ -80,10 +80,8 @@ class Community extends React.Component {
                                 return null
                             }
                             let images = []
-                            if(post.homestay.homestay_id >= 19793){
+                            if(post.homestay.homestay_id){
                                 images = post.homestay.images.split('$')
-                            } else {
-                                images = post.homestay.images.split(',')
                             }
                             return (
                                 <SharePost

@@ -31,19 +31,23 @@ class ThirdModal extends Component {
 
 
     componentDidMount() {
-        const { currentHomestay } = this.props;
-        if (currentHomestay) {
-            const { maxTourist, countBed, countRoom, forFamily, kitchen, entertainment, roomAmenity, generalAmenity, highlightAmenity } = currentHomestay
+        const { amenities } = this.props.currentHomestay;
+        let priceDetail = {}
+        amenities.data.map(el => {
+            priceDetail = {...priceDetail,...el}
+        })
+        if (priceDetail) {
+			console.log("TCL: componentDidMount -> currentHomestay", priceDetail)
             this.props.form.setFieldsValue({
-                maxTourist,
-                countBed,
-                countRoom,
-                forFamily,
-                kitchen,
-                entertainment,
-                roomAmenity,
-                generalAmenity,
-                highlightAmenity
+                maxTourist: priceDetail['Phòng ngủ'][0].split(' ').filter(el => !isNaN(el))[0],
+                countRoom: priceDetail['Phòng ngủ'][1].split(' ').filter(el => !isNaN(el))[0],
+                countBed: priceDetail['Phòng ngủ'][2].split(' ').filter(el => !isNaN(el))[0],
+                countBadroom: priceDetail['Phòng tắm'][0].split(' ').filter(el => !isNaN(el))[0],
+                forFamily: priceDetail['Cho gia đình'],
+                kitchen: priceDetail['Tiện ích bếp'],
+                entertainment: priceDetail['Hoạt động giải trí'],
+                roomAmenity: priceDetail['Tiện ích phòng'],
+                generalAmenity: priceDetail['Tiện ích'],
             });
         }
     }

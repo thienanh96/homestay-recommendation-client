@@ -17,28 +17,24 @@ class SecondModal extends Component {
             submitButtonText: "Create",
             imagesURL: [],
         };
-        this.getImageURL = this.getImageURL.bind(this);
     }
 
 
     componentDidMount() {
         const { currentHomestay } = this.props;
         if (currentHomestay) {
-            const { name, city, district, main_price, price_detail, descriptions, highlight, amenities, amenities_around, images } = currentHomestay
+            const { main_price, price_detail = {data: []} } = currentHomestay
+            let priceDetail = {}
+            price_detail.data.map(el => {
+                priceDetail = {...priceDetail,...el}
+            })
+			console.log("TCL: SecondModal -> componentDidMount -> price_detail", priceDetail)
             this.props.form.setFieldsValue({
-                name,
-                city,
-                district,
-                main_price,
-                price_detail,
-                descriptions,
-                highlight,
-                amenities,
-                amenities_around,
-                images
-            });
-            this.setState({
-                imagesURL: images
+                mondayToThursday: main_price,
+                firdayToSunday: priceDetail['Thứ sáu - Chủ nhật'],
+                extraPrice: priceDetail['Phí khách tăng thêm'],
+                minCountNight: priceDetail['Số đêm tối thiểu'],
+                cancelPolicy: priceDetail['Chính sách Huỷ']
             });
         }
     }
@@ -158,11 +154,6 @@ class SecondModal extends Component {
 
     handleSubmit = e => { };
 
-    getImageURL(imageURLs) {
-        this.setState({
-            imagesURL: imageURLs
-        })
-    }
 
 
     // handleOkModal() {

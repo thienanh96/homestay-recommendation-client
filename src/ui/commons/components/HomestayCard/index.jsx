@@ -54,10 +54,8 @@ class CardHomestay extends React.Component {
         })
         if (!homestay.images) return null;
         let images = homestay.images
-        if (homestay && homestay.homestay_id >= 19793) {
+        if (homestay && homestay.homestay_id) {
             images = images.split('$')
-        } else {
-            images = images.split(',')
         }
         for (let homestayImage of images) {
             const size = await this.resizeImage(homestayImage)

@@ -28,7 +28,7 @@ class UpdateTabs extends Component {
 
     handleOkModal() {
         this.setState({
-            isLoading: true
+            isLoading: false
         });
         const finalData = this.convertToFinalData(this.state)
     }
@@ -150,7 +150,7 @@ class UpdateTabs extends Component {
     }
 
     render() {
-        const { listCity } = this.props
+        const { listCity, currentHomestay } = this.props
         return (
             <Modal
                 title="Cập nhật Homestay của bạn"
@@ -167,21 +167,25 @@ class UpdateTabs extends Component {
                     <TabPane tab="Thông tin chung" key="1">
                         <FirstModal
                             listCity={listCity}
+                            currentHomestay={currentHomestay}
                             getValuesFromFirstModal={this.getValuesFromFirstModal.bind(this)}
                         />
                     </TabPane>
                     <TabPane tab="Giá" key="2">
                         <SecondModal
+                            currentHomestay={currentHomestay}
                             getValuesFromSecondModal={this.getValuesFromSecondModal.bind(this)}
                         />
                     </TabPane>
                     <TabPane tab="Tiện nghi" key="3">\
                     <ThirdModal
+                            currentHomestay={currentHomestay}
                             getValuesFromThirdModal={this.getValuesFromThirdModal.bind(this)}
                         />
                     </TabPane>
                     <TabPane tab="Tiện nghi xung quanh và ảnh" key="4">\
                     <ForthModal
+                            currentHomestay={currentHomestay}
                             getValuesFromForthModal={this.getValuesFromForthModal.bind(this)}
                             getImageURL={(images) => {
                                 this.setState({

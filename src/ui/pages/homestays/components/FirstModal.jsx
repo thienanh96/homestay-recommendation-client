@@ -22,18 +22,13 @@ class FirstModal extends Component {
     componentDidMount() {
         const { currentHomestay } = this.props;
         if (currentHomestay) {
-            const { name, city, district, main_price, price_detail, descriptions, highlight, amenities, amenities_around, images } = currentHomestay
+            const { name, city, district, descriptions, highlight, images } = currentHomestay
             this.props.form.setFieldsValue({
                 name,
                 city,
                 district,
-                main_price,
-                price_detail,
                 descriptions,
-                highlight,
-                amenities,
-                amenities_around,
-                images
+                highlight
             });
             this.setState({
                 imagesURL: images
@@ -85,7 +80,7 @@ class FirstModal extends Component {
         return (
             <Form onChange={this.onValuesChange.bind(this)}>
                 <FormItem {...formItemLayout} label="Tên">
-                    {getFieldDecorator("title", {
+                    {getFieldDecorator("name", {
                         rules: [
                             {
                                 required: true,

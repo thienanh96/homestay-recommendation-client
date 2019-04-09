@@ -38,8 +38,10 @@ import Comment from './components/Comments'
 import SimilarHomestays from './components/SimilarHomestay'
 import withSearch from '../WithSearch/index'
 import { createPostsRequest } from '../../../store/actions/communityAction'
-import { reject } from "q";
+import { getHomestayRequest } from '../../../store/actions/homestayAction'
 
+import { reject } from "q";
+import Tabs from '../homestays/components/Tabs'
 
 
 class DetailHomestay extends React.Component {
@@ -47,7 +49,8 @@ class DetailHomestay extends React.Component {
         super(props);
         this.state = {
             commentContent: null,
-            currentHomestayID: null
+            currentHomestayID: null,
+            showModal: false
         }
 
         this.onClickLike = this.onClickLike.bind(this)
@@ -172,6 +175,37 @@ class DetailHomestay extends React.Component {
         })
     }
 
+    getNewHomestay(newHomestay) {
+        if (newHomestay) {
+            const pm = new Promise((resolve, reject) => {
+                this.props.createHomestayRequest(newHomestay, resolve, reject)
+            })
+            pm.then(data => {
+                this.setState({
+                    completeCreateHomestay: true
+                })
+                if (data && data['homestay_id']) {
+                    message.success('Tạo mới homestay thành công. Xin chờ Admin phê duyệt!')
+                    this.props.createHomestaySimilarityRequest(data['homestay_id'])
+                    return this.setState({ showModal: false })
+                } else {
+                    message.error('Tạo mới homestay thất bại')
+                }
+            }, err => {
+                this.setState({
+                    completeCreateHomestay: true
+                })
+                return message.error('Tạo mới homestay thất bại')
+            }).catch(err => {
+                this.setState({
+                    completeCreateHomestay: true
+                })
+                return message.error('Tạo mới homestay thất bại')
+            })
+
+        }
+    }
+
 
 
 
@@ -192,15 +226,13 @@ class DetailHomestay extends React.Component {
         })
         let images = []
         const dataComment = this.toComments(dataRaw);
-        if (homestay_info.homestay_id >= 19793) {
+        if (homestay_info.homestay_id) {
             images = homestay_info.images ? homestay_info.images.split('$') : []
-        } else {
-            images = homestay_info.images ? homestay_info.images.split(',') : []
         }
         console.log('maimes: ', images.length)
         return (
             <div style={{ width: '100%', marginTop: '20px' }}>
-                <Row> 
+                <Row>
                     <SlideShow
                         contentSlides={images.map((imageUrl, index) => <ImageHomestay
                             imageUrl={imageUrl}
@@ -208,6 +240,14 @@ class DetailHomestay extends React.Component {
                         initialSlideToShow={images.length > 3 ? 3 : 1}
                     />
                 </Row>
+                {
+                    this.state.showModal && <Tabs
+                        listCity={['Hà Nội']}
+                        getData={this.getNewHomestay.bind(this)}
+                        close={() => { this.setState({ showModal: false }) }}
+                        currentHomestay={homestay_info}
+                    />
+                }
                 <Row gutter={30} style={{ marginTop: '20px' }}>
                     <Col sm={24} md={17}>
                         <Header
@@ -223,7 +263,7 @@ class DetailHomestay extends React.Component {
                             onClickShare={(e, content) => this.onClickShare(e, content, homestay_info.homestay_id, user_id)}
                             meRate={me_rate}
                             countShare={homestay_info.shares ? homestay_info.shares : 0}
-                            updateHomestayNode={user_id === (host_info ? host_info.id : '') ? <Icon style={{ fontSize: 20 }} type="edit" /> : null}
+                            updateHomestayNode={user_id === (host_info ? host_info.id : '') ? <Icon onClick={e => { this.setState({ showModal: true }) }} style={{ fontSize: 28 }} type="edit" /> : null}
                         />
                         <div>
                             <BoxHightlight

@@ -18,7 +18,7 @@ export default class BoxHightlight extends React.Component {
                 </div>
                 <div style={{ width: '100%', fontSize: '18px', padding: '5px',marginTop: '10px' }}>
                     {newContent.map(cont => <div style={{ width: '100%' }}>
-                        <Icon type="check"/><span style={{marginLeft: '5px'}}>{cont}</span>
+                        <span style={{marginLeft: '5px'}}>{cont}</span>
                     </div>)}
                 </div>
 

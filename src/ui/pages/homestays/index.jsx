@@ -145,6 +145,7 @@ class Homestays extends React.Component {
     }
 
     getNewHomestay(newHomestay) {
+		console.log("TCL: Homestays -> getNewHomestay -> newHomestay", newHomestay)
         if (newHomestay) {
             const pm = new Promise((resolve, reject) => {
                 this.props.createHomestayRequest(newHomestay, resolve, reject)

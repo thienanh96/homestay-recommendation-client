@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { resolve } from "path";
 import { reject } from "q";
 import RateHomestay from '../../../commons/components/RateHomestay'
+// import Tabs from '../../homestays/components/Tabs'
 
 export default class Header extends React.Component {
 

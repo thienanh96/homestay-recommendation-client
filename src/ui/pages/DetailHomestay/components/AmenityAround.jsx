@@ -29,7 +29,7 @@ export default class AmenityAround extends React.Component {
             return {
                 key: index,
                 name: <div style={{ color: 'black', fontWeight: '600',fontSize: '18px' }}>{Object.keys(el)[0]}</div>,
-                column1: el[Object.keys(el)[0]].map(el => <div style={{ color: 'black', marginTop: '10px',fontSize: '18px'  }}><Icon theme='filled' type="pushpin"style={{marginRight: '5px'}} />{el}</div>),
+                column1: el[Object.keys(el)[0]].split('\n').map(el => <div style={{ color: 'black', marginTop: '10px',fontSize: '18px'  }}><Icon theme='filled' type="pushpin"style={{marginRight: '5px'}} />{el}</div>),
             }
         })
         console.log('TCL: Amenity -> render -> dataTable', dataTable)
