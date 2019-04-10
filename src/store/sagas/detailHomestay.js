@@ -9,7 +9,10 @@ import {
     RATE_DETAIL_HOMESTAY_SUCCESS,
     GET_SIMIALR_HOMESTAY_FAILURE,
     GET_SIMILAR_HOMESTAY_SUCCESS,
-    GET_SIMILAR_HOMESTAY_REQUEST
+    GET_SIMILAR_HOMESTAY_REQUEST,
+    UPDATE_HOMESTAY_FAILURE,
+    UPDATE_HOMESTAY_REQUEST,
+    UPDATE_HOMESTAY_SUCCESS
 } from "../constants/detailHomestay";
 import { post, get, puts } from "../../client/index";
 
@@ -27,6 +30,10 @@ export function* getSimilarHomestaySaga() {
     yield takeEvery(GET_SIMILAR_HOMESTAY_REQUEST, getSimilarHomestays);
 }
 
+export function* updateHomestaySaga() {
+    yield takeEvery(UPDATE_HOMESTAY_REQUEST, updateHomestay);
+}
+
 
 
 
@@ -35,14 +42,35 @@ function* getDetailHomestay(action) {
         const { homestayId } = action
         let response = yield call(getDetailHomestayAPI, homestayId);
         if (response && response.status === 200) {
-			console.log("TCL: function*getDetailHomestay -> response", response)
-            
+            console.log("TCL: function*getDetailHomestay -> response", response)
+
             yield put({ type: GET_DETAIL_HOMESTAY_SUCCESS, detailHomestay: response.data })
         }
 
     } catch (error) {
         console.log('TCL: }catch -> error', error)
         yield put({ type: GET_DETAIL_HOMESTAY_FAILURE })
+    }
+}
+
+function* updateHomestay(action) {
+    const { body, resolve, reject, homestayId } = action
+    try {
+        let response = yield call(updateHomestayAPI, homestayId, body);
+		console.log("TCL: function*updateHomestay -> response", response)
+        if (response && response.status === 200) {
+            console.log("TCL: function*updateHomestay -> response", response)
+            resolve(response.data)
+            yield put({ type: UPDATE_HOMESTAY_SUCCESS, updatedHomestay: response.data })
+        } else {
+            yield put({ type: UPDATE_HOMESTAY_FAILURE })
+            reject()
+        }
+
+    } catch (error) {
+        console.log('TCL: }catch -> error', error)
+        reject()
+        yield put({ type: UPDATE_HOMESTAY_FAILURE })
     }
 }
 
@@ -92,6 +120,10 @@ function rateDetailHomestayAPI(body) {
 
 function getSimilarHomestaysAPI(homestayId) {
     return get(`/api/homestay-similarity/get?homestay_id=${homestayId}`);
+}
+
+function updateHomestayAPI(homestayId, body) {
+    return puts(`/api/homestay/update/${homestayId}`,body);
 }
 
 

@@ -14,11 +14,11 @@ class UpdateTabs extends Component {
         super(props);
         this.state = {
             isLoading: false,
-            firstData: {},
-            secondData: {},
-            thirdData: {},
-            forthData: {},
-            images: ''
+            firstData: null,
+            secondData: null,
+            thirdData: null,
+            forthData: null,
+            images: null
         };
     }
 
@@ -38,6 +38,7 @@ class UpdateTabs extends Component {
     }
 
     validateData(finalData) {
+        console.log("TCL: UpdateTabs -> validateData -> finalData", finalData)
         for (let value of Object.values(finalData)) {
             console.log("TCL: UpdateTabs -> validateData -> key", value)
             if (!value) return false
@@ -47,10 +48,10 @@ class UpdateTabs extends Component {
 
     convertToFinalData(rawData) {
         const { firstData, secondData, thirdData, forthData, images } = this.state
+        console.log("TCL: UpdateTabs -> convertToFinalData -> firstData, secondData, thirdData, forthData", firstData, secondData, thirdData, forthData)
         let finalData = {}
-        finalData = { ...firstData, name: firstData.title }
-        delete finalData.title
-        let priceDetail = {
+        finalData = { ...firstData, name: firstData.name }
+        let priceDetail = secondData ? {
             data: [
                 {
                     "Thứ hai - Thứ năm": secondData.mondayToThursday ? secondData.mondayToThursday + 'đ' : 0 + 'đ',
@@ -68,8 +69,8 @@ class UpdateTabs extends Component {
                     "Chính sách hủy": secondData.cancelPolicy ? secondData.cancelPolicy : 'Không có'
                 }
             ]
-        }
-        let amenity = {
+        } : null
+        let amenity = thirdData ? {
             data: [
                 {
                     "Phòng ngủ": [`Tối đa ${thirdData.maxTourist ? thirdData.maxTourist : 0} khách`, `${thirdData.countRoom ? thirdData.countRoom : 0} phòng ngủ`, `${thirdData.countBed ? thirdData.countBed : 0} giường`]
@@ -93,8 +94,8 @@ class UpdateTabs extends Component {
                     "Tiện ích": thirdData.generalAmenity ? thirdData.generalAmenity : ['Không có']
                 }
             ]
-        }
-        let amenityAround = {
+        } : null
+        let amenityAround = forthData ? {
             data: [
                 {
                     "Ẩm thực": forthData.cuisine ? forthData.cuisine : ['Không có']
@@ -112,38 +113,44 @@ class UpdateTabs extends Component {
                     "Cơ quan ban ngành": forthData.office ? forthData.office : ['Không có']
                 }
             ]
+        } : null
+        finalData = { ...finalData, main_price: secondData ? (secondData.mondayToThursday ? secondData.mondayToThursday : 0) : null, price_detail: priceDetail, amenities: amenity, amenities_around: amenityAround, images }
+        if (this.props.action === 'create') {
+            const validateResult = this.validateData(finalData)
+            if (!validateResult) {
+                this.setState({
+                    isLoading: false
+                })
+                return message.error('Thông tin không hợp lệ!')
+            }
         }
-        finalData = { ...finalData, main_price: secondData.mondayToThursday ? secondData.mondayToThursday : 0, price_detail: priceDetail, amenities: amenity, amenities_around: amenityAround, images: images }
 
-        const validateResult = this.validateData(finalData)
-        if (!validateResult) {
-            this.setState({
-                isLoading: false
-            })
-            return message.error('Thông tin không hợp lệ!')
-        }
         return this.props.getData(finalData)
     }
 
     getValuesFromFirstModal(values) {
+        console.log("TCL: UpdateTabs -> getValuesFromFirstModal -> values", values)
         this.setState({
             firstData: values
         })
     }
 
     getValuesFromSecondModal(values) {
+        console.log("TCL: UpdateTabs -> getValuesFromSecondModal -> values", values)
         this.setState({
             secondData: values
         })
     }
 
     getValuesFromThirdModal(values) {
+        console.log("TCL: UpdateTabs -> getValuesFromThirdModal -> values", values)
         this.setState({
             thirdData: values
         })
     }
 
     getValuesFromForthModal(values) {
+        console.log("TCL: UpdateTabs -> getValuesFromForthModal -> values", values)
         this.setState({
             forthData: values
         })
@@ -188,6 +195,7 @@ class UpdateTabs extends Component {
                             currentHomestay={currentHomestay}
                             getValuesFromForthModal={this.getValuesFromForthModal.bind(this)}
                             getImageURL={(images) => {
+                                console.log("TCL: UpdateTabs -> render -> images", images)
                                 this.setState({
                                     images: images.join(',')
                                 })

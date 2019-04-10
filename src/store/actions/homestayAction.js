@@ -1,7 +1,7 @@
 import {
   GET_HOMESTAY_REQUEST,
   CREATE_HOMESTAY_REQUEST,
-  CREATE_HOMESTAY_SIMILARITY_REQUEST
+  CREATE_HOMESTAY_SIMILARITY_REQUEST,
 } from "../constants/homestay";
 
 
@@ -21,6 +21,7 @@ export const createHomestayRequest = (body, resolve, reject) => {
     reject
   }
 }
+
 
 export const createHomestaySimilarityRequest = (homestayId) => {
   return {

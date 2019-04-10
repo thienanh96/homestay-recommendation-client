@@ -8,13 +8,17 @@ import {
     GET_SIMIALR_HOMESTAY_FAILURE,
     GET_SIMILAR_HOMESTAY_REQUEST,
     GET_SIMILAR_HOMESTAY_SUCCESS,
-    UPDATE_COUNT_SHARES
+    UPDATE_COUNT_SHARES,
+    UPDATE_HOMESTAY_REQUEST,
+    UPDATE_HOMESTAY_FAILURE,
+    UPDATE_HOMESTAY_SUCCESS
 } from "../constants/detailHomestay";
 
 // reducer with initial state
 const initialState = {
     startGetDetailHomestayRequest: false,
     startRateDetailHomestayRequest: false,
+    startUpdateHomestayRequest: false,
     detailHomestay: {
         me_rate: null,
         homestay_info: {},
@@ -108,6 +112,20 @@ export default function reducer(state = initialState, action) {
             return { ...state, similarHomestays: action.homestays, startSimilarHomestayRequest: false }
         case GET_SIMIALR_HOMESTAY_FAILURE:
             return { ...state, similarHomestays: [], startSimilarHomestayRequest: false }
+        case UPDATE_HOMESTAY_REQUEST:
+            return { ...state, startUpdateHomestayRequest: true }
+        case UPDATE_HOMESTAY_SUCCESS:
+            const updatedState = {
+                detailHomestay: {
+                    ...state.detailHomestay,
+                    homestay_info: {
+                        ...action.updatedHomestay
+                    }
+                }
+            }
+            return { ...state, ...updatedState, startUpdateHomestayRequest: false }
+        case UPDATE_HOMESTAY_FAILURE:
+            return {...state,startUpdateHomestayRequest: false}
         default:
             return state;
     }

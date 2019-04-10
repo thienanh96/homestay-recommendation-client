@@ -30,11 +30,10 @@ class ForthModal extends Component {
 
 
     componentDidMount() {
-        const { amenities_around,images } = this.props.currentHomestay;
-		console.log("TCL: ForthModal -> componentDidMount -> images", images)
+        const { amenities_around, images } = this.props.currentHomestay;
         let amenityAround = {}
         amenities_around.data.map(el => {
-            amenityAround = {...amenityAround,...el}
+            amenityAround = { ...amenityAround, ...el }
         })
         if (amenityAround) {
             this.props.form.setFieldsValue({
@@ -47,6 +46,16 @@ class ForthModal extends Component {
             this.setState({
                 imagesURL: images.split('$')
             })
+            this.props.getImageURL(images.split('$'))
+            this.props.form.validateFields((err, values) => {
+				console.log("TCL: ForthModal -> componentDidMount -> values", values)
+                if (err) {
+                    return;
+                }
+                return this.props.getValuesFromForthModal({
+                    ...values,images: images.split('$')
+                })
+            });
         }
     }
 
@@ -73,14 +82,16 @@ class ForthModal extends Component {
             if (err) {
                 return;
             }
-            return this.props.getValuesFromForthModal(values)
+            return this.props.getValuesFromForthModal({
+                ...values, images: this.state.imagesURL
+            })
         });
     }
 
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { getImageURL,currentHomestay = {images: ''} } = this.props
+        const { getImageURL, currentHomestay = { images: '' } } = this.props
         const formItemLayout = {
             labelCol: {
                 xs: { span: 33 },

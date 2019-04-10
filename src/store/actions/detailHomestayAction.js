@@ -1,7 +1,8 @@
 import {
   GET_DETAIL_HOMESTAY_REQUEST,
   RATE_DETAIL_HOMESTAY_REQUEST,
-  GET_SIMILAR_HOMESTAY_REQUEST
+  GET_SIMILAR_HOMESTAY_REQUEST,
+  UPDATE_HOMESTAY_REQUEST
 } from "../constants/detailHomestay";
 
 
@@ -26,6 +27,16 @@ export const getSimilarHomestayRequest = (homestayId) => {
   return {
     type: GET_SIMILAR_HOMESTAY_REQUEST,
     homestayId
+  }
+}
+
+export const updateHomestayRequest = (homestayId,body, resolve, reject) => {
+  return {
+    type: UPDATE_HOMESTAY_REQUEST,
+    body,
+    homestayId,
+    resolve,
+    reject
   }
 }
 

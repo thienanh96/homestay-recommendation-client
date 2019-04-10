@@ -49,6 +49,12 @@ class ThirdModal extends Component {
                 roomAmenity: priceDetail['Tiện ích phòng'],
                 generalAmenity: priceDetail['Tiện ích'],
             });
+            this.props.form.validateFields((err, values) => {
+                if (err) {
+                    return;
+                }
+                return this.props.getValuesFromThirdModal(values)
+            });
         }
     }
 

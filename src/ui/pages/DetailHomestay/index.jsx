@@ -20,7 +20,7 @@ import { connect } from "react-redux";
 import { compose } from 'redux'
 import history from '../../../lib/history'
 import './index.css'
-import { getDetailHomestayRequest, rateDetailHomestay, getSimilarHomestayRequest } from '../../../store/actions/detailHomestayAction'
+import { getDetailHomestayRequest, rateDetailHomestay, getSimilarHomestayRequest,updateHomestayRequest } from '../../../store/actions/detailHomestayAction'
 import SlideShow from '../../commons/components/SlideShow'
 import { changeStatusHeader } from '../../../store/actions/guiChangeAction'
 import { getCommentsRequest, createCommentRequest } from '../../../store/actions/commentAction'
@@ -176,31 +176,24 @@ class DetailHomestay extends React.Component {
     }
 
     getNewHomestay(newHomestay) {
+		console.log("TCL: DetailHomestay -> getNewHomestay -> newHomestay", newHomestay)
         if (newHomestay) {
             const pm = new Promise((resolve, reject) => {
-                this.props.createHomestayRequest(newHomestay, resolve, reject)
+                this.props.updateHomestayRequest(this.state.currentHomestayID,newHomestay, resolve, reject)
             })
             pm.then(data => {
-                this.setState({
-                    completeCreateHomestay: true
-                })
                 if (data && data['homestay_id']) {
-                    message.success('Tạo mới homestay thành công. Xin chờ Admin phê duyệt!')
-                    this.props.createHomestaySimilarityRequest(data['homestay_id'])
+                    message.success('Cập nhật homestay thành công!')
+                    // this.props.createHomestaySimilarityRequest(data['homestay_id'])
                     return this.setState({ showModal: false })
                 } else {
-                    message.error('Tạo mới homestay thất bại')
+                    message.error('Cập nhật homestay thất bại')
                 }
             }, err => {
-                this.setState({
-                    completeCreateHomestay: true
-                })
-                return message.error('Tạo mới homestay thất bại')
+                return message.error('Cập nhật homestay thất bại')
             }).catch(err => {
-                this.setState({
-                    completeCreateHomestay: true
-                })
-                return message.error('Tạo mới homestay thất bại')
+
+                return message.error('Cập nhật homestay thất bại')
             })
 
         }
@@ -343,7 +336,8 @@ const mapDispatchToProps = {
     changeStatusHeader,
     createCommentRequest,
     getSimilarHomestayRequest,
-    createPostsRequest
+    createPostsRequest,
+    updateHomestayRequest
 }
 // export default connect(
 //     mapStateToProps,

@@ -3,7 +3,7 @@ import { put, fork, takeLatest, all } from "redux-saga/effects";
 
 import { getHomestaySaga, createHomestaySaga, createHomestaySimilaritySaga } from './homestay'
 import { getBestHomestaySaga, getConformHomestaysSaga } from './home'
-import { getDetailHomestaySaga, rateDetailHomestaySaga, getSimilarHomestaySaga } from './detailHomestay'
+import { getDetailHomestaySaga, rateDetailHomestaySaga, getSimilarHomestaySaga,updateHomestaySaga } from './detailHomestay'
 import { getCommentsSaga, createCommentSaga } from './comments'
 import authSaga, { logoutSaga } from "./auth";
 import { getPostsSaga, createPostSaga } from './community'
@@ -29,6 +29,7 @@ export default function* rootSaga() {
     createHomestaySaga(),
     createHomestaySimilaritySaga(),
     updateProfileSaga(),
-    getProfileSaga()
+    getProfileSaga(),
+    updateHomestaySaga()
   ]);
 }

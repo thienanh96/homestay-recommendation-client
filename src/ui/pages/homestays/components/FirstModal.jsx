@@ -30,8 +30,12 @@ class FirstModal extends Component {
                 descriptions,
                 highlight
             });
-            this.setState({
-                imagesURL: images
+            this.props.form.validateFields((err, values) => {
+                console.log("TCL: FirstModal -> onValuesChange -> values", values)
+                if (err) {
+                    return
+                }
+                return this.props.getValuesFromFirstModal(values)
             });
         }
     }
@@ -56,6 +60,7 @@ class FirstModal extends Component {
 
     onValuesChange(props, changedValues, allValues) {
         this.props.form.validateFields((err, values) => {
+			console.log("TCL: FirstModal -> onValuesChange -> values", values)
             if (err) {
                 return
             }

@@ -28,13 +28,19 @@ class SecondModal extends Component {
             price_detail.data.map(el => {
                 priceDetail = {...priceDetail,...el}
             })
-			console.log("TCL: SecondModal -> componentDidMount -> price_detail", priceDetail)
             this.props.form.setFieldsValue({
                 mondayToThursday: main_price,
                 firdayToSunday: priceDetail['Thứ sáu - Chủ nhật'],
                 extraPrice: priceDetail['Phí khách tăng thêm'],
                 minCountNight: priceDetail['Số đêm tối thiểu'],
                 cancelPolicy: priceDetail['Chính sách Huỷ']
+            });
+            this.props.form.validateFields((err, values) => {
+				console.log("TCL: SecondModal -> componentDidMount -> values", values)
+                if (err) {
+                    return;
+                }
+                return this.props.getValuesFromSecondModal(values)
             });
         }
     }
@@ -89,10 +95,10 @@ class SecondModal extends Component {
                                 required: true,
                                 message: "Xin nhập giá"
                             },
-                            {
-                                pattern: /^[0-9]+$/g,
-                                message: "Giá phải là các chữ số"
-                            }
+                            // {
+                            //     pattern: /^[0-9]+$/g,
+                            //     message: "Giá phải là các chữ số"
+                            // }
                         ]
                     })(<Input type="text" />)}
                 </FormItem>
@@ -103,10 +109,10 @@ class SecondModal extends Component {
                                 required: true,
                                 message: "Xin nhập giá"
                             },
-                            {
-                                pattern: /^[0-9]+$/g,
-                                message: "Giá phải là các chữ số"
-                            }
+                            // {
+                            //     pattern: /^[0-9]+$/g,
+                            //     message: "Giá phải là các chữ số"
+                            // }
                         ]
                     })(<Input type="text" />)}
                 </FormItem>
@@ -117,10 +123,10 @@ class SecondModal extends Component {
                                 required: true,
                                 message: "Xin nhập giá"
                             },
-                            {
-                                pattern: /^[0-9]+$/g,
-                                message: "Giá phải là các chữ số"
-                            }
+                            // {
+                            //     pattern: /^[0-9]+$/g,
+                            //     message: "Giá phải là các chữ số"
+                            // }
                         ]
                     })(<Input type="text" />)}
                 </FormItem>
@@ -131,10 +137,10 @@ class SecondModal extends Component {
                                 required: true,
                                 message: "Xin nhập số điểm tối thiểu"
                             },
-                            {
-                                pattern: /^[0-9]+$/g,
-                                message: "Số đêm tối thiểu phải là các chữ số"
-                            }
+                            // {
+                            //     pattern: /^[0-9]+$/g,
+                            //     message: "Số đêm tối thiểu phải là các chữ số"
+                            // }
                         ]
                     })(<Input type="text" />)}
                 </FormItem>

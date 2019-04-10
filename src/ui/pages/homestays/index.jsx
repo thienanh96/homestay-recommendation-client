@@ -213,6 +213,7 @@ class Homestays extends React.Component {
                                 listCity={['Hà Nội']}
                                 getData={this.getNewHomestay.bind(this)}
                                 close={() => { this.setState({ showModal: false }) }}
+                                action="create"
                             />
                         }
 
