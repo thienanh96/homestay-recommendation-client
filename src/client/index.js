@@ -11,7 +11,7 @@ headers.append("Access-Control-Allow-Credentials", "true");
 // headers.append('Authorization','Bearer ' + token)
 
 var request = axios.create({
-//   baseURL: apiBase,
+  //   baseURL: apiBase,
   headers
 });
 
@@ -98,5 +98,19 @@ export const puts = (
   }
   return request.put(endpoint, data, config);
 };
+
+export const deletes = (endpoint, config = {
+  headers: {}
+}) => {
+  if (localStorage.getItem("token")) {
+    config = {
+      ...config,
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token")
+      }
+    };
+  }
+  return request.delete(endpoint, config);
+}
 
 

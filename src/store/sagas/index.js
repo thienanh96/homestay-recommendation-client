@@ -3,12 +3,12 @@ import { put, fork, takeLatest, all } from "redux-saga/effects";
 
 import { getHomestaySaga, createHomestaySaga, createHomestaySimilaritySaga } from './homestay'
 import { getBestHomestaySaga, getConformHomestaysSaga } from './home'
-import { getDetailHomestaySaga, rateDetailHomestaySaga, getSimilarHomestaySaga,updateHomestaySaga } from './detailHomestay'
+import { getDetailHomestaySaga, rateDetailHomestaySaga, getSimilarHomestaySaga, updateHomestaySaga } from './detailHomestay'
 import { getCommentsSaga, createCommentSaga } from './comments'
 import authSaga, { logoutSaga } from "./auth";
-import { getPostsSaga, createPostSaga } from './community'
+import { getPostsSaga, createPostSaga, deletePostSaga } from './community'
 import { getRateHomestaySaga } from './rateHomestay'
-import { updateProfileSaga,getProfileSaga} from './profile'
+import { updateProfileSaga, getProfileSaga,getListProfileSaga } from './profile'
 
 // Root sagas
 // Single entry point to start all sagas at once
@@ -30,6 +30,8 @@ export default function* rootSaga() {
     createHomestaySimilaritySaga(),
     updateProfileSaga(),
     getProfileSaga(),
-    updateHomestaySaga()
+    updateHomestaySaga(),
+    deletePostSaga(),
+    getListProfileSaga()
   ]);
 }

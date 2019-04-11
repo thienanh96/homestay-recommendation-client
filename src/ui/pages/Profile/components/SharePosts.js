@@ -1,85 +1,51 @@
 import React from "react";
-import { post, get, puts } from "../../../client/index";
 import {
-    Layout,
-    Menu,
-    Breadcrumb,
-    Icon,
-    Button,
-    Input,
-    Row,
-    Col,
-    Dropdown,
-    Avatar,
-    Select,
-    Affix,
-    Pagination
-} from "antd";
+    Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, List, Pagination, message
+} from 'antd';
+import { getHomestayRequest } from '../../../../store/actions/homestayAction'
 import { connect } from "react-redux";
-import { compose } from 'redux'
-import './index.css'
-import { getPostsRequest } from '../../../store/actions/communityAction'
-import CardHomestay from '../../commons/components/HomestayCard'
-import { changeStatusHeader } from '../../../store/actions/guiChangeAction'
-import { getMyRateHomestayRequest } from '../../../store/actions/rateHomestayAction'
-import { resolve } from "path";
-import withSearch from '../WithSearch/index'
-import SharePost from './components/SharePost'
-import Filter from '../../commons/components/Filter'
+import CardHomestay from '../../../commons/components/HomestayCard'
+import SharePost from '../../Community/components/SharePost'
+import { getPostsRequest } from '../../../../store/actions/communityAction'
+import { deletePostsRequest } from '../../../../store/actions/communityAction'
+import { resolve, reject } from "q";
 
 
-
-class Community extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filter: null
-        }
-    }
+class SharePosts extends React.Component {
 
     componentWillMount() {
-        this.props.getPostsRequest('newest', 3, 0)
+        this.props.getPostsRequest('by-me', 3, 0)
     }
 
     onChangePagination(page, pageSize) {
-        this.props.getPostsRequest(this.state.filter, 3, parseInt(pageSize * (page - 1)))
+        this.props.getPostsRequest('by-me', 3, parseInt(pageSize * (page - 1)))
     }
 
-
-    handleChangeFilter(value) {
-        this.setState({
-            filter: value
+    onClickDelete(postId) {
+        const pm = new Promise((resolve, reject) => {
+            this.props.deletePostsRequest(postId, resolve, reject)
         })
-        if (value === 'like') {
-            this.props.getPostsRequest('like', 3, 0)
-        }
-        if (value === 'newest') {
-            this.props.getPostsRequest('newest', 3, 0)
-        }
-        if (value === 'by-me') {
-            this.props.getPostsRequest('by-me', 3, 0)
-        }
+        pm.then(postId => {
+			console.log("TCL: SharePosts -> onClickDelete -> postId", postId)
+            message.success('Xóa thành công!')
+        }, err => {
+            message.error('Xóa thất bại!')
+        })
+
     }
-
-
 
     render() {
         const { totalPosts, posts, meRate = null } = this.props
         return (
-            <div style={{ width: '100%', marginTop: '30px' }}>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', height: '80px', alignItems: 'center' }}>
-                    <Filter
-                        handleChange={this.handleChangeFilter.bind(this)}
-                    />
-                </div>
+            <div style={{ width: '100%', marginTop: '30px', padding: '15px' }}>
                 <div style={{ width: '100%', }}>
                     {
                         posts && Array.isArray(posts) && posts.map((post = {}) => {
-                            if(!post || (post && !post.homestay)){
+                            if (!post || (post && !post.homestay)) {
                                 return null
                             }
                             let images = []
-                            if(post.homestay.homestay_id){
+                            if (post.homestay.homestay_id) {
                                 images = post.homestay.images.split('$')
                             }
                             return (
@@ -93,6 +59,8 @@ class Community extends React.Component {
                                     meRate={meRate}
                                     customStyle={{ marginBottom: '50px' }}
                                     imageCovers={images}
+                                    hasAction={true}
+                                    onClickDelete={e => this.onClickDelete(post.post_id)}
                                 />
                             )
                         })
@@ -108,24 +76,24 @@ class Community extends React.Component {
                     />
                 </div>
             </div>
+
         )
     }
 }
 
 function mapStateToProps(state) {
     return {
+        me: state.authReducer.user,
         posts: state.communityReducer.posts,
         totalPosts: state.communityReducer.totalPosts,
-        meRate: state.rateHomestayReducer.meRate
     }
 }
 
 const mapDispatchToProps = {
     getPostsRequest,
-    changeStatusHeader,
-    getMyRateHomestayRequest
+    deletePostsRequest
 }
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps), withSearch
-)(Community)
-
+export default SharePosts = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SharePosts);

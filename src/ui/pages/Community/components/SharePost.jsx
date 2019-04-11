@@ -32,8 +32,8 @@ export default class SharePost extends React.Component {
     }
 
     render() {
-        const { content, avatar, username, datePost, homestay = {}, countLike, customStyle, imageCovers } = this.props;
-		console.log("TCL: SharePost -> render -> datePost", datePost)
+        const { content, avatar, username, datePost, homestay = {}, countLike, customStyle, imageCovers, hasAction, onClickDelete } = this.props;
+        console.log("TCL: SharePost -> render -> datePost", datePost)
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between', ...customStyle }}>
                 <div style={{ width: '64px', height: '64px' }}>
@@ -55,14 +55,25 @@ export default class SharePost extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div style={{ width: '80px', height: '100%', float: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div style={{ width: '50%', textAlign: 'center', fontSize: '16px' }}>
-                                1234
-                            </div>
-                            <div style={{ width: '50%', textAlign: 'center' }}>
-                                <Icon type="heart" style={{ fontSize: '32px' }} />
-                            </div>
-                        </div>
+                        {
+                            hasAction ? (
+                                <div style={{ width: '80px', height: '100%', float: 'left', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                    <Icon onClick={onClickDelete} style={{ fontSize: 24, color: 'red', float: 'right' }} type="delete" />
+                                </div>
+                            ) : (
+                                    <div style={{ width: '80px', height: '100%', float: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div style={{ width: '50%', textAlign: 'center', fontSize: '16px' }}>
+                                            1234
+                                            </div>
+                                        <div style={{ width: '50%', textAlign: 'center' }}>
+                                            <Icon type="heart" style={{ fontSize: '32px' }} />
+                                        </div>
+                                    </div>
+
+                                )
+                        }
+
+
 
                     </div>
                     <div style={{ width: '100%' }}>

@@ -6,7 +6,10 @@ import {
     UPDATE_PROFILE_SUCCESS,
     GET_PROFILE_FAILURE,
     GET_PROFILE_REQUEST,
-    GET_PROFILE_SUCCESS
+    GET_PROFILE_SUCCESS,
+    GET_LIST_PROFILE_REQUEST,
+    GET_LIST_PROFILE_FAILURE,
+    GET_LIST_PROFILE_SUCCESS
 } from "../constants/profile";
 
 
@@ -23,23 +26,11 @@ export function* getProfileSaga() {
     yield takeEvery(GET_PROFILE_REQUEST, getProfile);
 }
 
+export function* getListProfileSaga() {
+    yield takeEvery(GET_LIST_PROFILE_REQUEST, getListProfile);
+}
 
-// function* getPosts(action) {
-//     try {
-//         const { filter, limit, offset } = action
-//         let response = yield call(getPostsAPI, filter, limit, offset);
-//         console.log("TCL: function*getPosts -> response", response)
-//         if (response && response.status === 200) {
-//             yield put({ type: UPDATE_PROFILE_REQUEST, posts: response.data.data, total: response.data.total })
-//         } else {
-//             yield put({ type: UPDATE_PROFILE_FAILURE })
-//         }
 
-//     } catch (error) {
-//         console.log('TCL: }catch -> error', error)
-//         yield put({ type: GET_POST_FAILURE })
-//     }
-// }
 
 function* updateProfile(action) {
     try {
@@ -60,6 +51,8 @@ function* updateProfile(action) {
         action.reject()
     }
 }
+
+
 
 function* getProfile(action) {
     try {
@@ -84,23 +77,27 @@ function* getProfile(action) {
     }
 }
 
+function* getListProfile(action) {
+    try {
+        const { limit, offset } = action
+        let response = yield call(getListProfileAPI, limit, offset);
+		console.log("TCL: function*getListProfile -> response", response)
+        if (response && response.status === 200) {
+            yield put({ type: GET_LIST_PROFILE_SUCCESS, profiles: response.data })
+        } else {
+            yield put({ type: GET_LIST_PROFILE_FAILURE })
+        }
+
+    } catch (error) {
+        console.log('TCL: }catch -> error', error)
+        yield put({ type: GET_LIST_PROFILE_FAILURE })
+    }
+}
 
 
 
 
-// function getPostsAPI(filter, limit, offset) {
-//     let api = '/api/posts/get'
-//     if (filter) {
-//         api += '?filter=' + filter
-//     }
-//     if (limit) {
-//         api += '&limit=' + limit
-//     }
-//     if (offset) {
-//         api += '&offset=' + offset
-//     }
-//     return get(api)
-// }
+
 
 function updateProfileAPI(body) {
     return puts('/api/profile/update', body)
@@ -109,6 +106,10 @@ function updateProfileAPI(body) {
 
 function getProfileAPI(queryString) {
     return get('/api/profile/get' + queryString)
+}
+
+function getListProfileAPI(limit, offset) {
+    return get('/api/profile/getlist?limit=' + limit + '&offset=' + offset)
 }
 
 

@@ -1,6 +1,7 @@
 import {
   GET_POST_REQUEST,
-  CREATE_POST_REQUEST
+  CREATE_POST_REQUEST,
+  DELETE_POST_REQUEST
 } from "../constants/communtity";
 
 
@@ -20,5 +21,14 @@ export const createPostsRequest = (homestayId, content, resolve, reject) => {
     homestayId,
     content,
     resolve, reject
+  }
+}
+
+export const deletePostsRequest = (postId, resolve, reject) => {
+  return {
+    type: DELETE_POST_REQUEST,
+    postId,
+    resolve, 
+    reject
   }
 }

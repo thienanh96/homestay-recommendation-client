@@ -20,6 +20,9 @@ import {
 import { connect } from "react-redux";
 import history from '../../../lib/history'
 import ProfileUpdate from './components/ProfileUpdate'
+import OwnHomestays from './components/OwnHomestays'
+import SharePosts from './components/SharePosts'
+import UserManagement from './components/UserManagement'
 import { updateProfileRequest, getProfileRequest } from '../../../store/actions/profileAction'
 import './index.css'
 
@@ -59,11 +62,14 @@ class Profile extends React.Component {
     // }
 
     handleClick({ item, key, keyPath }) {
-        if(key === '1'){
+        if (key === '1') {
             this.props.history.push('/profile?type=update-profile')
-        } else if (key === '2'){
-            console.log('????',key)
+        } else if (key === '2') {
             this.props.history.push('/profile?type=own-homestay')
+        } else if (key === '3') {
+            this.props.history.push('/profile?type=share')
+        } else if (key === '4') {
+            this.props.history.push('/profile?type=admin-user-management')
         }
     }
 
@@ -75,6 +81,12 @@ class Profile extends React.Component {
         }
         if (params && params.get('type') === 'own-homestay') {
             return 2
+        }
+        if (params && params.get('type') === 'share') {
+            return 3
+        }
+        if (params && params.get('type') === 'admin-user-management') {
+            return 4
         }
         return -1
     }
@@ -96,10 +108,9 @@ class Profile extends React.Component {
 
 
     render() {
-        const { profile = {} } = this.props
+        const { profile = {}, homestays, totalHomestays } = this.props
         console.log(this.getKeys())
         if (!profile) return null
-        console.log("TCL: Profile -> render -> profile", profile)
         return (
             <Row style={{ marginTop: '30px' }}>
                 <Col sm={1} md={4}>
@@ -143,6 +154,15 @@ class Profile extends React.Component {
                                 initialInfo={profile}
                                 getUpdatedInfo={this.getUpdatedInfo.bind(this)}
                             />
+                        }
+                        {
+                            this.getKeys() === 2 && <OwnHomestays />
+                        }
+                        {
+                            this.getKeys() === 3 && <SharePosts />
+                        }
+                        {
+                            this.getKeys() === 4 && <UserManagement />
                         }
 
                     </div>

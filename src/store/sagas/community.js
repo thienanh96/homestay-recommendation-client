@@ -6,12 +6,15 @@ import {
     GET_POST_SUCCESS,
     CREATE_POST_FAILURE,
     CREATE_POST_REQUEST,
-    CREATE_POST_SUCCESS
+    CREATE_POST_SUCCESS,
+    DELETE_POST_FAILURE,
+    DELETE_POST_REQUEST,
+    DELETE_POST_SUCCESS
 } from "../constants/communtity";
 
 import { UPDATE_COUNT_SHARES } from '../constants/detailHomestay'
 
-import { post, get, puts } from "../../client/index";
+import { post, get, puts, deletes } from "../../client/index";
 
 
 // watcher saga: watches for actions dispatched to the store, starts worker saga
@@ -21,6 +24,10 @@ export function* getPostsSaga() {
 
 export function* createPostSaga() {
     yield takeEvery(CREATE_POST_REQUEST, createPost);
+}
+
+export function* deletePostSaga() {
+    yield takeEvery(DELETE_POST_REQUEST, deletePost);
 }
 
 
@@ -63,6 +70,25 @@ function* createPost(action) {
     }
 }
 
+function* deletePost(action) {
+    const { postId, reject, resolve } = action
+    try {
+        let response = yield call(deletePostAPU,postId);
+		console.log("TCL: function*deletePost -> response", response)
+        if (response && response.status === 200) {
+            yield put({ type: DELETE_POST_SUCCESS, postId: postId })
+            resolve(postId)
+        } else {
+            yield put({ type: DELETE_POST_FAILURE })
+            reject()
+        }
+
+    } catch (error) {
+        yield put({ type: DELETE_POST_FAILURE })
+        reject()
+    }
+}
+
 
 
 
@@ -86,6 +112,10 @@ function createPostAPI(homestayId, content) {
         homestay_id: homestayId,
         content
     })
+}
+
+function deletePostAPU(postId) {
+    return deletes('/api/post/delete/' + postId)
 }
 
 
