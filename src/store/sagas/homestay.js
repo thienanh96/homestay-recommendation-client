@@ -30,9 +30,9 @@ export function* createHomestaySimilaritySaga() {
 
 function* getHomestays(action) {
     try {
-        const { params } = action
+        const { params, notAllowed } = action
         const queryString = createQueryString(params)
-        let response = yield call(getHomestaysAPI, queryString);
+        let response = yield call(getHomestaysAPI, queryString, notAllowed);
         console.log('TCL: function*searchHomestay -> response', response)
         if (response && response.status === 200) {
             yield put({ type: GET_HOMESTAY_SUCCESS, homestays: response.data.data, total: response.data.total })
@@ -76,8 +76,13 @@ function* createHomestaySimilarity(action) {
 
 
 
-function getHomestaysAPI(searchLocation) {
-    return get(`/api/homestays${searchLocation}`);
+function getHomestaysAPI(searchLocation, notAllowed) {
+	console.log("TCL: getHomestaysAPI -> searchLocation, notAllowed", searchLocation, notAllowed)
+    if (notAllowed) {
+        return get('/api/admin/homestays/get_not_allowed')
+    } else {
+        return get(`/api/homestays${searchLocation}`);
+    }
 }
 
 function createHomestayAPI(body) {
@@ -86,7 +91,7 @@ function createHomestayAPI(body) {
 
 function createHomestaySimilarityAPI(homestayId) {
     return post(`/api/homestay-similarity/create`, {
-        homestay_id :homestayId
+        homestay_id: homestayId
     });
 }
 

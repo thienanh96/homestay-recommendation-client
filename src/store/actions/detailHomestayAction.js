@@ -7,10 +7,11 @@ import {
 
 
 
-export const getDetailHomestayRequest = (homestayId) => {
+export const getDetailHomestayRequest = (homestayId,typeGet) => {
   return {
     type: GET_DETAIL_HOMESTAY_REQUEST,
-    homestayId
+    homestayId,
+    typeGet
   }
 }
 

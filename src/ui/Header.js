@@ -99,7 +99,7 @@ class HeaderWeb extends React.Component {
                                                     <NavLink to="/community">Cộng đồng</NavLink>
                                                 </Menu.Item>
                                                 <Menu.Item key="4">
-                                                    <NavLink to="/profile?type=update-profile">Tài khoản</NavLink>
+                                                    <NavLink to="/profile/me?type=update-profile">Tài khoản</NavLink>
                                                 </Menu.Item>
                                                 {this.props.isAuthenticated ? (
                                                     <React.Fragment>

@@ -39,8 +39,8 @@ export function* updateHomestaySaga() {
 
 function* getDetailHomestay(action) {
     try {
-        const { homestayId } = action
-        let response = yield call(getDetailHomestayAPI, homestayId);
+        const { homestayId, typeGet } = action
+        let response = yield call(getDetailHomestayAPI, homestayId, typeGet);
         if (response && response.status === 200) {
             console.log("TCL: function*getDetailHomestay -> response", response)
 
@@ -57,7 +57,7 @@ function* updateHomestay(action) {
     const { body, resolve, reject, homestayId } = action
     try {
         let response = yield call(updateHomestayAPI, homestayId, body);
-		console.log("TCL: function*updateHomestay -> response", response)
+        console.log("TCL: function*updateHomestay -> response", response)
         if (response && response.status === 200) {
             console.log("TCL: function*updateHomestay -> response", response)
             resolve(response.data)
@@ -110,8 +110,12 @@ function* getSimilarHomestays(action) {
 
 
 
-function getDetailHomestayAPI(homestayId) {
-    return get(`/api/homestays/${homestayId}`);
+function getDetailHomestayAPI(homestayId, typeGet) {
+    if (typeGet === 'admin') {
+        return get(`/api/admin/homestay/get/${homestayId}?type-get=admin`)
+    } else {
+        return get(`/api/homestays/${homestayId}`);
+    }
 }
 
 function rateDetailHomestayAPI(body) {
@@ -123,7 +127,7 @@ function getSimilarHomestaysAPI(homestayId) {
 }
 
 function updateHomestayAPI(homestayId, body) {
-    return puts(`/api/homestay/update/${homestayId}`,body);
+    return puts(`/api/homestay/update/${homestayId}`, body);
 }
 
 

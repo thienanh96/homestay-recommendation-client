@@ -1,5 +1,6 @@
 export function createQueryString(params) {
-    const { limitParams, offsetParams, orderByParams, cityParams, nameParams, priceRangeParams, idsParams, host_id } = params
+    if(!params) return null;
+    const { limitParams, offsetParams, orderByParams, cityParams, nameParams, priceRangeParams, idsParams, host_id, notAllowed } = params
     let api = ''
     if (limitParams) {
         api += '?limit=' + limitParams
@@ -28,6 +29,9 @@ export function createQueryString(params) {
     }
     if (host_id) {
         api += '&host_id=' + host_id
+    }
+    if(notAllowed){
+        api += '&not_allowed=1'
     }
     console.log('apiiiiiiiiiiiiiiiiiiii: ', api)
     return api

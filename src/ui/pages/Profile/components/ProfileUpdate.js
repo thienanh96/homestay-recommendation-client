@@ -4,36 +4,28 @@ import {
 } from 'antd';
 
 const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
 
-const residences = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [{
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [{
-            value: 'xihu',
-            label: 'West Lake',
-        }],
-    }],
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-        }],
-    }],
-}];
 
 class ProfileUpdate extends React.Component {
     state = {
         confirmDirty: false,
     };
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.initialInfo && this.props.initialInfo && nextProps.initialInfo.id !== this.props.initialInfo.id) {
+
+            const { address, user_name, phone, email } = nextProps.initialInfo
+            let phoneWithoutPrefix = phone.length > 3 ? phone.substr(2) : phone;
+            this.props.form.setFieldsValue({
+                address,
+                username: user_name,
+                phone: phoneWithoutPrefix,
+                email
+            });
+
+        }
+        // if(this.props.initialInfo !== this.pr)
+    }
 
 
     // componentWillReceiveProps(nextProps) {
@@ -63,12 +55,13 @@ class ProfileUpdate extends React.Component {
 
     componentDidMount() {
         if (this.props.initialInfo) {
-            const { address, user_name, phone } = this.props.initialInfo
-            let phoneWithoutPrefix = phone.length > 3 ? phone.substr(2): phone;
+            const { address, user_name, phone, email } = this.props.initialInfo
+            let phoneWithoutPrefix = phone.length > 3 ? phone.substr(2) : phone;
             this.props.form.setFieldsValue({
                 address,
                 username: user_name,
-                phone :phoneWithoutPrefix
+                phone: phoneWithoutPrefix,
+                email
             });
         }
 
@@ -117,6 +110,8 @@ class ProfileUpdate extends React.Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { id } = this.props.initialInfo
+        console.log("TCL: ProfileUpdate -> render -> id", id)
 
         const formItemLayout = {
             labelCol: {
@@ -174,6 +169,13 @@ class ProfileUpdate extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item
+                    label="Email"
+                >
+                    {getFieldDecorator('email')(
+                        <Input type="text" disabled />
+                    )}
+                </Form.Item>
+                <Form.Item
                     label={(
                         <span>
                             Tên đăng nhập&nbsp;
@@ -213,6 +215,7 @@ class ProfileUpdate extends React.Component {
                         type={'primary'}
                         style={{ background: 'rgb(255, 153, 0)', border: 'none', height: '38px', fontSize: '14px', color: 'black', float: 'right' }}
                         htmlType='submit'
+                        disabled={this.props.me.user_id ? (this.props.me.user_id !== this.props.initialInfo.id) : false}
                     >
                         Cập nhật
                     </Button>

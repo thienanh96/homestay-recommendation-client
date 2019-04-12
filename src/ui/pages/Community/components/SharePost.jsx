@@ -127,6 +127,7 @@ export default class SharePost extends React.Component {
                                     // onClickLike
                                     countLike={homestay.likes ? homestay.likes : 0}
                                     countDislike={homestay.dislikes ? homestay.dislikes : 0}
+                                    countShare={homestay.shares ? homestay.shares : 0}
                                 />
                             </div>
                         </div>

@@ -10,7 +10,7 @@ class OwnHomestays extends React.Component {
 
     componentWillMount() {
         this.props.getHomestayRequest({
-            host_id: this.props.me.user_id
+            host_id: this.props.userId
         })
     }
     render() {

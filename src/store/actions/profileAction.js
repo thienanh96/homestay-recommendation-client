@@ -1,7 +1,8 @@
 import {
     UPDATE_PROFILE_REQUEST,
     GET_PROFILE_REQUEST,
-    GET_LIST_PROFILE_REQUEST
+    GET_LIST_PROFILE_REQUEST,
+    DELETE_PROFILE_REQUEST
 } from "../constants/profile";
 
 
@@ -27,6 +28,15 @@ export const getListProfileRequest = (limit, offset) => {
         type: GET_LIST_PROFILE_REQUEST,
         limit,
         offset
+    }
+}
+
+export const deleteProfileRequest = (profileId,resolve,reject) => {
+    return {
+        type: DELETE_PROFILE_REQUEST,
+        profileId,
+        resolve,
+        reject
     }
 }
 

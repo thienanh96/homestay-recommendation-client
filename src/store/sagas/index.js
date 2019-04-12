@@ -8,7 +8,7 @@ import { getCommentsSaga, createCommentSaga } from './comments'
 import authSaga, { logoutSaga } from "./auth";
 import { getPostsSaga, createPostSaga, deletePostSaga } from './community'
 import { getRateHomestaySaga } from './rateHomestay'
-import { updateProfileSaga, getProfileSaga,getListProfileSaga } from './profile'
+import { updateProfileSaga, getProfileSaga, getListProfileSaga, deleteProfileSaga } from './profile'
 
 // Root sagas
 // Single entry point to start all sagas at once
@@ -32,6 +32,7 @@ export default function* rootSaga() {
     getProfileSaga(),
     updateHomestaySaga(),
     deletePostSaga(),
-    getListProfileSaga()
+    getListProfileSaga(),
+    deleteProfileSaga()
   ]);
 }

@@ -13,8 +13,28 @@ import { resolve, reject } from "q";
 
 class SharePosts extends React.Component {
 
-    componentWillMount() {
-        this.props.getPostsRequest('by-me', 3, 0)
+    componentWillReceiveProps(nextProps) {
+        console.log("TCL: SharePosts -> componentWillReceiveProps -> nextProps", nextProps)
+        console.log("TCL: SharePosts -> componentWillReceiveProps -> this.props", this.props)
+        // console.log("TCL: SharePosts -> componentWillReceiveProps -> nextProps", nextProps)
+        // if (nextProps.posts && this.props.posts && nextProps.posts!== this.props.posts) {
+        //     this.props.getPostsRequest(nextProps.myId, 3, 0)
+
+        // }
+        if (
+            this.props.location.pathname !== nextProps.location.pathname
+        ) {
+            this.props.getPostsRequest(nextProps.myId, 3, 0)
+        }
+    }
+
+    componentDidMount() {
+        const myId = this.props.myId
+        if (myId === 'me') {
+            this.props.getPostsRequest('by-me', 3, 0)
+        } else if (!isNaN(myId)) {
+            this.props.getPostsRequest(myId, 3, 0)
+        }
     }
 
     onChangePagination(page, pageSize) {
@@ -26,7 +46,7 @@ class SharePosts extends React.Component {
             this.props.deletePostsRequest(postId, resolve, reject)
         })
         pm.then(postId => {
-			console.log("TCL: SharePosts -> onClickDelete -> postId", postId)
+            console.log("TCL: SharePosts -> onClickDelete -> postId", postId)
             message.success('Xóa thành công!')
         }, err => {
             message.error('Xóa thất bại!')

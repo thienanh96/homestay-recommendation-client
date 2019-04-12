@@ -6,10 +6,11 @@ import {
 
 
 
-export const getHomestayRequest = (params) => {
+export const getHomestayRequest = (params,notAllowed) => {
   return {
     type: GET_HOMESTAY_REQUEST,
-    params
+    params,
+    notAllowed
   }
 }
 

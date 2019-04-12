@@ -59,11 +59,16 @@ class DetailHomestay extends React.Component {
 
     componentWillMount() {
         const id = this.props.match.params.id
+        const params = new URLSearchParams(this.props.location.search)
         if (id && !isNaN(id)) {
             this.setState({
                 currentHomestayID: id
             })
-            this.props.getDetailHomestayRequest(parseInt(id))
+            if(params.get('type-get') === 'admin'){
+                this.props.getDetailHomestayRequest(parseInt(id),'admin')
+            } else {
+                this.props.getDetailHomestayRequest(parseInt(id),null)
+            }
             this.props.getCommentsRequest(id)
             this.props.getSimilarHomestayRequest(id)
         } else {

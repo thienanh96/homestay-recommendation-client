@@ -39,7 +39,7 @@ export default class App extends Component {
                     <Route exact path="/homestays" component={Homestays} />
                     <Route exact path="/homestays/:id" component={DetailHomestay} />
                     <Route exact path="/community" component={Community} />
-                    <Route exact path="/profile" component={Profile} />}
+                    <Route exact path="/profile/:id" component={Profile} />}
                   </Switch>
                 </LayoutWeb>
               </React.Fragment>

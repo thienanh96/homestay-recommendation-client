@@ -31,6 +31,8 @@ export default class Comments extends React.Component {
 
     render() {
         const { numberOfComments, myAvatarUrl, dataComment, onPressEnterComment } = this.props
+        const countPositive = dataComment.filter(el => el.sentiment === 1).length
+        const countNegative = dataComment.filter(el => el.sentiment === 2).length
         return (
             <div style={{ width: '100%', marginTop: '35px' }}>
                 <div style={{ width: '100%', fontSize: '20px', fontWeight: '600', marginBottom: '30px' }}>
@@ -39,6 +41,10 @@ export default class Comments extends React.Component {
                 <div className='comment-popover-see-all'>
                     <div style={{ fontWeight: '600' }}>
                         Xem tất cả bình luận ({numberOfComments})
+                    </div>
+                    <div style={{ fontWeight: '600', display: 'flex' }}>
+                        <div style={{marginRight: '10px'}}>{countPositive} tích cực</div><Icon style={{ color: 'green', fontSize: '23px', marginRight: '10px'}} type="smile" />
+                        <div style={{marginRight: '10px'}}>{countNegative} tiêu cực</div><Icon style={{ color: 'red', fontSize: '23px'}} type="frown" />
                     </div>
                 </div>
                 <div className='comment-popover-type-comment'>
@@ -63,8 +69,8 @@ export default class Comments extends React.Component {
                         itemLayout="horizontal"
                         dataSource={dataComment}
                         renderItem={item => {
-							console.log("TCL: Comments -> render -> item", item)
-                            
+                            console.log("TCL: Comments -> render -> item", item)
+
                             return (
                                 <Comment
                                     // actions={item.actions}
@@ -75,7 +81,7 @@ export default class Comments extends React.Component {
                                 />
                             )
                         }}
-                />
+                    />
                 </div>
             </div>
         );

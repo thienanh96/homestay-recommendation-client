@@ -1,25 +1,29 @@
 import React from "react";
 
 import {
-    List, Avatar, Button, Skeleton, Icon, Pagination, message
+    List, Avatar, Button, Skeleton, Icon, Pagination, message, Switch
 } from 'antd';
 import { connect } from "react-redux";
-import { getListProfileRequest, deleteProfileRequest } from '../../../../store/actions/profileAction'
+import { getHomestayRequest } from '../../../../store/actions/homestayAction'
 import '../index.css'
 import { reject } from "q";
 const count = 3;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`;
 
-class UserManagement extends React.Component {
+class HomestayManagement extends React.Component {
     state = {
         initLoading: true,
         loading: false,
         data: [],
         list: [],
+        checkedSwitch: false
     }
 
     componentDidMount() {
-        this.props.getListProfileRequest(8, 0)
+        this.props.getHomestayRequest({
+            limitParams: 8,
+            offsetParams: 0
+        })
     }
 
     getData = (callback) => {
@@ -55,7 +59,10 @@ class UserManagement extends React.Component {
     }
 
     onChangePagination(page, pageSize) {
-        this.props.getListProfileRequest(8, parseInt(pageSize * (page - 1)))
+        this.props.getHomestayRequest({
+            limitParams: 8,
+            offsetParams: parseInt(pageSize * (page - 1))
+        })
     }
 
     deleteProfile(userId) {
@@ -64,45 +71,56 @@ class UserManagement extends React.Component {
         })
         pm.then(profileId => {
             message.success('Xóa tài khoản thành công!')
-        },err => {
+        }, err => {
             message.error('Xóa tài khoản thất bại!')
         })
     }
 
-    seeDetail(profileId){
-        if(profileId){
-            this.props.history.push('/profile/' + profileId + '?type=update-profile')
+    seeDetail(homestayId) {
+        if (homestayId) {
+            this.props.history.push('/homestays/' + homestayId + '?type-get=admin')
         }
     }
 
+    onChangeSwitch(checked) {
+        if (checked) {
+            this.props.getHomestayRequest(null, true)
+        } else {
+            this.props.getHomestayRequest({
+                limitParams: 8,
+                offsetParams: 0
+            }, false)
+        }
+    }
+
+    approveHomestay(homestayId) {
+
+    }
+
     render() {
-        const { initLoading, loading, list } = this.state;
-        const { listProfiles = { dt: [], total: 0 }, startGetListProfileRequest = true } = this.props
-        console.log("TCL: UserManagement -> render -> listProfiles", listProfiles)
-        const loadMore = !initLoading && !loading ? (
-            <div style={{
-                textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px',
-            }}
-            >
-                <Button onClick={this.onLoadMore}>loading more</Button>
-            </div>
-        ) : null;
+        const { startHomestayRequest } = this.state;
+        const { homestays = [] } = this.props
 
         return (
             <div>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', height: '50px' }}>
+                    <div style={{ marginRight: '10px' }}>
+                        Phê duyệt
+                    </div>
+                    <Switch onChange={this.onChangeSwitch.bind(this)} />
+                </div>
                 <List
                     className="demo-loadmore-list"
-                    loading={startGetListProfileRequest}
+                    loading={startHomestayRequest}
                     itemLayout="horizontal"
-                    loadMore={loadMore}
-                    dataSource={listProfiles.dt}
+                    dataSource={homestays}
                     renderItem={item => (
-                        <List.Item actions={[<Icon onClick={e => this.seeDetail(item.id)} style={{ fontSize: '23px' }} type="eye" />, <Icon onClick={e => this.deleteProfile(item.id)} style={{ color: 'red', fontSize: '23px' }} type="delete" />]}>
-                            <Skeleton avatar title={false} loading={startGetListProfileRequest} active>
+                        <List.Item actions={[<Icon onClick={e => this.seeDetail(item.homestay_id)} style={{ fontSize: '23px' }} type="eye" />, <Icon onClick={e => this.deleteProfile(item.homestay_id)} style={{ color: 'red', fontSize: '23px' }} type="delete" />, item.is_allowed === 0 ? <Icon onClick={e => this.approveHomestay(item.homestay_id)} type="check-circle" style={{ fontSize: 23, color: 'green' }} /> : null]}>
+                            <Skeleton avatar title={false} loading={startHomestayRequest} active>
                                 <List.Item.Meta
-                                    avatar={<Avatar src={item.avatar} />}
-                                    title={<a href="https://ant.design">{item.user_name}</a>}
-                                    description={item.join_date}
+                                    // avatar={<Avatar src={item.avatar} />}
+                                    title={<b>{item.name}</b>}
+                                    description={'Giá từ ' + item.main_price + 'đ/1 đêm'}
                                 />
 
                             </Skeleton>
@@ -112,7 +130,7 @@ class UserManagement extends React.Component {
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
                     <Pagination
                         defaultCurrent={1}
-                        total={listProfiles.total}
+                        total={5000}
                         pageSize={8}
                         onChange={this.onChangePagination.bind(this)}
                     />
@@ -125,16 +143,15 @@ class UserManagement extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        listProfiles: state.profileReducer.listProfiles,
-        startGetListProfileRequest: state.profileReducer.startGetListProfileRequest
+        homestays: state.homestayReducer.homestays,
+        startHomestayRequest: state.homestayReducer.startHomestayRequest
     }
 }
 
 const mapDispatchToProps = {
-    getListProfileRequest,
-    deleteProfileRequest
+    getHomestayRequest
 }
-export default UserManagement = connect(
+export default HomestayManagement = connect(
     mapStateToProps,
     mapDispatchToProps
-)(UserManagement);
+)(HomestayManagement);
