@@ -5,6 +5,7 @@ import {
 } from 'antd';
 import { connect } from "react-redux";
 import { getHomestayRequest } from '../../../../store/actions/homestayAction'
+import {approveHomestayRequest} from '../../../../store/actions/homestayAction'
 import '../index.css'
 import { reject } from "q";
 const count = 3;
@@ -94,7 +95,14 @@ class HomestayManagement extends React.Component {
     }
 
     approveHomestay(homestayId) {
-
+        const pm = new Promise((resolve,reject) => {
+            this.props.approveHomestayRequest(homestayId,resolve,reject)
+        })
+        return pm.then(res => {
+            return message.success('Phê duyệt Homestay thành công!')
+        },err => {
+            return message.error('Phê duyệt Homestay thất bại!')
+        })
     }
 
     render() {
@@ -149,7 +157,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-    getHomestayRequest
+    getHomestayRequest,
+    approveHomestayRequest
 }
 export default HomestayManagement = connect(
     mapStateToProps,

@@ -82,6 +82,7 @@ class Homestays extends React.Component {
                 idsParams: params.get('ids'),
                 priceRangeParams: params.get('price_range')
             }, () => {
+                console.log('print state: ',this.state)
                 if (!isNaN(this.state.offsetParams) && !isNaN(this.state.limitParams)) {
                     this.setState({
                         defaultPagination: Math.round(parseInt(this.state.offsetParams) / parseInt(this.state.limitParams)) + 1
@@ -135,7 +136,7 @@ class Homestays extends React.Component {
     }
 
     onSearchSubmit(e) {
-        this.props.getHomestayRequest(this.state)
+        // this.props.getHomestayRequest(this.state)
         const api = createQueryString(this.state)
         this.props.history.push('/homestays' + api)
     }
@@ -145,7 +146,7 @@ class Homestays extends React.Component {
     }
 
     getNewHomestay(newHomestay) {
-		console.log("TCL: Homestays -> getNewHomestay -> newHomestay", newHomestay)
+        console.log("TCL: Homestays -> getNewHomestay -> newHomestay", newHomestay)
         if (newHomestay) {
             const pm = new Promise((resolve, reject) => {
                 this.props.createHomestayRequest(newHomestay, resolve, reject)
@@ -197,15 +198,18 @@ class Homestays extends React.Component {
                         </Affix>
                     </div>
                     <div style={{ marginTop: '40px', marginBottom: '20px', display: 'flex', justifyContent: 'flex-end', paddingRight: '10px' }}>
-                        <Button
-                            type={'primary'}
-                            style={{ background: 'rgb(255, 153, 0)', border: 'none', height: '38px', fontSize: '18px', color: 'black' }}
-                            onClick={() => {
-                                this.setState({
-                                    showModal: true
-                                })
-                            }}
-                        >Đăng Homestay</Button>
+                        {
+                            this.props.me && this.props.me.user_id && <Button
+                                type={'primary'}
+                                style={{ background: 'rgb(255, 153, 0)', border: 'none', height: '38px', fontSize: '18px', color: 'black' }}
+                                onClick={() => {
+                                    this.setState({
+                                        showModal: true
+                                    })
+                                }}
+                            >Đăng Homestay</Button>
+                        }
+
                     </div>
                     <div>
                         {
@@ -260,7 +264,10 @@ class Homestays extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return { ...state.homestayReducer }
+    return {
+        ...state.homestayReducer,
+        me: state.authReducer.user
+    }
 }
 
 const mapDispatchToProps = {

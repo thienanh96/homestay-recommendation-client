@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Row, Col } from "antd";
+import { Layout, Row, Col, Icon } from "antd";
 import { Link } from "react-router-dom";
 
 const { Footer } = Layout;
@@ -11,107 +11,44 @@ class FooterWeb extends React.Component {
         zIndex: 3
       }}>
         <Row type="flex" justify="center">
-          <Link to="/#">
-            <img src="./icons/iconFb.png" alt="Facebook" />
+          <Link to="/#" style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
+            {/* <img src="./icons/iconFb.png" alt="Facebook" /> */}
+            <Icon type="facebook" style={{ fontSize: '26px', marginRight: '5px' }} /> <div>Facebook</div>
           </Link>
-          <Link to="/#">
-            <img
-              src="./icons/iconFb.png"
-              alt="Instagram"
-              style={{
-                margin: "0 15px"
-              }}
-            />
+          <Link to="/#" style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
+            <Icon type="instagram" style={{ fontSize: '26px', marginRight: 5 }} /> <div>Instagram</div>
           </Link>
 
-          <Link to="/#">
-            <img src="./icons/iconFb.png" alt="Facebook" />
+          <Link to="/#" style={{ display: 'flex', alignItems: 'center' }}>
+            <Icon type="google" style={{ fontSize: '26px', marginRight: 5 }} /> <div>Google</div>
           </Link>
         </Row>
-        <Row type="flex" justify="space-around" style={{ margin: "30px 0" }}>
+        <Row type="flex" justify="center" style={{ margin: "30px 0" }}>
           <Col>
             <Row
               className="tittleDefaut fontSize18"
-              style={{ margin: "10px 0" }}
+              style={{ margin: "10px 0", textAlign: 'center' }}
             >
-              Về 12Go.vn
+              Về HomestayHub
             </Row>
-            <Row style={{ margin: "10px 0" }}>
+            <Row style={{ margin: "10px 0", textAlign: 'center' }}>
               <Link to="/#" className="textDefault fontSize18">
                 Điều khoản dịch vụ
               </Link>
             </Row>
-            <Row style={{ margin: "10px 0" }}>
+            <Row style={{ margin: "10px 0", textAlign: 'center' }}>
               <Link to="/#" className="textDefault fontSize18">
                 Giới thiệu
               </Link>
             </Row>
-            <Row style={{ margin: "10px 0" }}>
+            <Row style={{ margin: "10px 0", textAlign: 'center' }}>
               <Link to="/#" className="textDefault fontSize18">
                 Báo chí
               </Link>
             </Row>
-            <Row style={{ margin: "10px 0" }}>
+            <Row style={{ margin: "10px 0", textAlign: 'center' }}>
               <Link to="/#" className="textDefault fontSize18">
                 Cơ hội việc làm
-              </Link>
-            </Row>
-          </Col>
-
-          <Col>
-            <Row
-              className="tittleDefaut fontSize18"
-              style={{ margin: "10px 0" }}
-            >
-              Chủ nhà
-            </Row>
-            <Row style={{ margin: "10px 0" }}>
-              <Link to="/#" className="textDefault fontSize18">
-                Nên tham gia vì?
-              </Link>
-            </Row>
-            <Row style={{ margin: "10px 0" }}>
-              <Link to="/#" className="textDefault fontSize18">
-                Ứng dụng của chủ nhà
-              </Link>
-            </Row>
-            <Row style={{ margin: "10px 0" }}>
-              <Link to="/#" className="textDefault fontSize18">
-                Trợ giúp
-              </Link>
-            </Row>
-            <Row style={{ margin: "10px 0" }}>
-              <Link to="/#" className="textDefault fontSize18">
-                Kinh nghiệm
-              </Link>
-            </Row>
-          </Col>
-
-          <Col>
-            <Row
-              className="tittleDefaut fontSize18"
-              style={{ margin: "10px 0" }}
-            >
-              Phượt thủ
-            </Row>
-            <Row style={{ margin: "10px 0" }}>
-              <Link to="/#" className="textDefault fontSize18">
-                Địa danh hấp dẫn
-              </Link>
-            </Row>
-            <Row style={{ margin: "10px 0" }}>
-              <Link to="/#" className="textDefault fontSize18">
-                Giới thiệu chủ nhà
-              </Link>
-            </Row>
-            <Row style={{ margin: "10px 0" }}>
-              <Link to="/#" className="textDefault fontSize18">
-                Chia sẻ trải nghiệm
-              </Link>
-            </Row>
-            <Row style={{ margin: "10px 0" }}>
-              <Link to="/#" className="textDefault fontSize18">
-                Trợ giúp
               </Link>
             </Row>
           </Col>
@@ -127,7 +64,7 @@ class FooterWeb extends React.Component {
           />
         </Row>
         <Row type="flex" justify="center" className="tittleDefaut fontSize14">
-          2019 © Bản quyền thuộc về 12Go.vn
+          2019 © Bản quyền thuộc về HomestayHub.vn
         </Row>
       </Footer>
     );

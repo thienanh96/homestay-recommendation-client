@@ -9,7 +9,7 @@ class LayoutWeb extends React.Component {
       <Layout style={{backgroundColor: 'white'}} className="layout">
         <Header />
         {this.props.children}
-        {/* <Footer /> */}
+        <Footer />
       </Layout>
     );
   }

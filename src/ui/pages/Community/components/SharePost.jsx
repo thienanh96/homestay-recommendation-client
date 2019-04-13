@@ -32,16 +32,16 @@ export default class SharePost extends React.Component {
     }
 
     render() {
-        const { content, avatar, username, datePost, homestay = {}, countLike, customStyle, imageCovers, hasAction, onClickDelete } = this.props;
+        const { content, avatar, username, datePost, homestay = {}, countLike, customStyle, imageCovers, hasAction, onClickDelete, ratePost, meLikePost } = this.props;
         console.log("TCL: SharePost -> render -> datePost", datePost)
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between', ...customStyle }}>
                 <div style={{ width: '64px', height: '64px' }}>
                     <img style={{ width: '100%', borderRadius: '50%' }} alt='' src={avatar ? avatar : 'https://www.w3schools.com/howto/img_avatar2.png'}></img>
                 </div>
-                <div style={{ width: 'calc(100% - 80px)' }}>
+                <div style={{ width: 'calc(100% - 160px)' }}>
                     <div style={{ height: '50px', width: '100%' }}>
-                        <div style={{ width: 'calc(100% - 80px)', height: '100%', float: 'left' }}>
+                        <div style={{ width: 'calc(100% - 160px)', height: '100%', float: 'left' }}>
                             <div className='share-post-userinfo'>
                                 <div>
                                     <b><span>{username ? username : 'Ản danh'} </span> </b> đã chia sẻ một homestay
@@ -57,16 +57,22 @@ export default class SharePost extends React.Component {
                         </div>
                         {
                             hasAction ? (
-                                <div style={{ width: '80px', height: '100%', float: 'left', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <div style={{ width: '160px', height: '100%', float: 'left', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                                     <Icon onClick={onClickDelete} style={{ fontSize: 24, color: 'red', float: 'right' }} type="delete" />
                                 </div>
                             ) : (
-                                    <div style={{ width: '80px', height: '100%', float: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div style={{ width: '50%', textAlign: 'center', fontSize: '16px' }}>
-                                            1234
+                                    <div style={{ width: '160px', height: '100%', float: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div style={{ width: '80%', textAlign: 'center', fontSize: '16px' }}>
+                                            {countLike} lượt thích
                                             </div>
-                                        <div style={{ width: '50%', textAlign: 'center' }}>
-                                            <Icon type="heart" style={{ fontSize: '32px' }} />
+                                        <div style={{ width: '20%', textAlign: 'center' }} onClick={ratePost}>
+                                            {
+                                                meLikePost === 0 && <Icon type="heart" style={{ fontSize: '32px',cursor: 'pointer' }} />
+                                            }
+                                            {
+                                                meLikePost === 1 && <Icon type="heart" theme='filled' style={{ fontSize: '32px', cursor: 'pointer' }} />
+                                            }
+
                                         </div>
                                     </div>
 

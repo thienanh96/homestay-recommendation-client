@@ -47,7 +47,7 @@ class CitySearchContent extends React.Component {
                 <Option value="Hà Nội">Hà Nội</Option>
                 <Option value="Hải Phòng">Hải Phòng</Option>
                 <Option value="Ninh Bình">Ninh Bình</Option>
-                <Option value="Nha Trang">Nha Trang</Option>
+                <Option value="Nha Trang">Khánh Hòa</Option>
                 <Option value="Hồ Chí Minh">TP HCM</Option>
                 <Option value="Đà Nẵng">Đà Nẵng</Option>
                 <Option value="Vũng Tàu">Vũng Tàu</Option>

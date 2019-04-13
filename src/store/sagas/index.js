@@ -1,12 +1,13 @@
 // import 'regenerator-runtime/runtime';
 import { put, fork, takeLatest, all } from "redux-saga/effects";
 
-import { getHomestaySaga, createHomestaySaga, createHomestaySimilaritySaga } from './homestay'
+import { getHomestaySaga, createHomestaySaga, createHomestaySimilaritySaga, approveHomestaySaga } from './homestay'
 import { getBestHomestaySaga, getConformHomestaysSaga } from './home'
 import { getDetailHomestaySaga, rateDetailHomestaySaga, getSimilarHomestaySaga, updateHomestaySaga } from './detailHomestay'
 import { getCommentsSaga, createCommentSaga } from './comments'
 import authSaga, { logoutSaga } from "./auth";
-import { getPostsSaga, createPostSaga, deletePostSaga } from './community'
+import {registerSaga} from './auth';
+import { getPostsSaga, createPostSaga, deletePostSaga, ratePostSaga } from './community'
 import { getRateHomestaySaga } from './rateHomestay'
 import { updateProfileSaga, getProfileSaga, getListProfileSaga, deleteProfileSaga } from './profile'
 
@@ -33,6 +34,9 @@ export default function* rootSaga() {
     updateHomestaySaga(),
     deletePostSaga(),
     getListProfileSaga(),
-    deleteProfileSaga()
+    deleteProfileSaga(),
+    ratePostSaga(),
+    approveHomestaySaga(),
+    registerSaga()
   ]);
 }

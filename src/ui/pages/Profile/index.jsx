@@ -164,10 +164,10 @@ class Profile extends React.Component {
                             <Menu.Item key="2">Homestay sở hữu</Menu.Item>
                             <Menu.Item key="3">Homestay chia sẻ</Menu.Item>
                             {
-                                this.props.me.user_id === 10001 && <Menu.Item key="4">Admin - QLND</Menu.Item>
+                                this.props.me && this.props.me.user_id === 10001 && <Menu.Item key="4">Admin - QLND</Menu.Item>
                             }
                             {
-                                this.props.me.user_id === 10001 && <Menu.Item key="5">Admin - QLHS</Menu.Item>
+                                this.props.me && this.props.me.user_id === 10001 && <Menu.Item key="5">Admin - QLHS</Menu.Item>
 
                             }
                         </Menu>
@@ -176,6 +176,7 @@ class Profile extends React.Component {
                         {
                             this.getKeys() === 1 && <ProfileUpdate
                                 initialInfo={profile}
+                                {...this.props}
                                 me={me}
                                 getUpdatedInfo={this.getUpdatedInfo.bind(this)}
                             />

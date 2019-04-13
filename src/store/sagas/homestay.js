@@ -7,7 +7,10 @@ import {
     CREATE_HOMESTAY_FAILURE,
     CREATE_HOMESTAY_REQUEST,
     CREATE_HOMESTAY_SUCCESS,
-    CREATE_HOMESTAY_SIMILARITY_REQUEST
+    CREATE_HOMESTAY_SIMILARITY_REQUEST,
+    ADMIN_APPROVE_HOMESTAY_FAILURE,
+    ADMIN_APPROVE_HOMESTAY_REQUEST,
+    ADMIN_APPROVE_HOMESTAY_SUCCESS
 } from "../constants/homestay";
 import { post, get, puts } from "../../client/index";
 import { createQueryString } from '../../lib/utils'
@@ -25,6 +28,11 @@ export function* createHomestaySaga() {
 export function* createHomestaySimilaritySaga() {
     yield takeEvery(CREATE_HOMESTAY_SIMILARITY_REQUEST, createHomestaySimilarity);
 }
+
+export function* approveHomestaySaga() {
+    yield takeEvery(ADMIN_APPROVE_HOMESTAY_REQUEST, approveHomestay);
+}
+
 
 
 
@@ -72,6 +80,18 @@ function* createHomestaySimilarity(action) {
     yield call(createHomestaySimilarityAPI, homestayId);
 }
 
+function* approveHomestay(action) {
+    const { homestayId,resolve,reject } = action
+    let response = yield call(approveHomestayAPI, homestayId);
+    if (response && response.status === 200) {
+        yield put({ type: ADMIN_APPROVE_HOMESTAY_SUCCESS, homestayId: homestayId})
+        resolve();
+    } else {
+        yield put({ type: ADMIN_APPROVE_HOMESTAY_FAILURE })
+        reject();
+    }
+}
+
 
 
 
@@ -93,6 +113,10 @@ function createHomestaySimilarityAPI(homestayId) {
     return post(`/api/homestay-similarity/create`, {
         homestay_id: homestayId
     });
+}
+
+function approveHomestayAPI(homestayId) {
+    return puts('/api/admin/homestay/approve/' + homestayId)
 }
 
 

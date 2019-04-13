@@ -111,6 +111,10 @@ class ProfileUpdate extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { id } = this.props.initialInfo
+        if(!this.props.me){
+            this.props.history.replace('/')
+            return null
+        }
         console.log("TCL: ProfileUpdate -> render -> id", id)
 
         const formItemLayout = {
@@ -215,7 +219,7 @@ class ProfileUpdate extends React.Component {
                         type={'primary'}
                         style={{ background: 'rgb(255, 153, 0)', border: 'none', height: '38px', fontSize: '14px', color: 'black', float: 'right' }}
                         htmlType='submit'
-                        disabled={this.props.me.user_id ? (this.props.me.user_id !== this.props.initialInfo.id) : false}
+                        disabled={this.props.me.user_id ?  (this.props.me.user_id !== this.props.initialInfo.id) : false}
                     >
                         Cập nhật
                     </Button>

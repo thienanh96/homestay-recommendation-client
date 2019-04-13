@@ -21,30 +21,6 @@ import { logoutRequest } from "../store/actions/authAction";
 // import SearchBar from "./SearchBar";
 const { Header } = Layout;
 
-class MenuAccount extends React.Component {
-    render() {
-        let { logoutRequest = () => { } } = this.props;
-        return (
-            <Menu>
-                <Menu.Item key="0">
-                    <a href="#">Quản lý tài khoản</a>
-                </Menu.Item>
-                <Menu.Item key="1">
-                    <a href="#">Thay đổi mật khẩu</a>
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item onClick={logoutRequest} key="3">
-                    Đăng xuất
-        </Menu.Item>
-            </Menu>
-        );
-    }
-}
-MenuAccount = connect(
-    null,
-    { logoutRequest }
-)(MenuAccount);
-const menu = props => <MenuAccount {...props} />;
 class HeaderWeb extends React.Component {
     constructor(props) {
         super(props);
@@ -76,13 +52,14 @@ class HeaderWeb extends React.Component {
                                     this.props.showStatusHeader && <Row>
                                         <Col md={12} sm={6}>
                                             <div className="search-logo">
-                                                <div className="logo">
+                                                {/* <div className="logo">
                                                     <div>HomestayHub</div>
-                                                </div>
+                                                </div> */}
+                                                <img alt='' src='/logo.png'></img>
                                                 {/* <SearchBar /> */}
                                             </div>
                                         </Col>
-                                        <Col md={12} sm={18} style={{ height: '64px' }}>
+                                        <Col md={12} sm={12} style={{ height: '64px' }}>
                                             <Menu
                                                 //   theme="dark"
                                                 mode="horizontal"
@@ -98,36 +75,29 @@ class HeaderWeb extends React.Component {
                                                 <Menu.Item key="3">
                                                     <NavLink to="/community">Cộng đồng</NavLink>
                                                 </Menu.Item>
-                                                <Menu.Item key="4">
-                                                    <NavLink to="/profile/me?type=update-profile">Tài khoản</NavLink>
-                                                </Menu.Item>
                                                 {this.props.isAuthenticated ? (
-                                                    <React.Fragment>
-
-                                                        <Avatar
-                                                            style={{ marginLeft: "20px" }}
-                                                            size={40}
-                                                            src={this.props.user.avatar}
-                                                            icon="user"
-                                                        />
-                                                        <div style={{ float: 'right' }}>{this.props.user.username}</div>
-                                                        <Dropdown {...this.props} overlay={menu} trigger={["click"]}>
-                                                            <a className="ant-dropdown-link" href="#">
-                                                                <Icon type="down" />
-                                                            </a>
-                                                        </Dropdown>
-
-
-                                                        ,
-                                                </React.Fragment>
+                                                    <Menu.Item key="5">
+                                                        <NavLink to="/profile/me?type=update-profile">
+                                                            <Avatar
+                                                                style={{ marginRight: "20px" }}
+                                                                size={40}
+                                                                src={this.props.user.avatar}
+                                                                icon="user"
+                                                            />
+                                                            <div style={{ float: 'right' }}>{this.props.user.username}</div>
+                                                        </NavLink>
+                                                    </Menu.Item>
                                                 ) : (
                                                         <Button
                                                             style={{ marginLeft: "20px" }}
                                                             onClick={this.showModalLogin}
                                                         >
                                                             Đăng nhập
-                                    </Button>
+                                                        </Button>
                                                     )}
+                                                <Menu.Item key="4" onClick={e => this.props.logoutRequest()}>
+                                                Đăng xuất
+                                                </Menu.Item>
                                             </Menu>
                                         </Col>
                                     </Row>
@@ -153,4 +123,6 @@ export default connect(state => {
         user: state.authReducer.user,
         showStatusHeader: state.guiChangeReducer.showHeaderStatus
     };
-}, null)(HeaderWeb);
+}, {
+    logoutRequest
+})(HeaderWeb);

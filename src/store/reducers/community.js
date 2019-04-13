@@ -7,7 +7,10 @@ import {
     CREATE_POST_SUCCESS,
     DELETE_POST_FAILURE,
     DELETE_POST_REQUEST,
-    DELETE_POST_SUCCESS
+    DELETE_POST_SUCCESS,
+    RATE_POST_FAILURE,
+    RATE_POST_REQUEST,
+    RATE_POST_SUCCESS
 } from "../constants/communtity";
 // reducer with initial state
 const initialState = {
@@ -42,6 +45,27 @@ export default function reducer(state = initialState, action) {
                 posts: state.posts.filter(el => el.post_id !== action.postId)
             }
             return { ...state, ...stateCopy, startDeletePostsRequest: false, }
+        case RATE_POST_REQUEST:
+            return { ...state }
+        case RATE_POST_FAILURE:
+            return { ...state }
+        case RATE_POST_SUCCESS:
+            let typeRate = action.typeRate
+            let postId = action.postId
+            let post = state.posts.map((post = { post: {}, me_like: 0 }) => {
+                if (post.post.post_id === postId) {
+                    if (typeRate === 'like') {
+                        post.post.count_like = post.post.count_like + 1
+                        post.me_like = 1
+                    } else {
+                        post.post.count_like = post.post.count_like - 1
+                        post.me_like = 0
+                    }
+                }
+                return post
+            })
+
+            return { ...state, posts: [...post] }
         default:
             return state;
     }

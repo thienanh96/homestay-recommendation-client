@@ -7,6 +7,7 @@ import "./index.css";
 import { SubmissionError } from "redux-form";
 import { NavLink, withRouter } from "react-router-dom";
 import { TextInput } from "../../commons/input/InputField";
+import Register from '../Register'
 const FormItem = Form.Item;
 const formItemLayout = {
     labelCol: {
@@ -57,7 +58,8 @@ class Login extends React.Component {
 
     showModal = () => {
         this.setState({
-            visible: true
+            visible: true,
+            showModalRegister: false
         });
     };
 
@@ -65,12 +67,13 @@ class Login extends React.Component {
     handleCancel = e => {
         this.props.close();
     };
-    register = () => {
-        this.props.close();
-        this.props.history.push("/register");
+    switchModal = () => {
+        this.setState({
+            showModalRegister: false
+        });
     };
     login = values => {
-		console.log('TCL: Login -> values', values)
+        console.log('TCL: Login -> values', values)
         const pm = new Promise((resolve, reject) => {
             this.props.dispatch(loginRequest(values, resolve, reject));
         });
@@ -100,42 +103,47 @@ class Login extends React.Component {
                     onCancel={this.handleCancel}
                     footer={null}
                 >
-                    <div>
+                    {this.state.showModalRegister ? (
+                        <Register close={this.switchModal} />
+                    ) : (
+                            <div>
 
-                        <div className="text-login-other">
-                            Đăng nhập ngay bây giờ
-                        </div>
-                        <form onSubmit={handleSubmit(this.login)}>
-                            <TextInput
-                                name="username"
-                                component={AInput}
-                                // type="email"
-                                placeholder="Nhập email của bạn"
-                            />
-                            <TextInput
-                                name="password"
-                                component={AInput}
-                                type="password"
-                                placeholder="Nhập mật khẩu của bạn"
-                            />
+                                <div className="text-login-other">
+                                    Đăng nhập ngay bây giờ
+                                </div>
+                                <form onSubmit={handleSubmit(this.login)}>
+                                    <TextInput
+                                        name="username"
+                                        component={AInput}
+                                        // type="email"
+                                        placeholder="Nhập email của bạn"
+                                    />
+                                    <TextInput
+                                        name="password"
+                                        component={AInput}
+                                        type="password"
+                                        placeholder="Nhập mật khẩu của bạn"
+                                    />
 
-                            <FormItem {...tailFormItemLayout}>
-                                <Button
-                                    className="btn btn-login"
-                                    htmlType="submit"
-                                    style={{ marginRight: "10px", float: 'right' }}
-                                >
-                                    Đăng nhập
+                                    <FormItem {...tailFormItemLayout}>
+                                        <Button
+                                            className="btn btn-login"
+                                            htmlType="submit"
+                                            style={{ marginRight: "10px", float: 'right' }}
+                                        >
+                                            Đăng nhập
                                     </Button>
 
-                                <div className="text-register">
-                                    Bạn chưa có tài khoản?{" "}
-                                    <strong onClick={this.register}>Đăng ký ngay</strong>
-                                </div>
+                                        <div className="text-register">
+                                            Bạn chưa có tài khoản?{" "}
+                                            <strong onClick={e => this.setState({ showModalRegister: true })}>Đăng ký ngay</strong>
+                                        </div>
 
-                            </FormItem>
-                        </form>
-                    </div>
+                                    </FormItem>
+                                </form>
+                            </div>
+                        )}
+
                 </Modal>
             </div>
         );

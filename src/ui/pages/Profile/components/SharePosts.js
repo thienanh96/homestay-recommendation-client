@@ -55,32 +55,31 @@ class SharePosts extends React.Component {
     }
 
     render() {
-        const { totalPosts, posts, meRate = null } = this.props
+        const { totalPosts, posts = { post: [], me_like: 0 }, meRate = null } = this.props
         return (
             <div style={{ width: '100%', marginTop: '30px', padding: '15px' }}>
                 <div style={{ width: '100%', }}>
                     {
-                        posts && Array.isArray(posts) && posts.map((post = {}) => {
-                            if (!post || (post && !post.homestay)) {
-                                return null
-                            }
+                        posts && Array.isArray(posts) && posts.map((post = { post: {}, me_like: 0 }) => {
+                            // post = post.post
                             let images = []
-                            if (post.homestay.homestay_id) {
-                                images = post.homestay.images.split('$')
+                            if (post.post.homestay.homestay_id) {
+                                images = post.post.homestay.images.split('$')
                             }
                             return (
                                 <SharePost
-                                    content={post.content}
-                                    avatar={post.user ? post.user.avatar : null}
-                                    username={post.user ? post.user.user_name : null}
-                                    datePost={post.created_at}
-                                    homestay={post.homestay}
-                                    countLike={post.count_like}
+                                    content={post.post.content}
+                                    avatar={post.post.user ? post.post.user.avatar : null}
+                                    username={post.post.user ? post.post.user.user_name : null}
+                                    datePost={post.post.created_at}
+                                    homestay={post.post.homestay}
+                                    countLike={post.post.count_like}
                                     meRate={meRate}
                                     customStyle={{ marginBottom: '50px' }}
                                     imageCovers={images}
                                     hasAction={true}
-                                    onClickDelete={e => this.onClickDelete(post.post_id)}
+                                    onClickDelete={e => this.onClickDelete(post.post.post_id)}
+                                    meLikePost={post.me_like}
                                 />
                             )
                         })

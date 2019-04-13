@@ -9,7 +9,10 @@ import {
     CREATE_POST_SUCCESS,
     DELETE_POST_FAILURE,
     DELETE_POST_REQUEST,
-    DELETE_POST_SUCCESS
+    DELETE_POST_SUCCESS,
+    RATE_POST_FAILURE,
+    RATE_POST_REQUEST,
+    RATE_POST_SUCCESS
 } from "../constants/communtity";
 
 import { UPDATE_COUNT_SHARES } from '../constants/detailHomestay'
@@ -30,13 +33,16 @@ export function* deletePostSaga() {
     yield takeEvery(DELETE_POST_REQUEST, deletePost);
 }
 
+export function* ratePostSaga() {
+    yield takeEvery(RATE_POST_REQUEST, ratePost);
+}
+
 
 
 function* getPosts(action) {
     try {
         const { filter, limit, offset } = action
         let response = yield call(getPostsAPI, filter, limit, offset);
-        console.log("TCL: function*getPosts -> response", response)
         if (response && response.status === 200) {
             yield put({ type: GET_POST_SUCCESS, posts: response.data.data, total: response.data.total })
         } else {
@@ -73,8 +79,8 @@ function* createPost(action) {
 function* deletePost(action) {
     const { postId, reject, resolve } = action
     try {
-        let response = yield call(deletePostAPU,postId);
-		console.log("TCL: function*deletePost -> response", response)
+        let response = yield call(deletePostAPI, postId);
+        console.log("TCL: function*deletePost -> response", response)
         if (response && response.status === 200) {
             yield put({ type: DELETE_POST_SUCCESS, postId: postId })
             resolve(postId)
@@ -86,6 +92,22 @@ function* deletePost(action) {
     } catch (error) {
         yield put({ type: DELETE_POST_FAILURE })
         reject()
+    }
+}
+
+function* ratePost(action) {
+    const { postId} = action
+    try {
+        let response = yield call(ratePostAPI, postId);
+        console.log("TCL: function*ratePost -> response", response)
+        if (response && response.status === 200) {
+            yield put({ type: RATE_POST_SUCCESS, typeRate: response.data.type_rate, postId: postId })
+        } else {
+            yield put({ type: RATE_POST_FAILURE })
+        }
+
+    } catch (error) {
+        yield put({ type: RATE_POST_FAILURE })
     }
 }
 
@@ -114,8 +136,14 @@ function createPostAPI(homestayId, content) {
     })
 }
 
-function deletePostAPU(postId) {
+function deletePostAPI(postId) {
     return deletes('/api/post/delete/' + postId)
+}
+
+function ratePostAPI(postId) {
+    return post('/api/post/rate',{
+        post_id: postId
+    })
 }
 
 

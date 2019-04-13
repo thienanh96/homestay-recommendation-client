@@ -18,7 +18,7 @@ import {
 import { connect } from "react-redux";
 import { compose } from 'redux'
 import './index.css'
-import { getPostsRequest } from '../../../store/actions/communityAction'
+import { getPostsRequest, ratePostRequest } from '../../../store/actions/communityAction'
 import CardHomestay from '../../commons/components/HomestayCard'
 import { changeStatusHeader } from '../../../store/actions/guiChangeAction'
 import { getMyRateHomestayRequest } from '../../../store/actions/rateHomestayAction'
@@ -26,6 +26,7 @@ import { resolve } from "path";
 import withSearch from '../WithSearch/index'
 import SharePost from './components/SharePost'
 import Filter from '../../commons/components/Filter'
+import { reject } from "q";
 
 
 
@@ -61,10 +62,16 @@ class Community extends React.Component {
         }
     }
 
+    ratePost(postId) {
+        console.log("TCL: Community -> ratePost -> postId", postId)
+        this.props.ratePostRequest(postId, null, null)
+
+    }
+
 
 
     render() {
-        const { totalPosts, posts, meRate = null } = this.props
+        const { totalPosts, posts = [], meRate = null } = this.props
         return (
             <div style={{ width: '100%', marginTop: '30px' }}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', height: '80px', alignItems: 'center' }}>
@@ -74,25 +81,24 @@ class Community extends React.Component {
                 </div>
                 <div style={{ width: '100%', }}>
                     {
-                        posts && Array.isArray(posts) && posts.map((post = {}) => {
-                            if(!post || (post && !post.homestay)){
-                                return null
-                            }
+                        posts && Array.isArray(posts) && posts.map((post = { post: {}, me_like: 0 }) => {
                             let images = []
-                            if(post.homestay.homestay_id){
-                                images = post.homestay.images.split('$')
+                            if (post.post.homestay.homestay_id) {
+                                images = post.post.homestay.images.split('$')
                             }
                             return (
                                 <SharePost
-                                    content={post.content}
-                                    avatar={post.user ? post.user.avatar : null}
-                                    username={post.user ? post.user.user_name : null}
-                                    datePost={post.created_at}
-                                    homestay={post.homestay}
-                                    countLike={post.count_like}
+                                    content={post.post.content}
+                                    avatar={post.post.user ? post.post.user.avatar : null}
+                                    username={post.post.user ? post.post.user.user_name : null}
+                                    datePost={post.post.created_at}
+                                    homestay={post.post.homestay}
+                                    countLike={post.post.count_like}
                                     meRate={meRate}
                                     customStyle={{ marginBottom: '50px' }}
                                     imageCovers={images}
+                                    meLikePost={post.me_like}
+                                    ratePost={e => this.ratePost(post.post.post_id)}
                                 />
                             )
                         })
@@ -123,7 +129,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
     getPostsRequest,
     changeStatusHeader,
-    getMyRateHomestayRequest
+    getMyRateHomestayRequest,
+    ratePostRequest
 }
 export default compose(
     connect(mapStateToProps, mapDispatchToProps), withSearch

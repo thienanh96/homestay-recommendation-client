@@ -1,0 +1,135 @@
+.modal-register {
+    width: 586px;
+  }
+  
+  .modal-register .ant-modal-close {
+    top: -20px;
+    right: -20px;
+  }
+  
+  .modal-register .ant-modal-close .anticon {
+    border-radius: 17px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+    /* height: 30px; */
+    padding: 9px;
+    /* width: 30px; */
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-register .ant-modal-body {
+    padding: 36px !important;
+  }
+  
+  .modal-register input {
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #575454;
+    border-radius: 3px;
+    background-color: #ffffff;
+    padding: 23px 21px 23px 21px;
+    text-align: left;
+  }
+  
+  .modal-register form {
+    margin-top: 20px;
+  }
+  
+  .modal-login .link-register {
+    color: #575454;
+  }
+  
+  .btn-facebook {
+    background-color: #295897;
+  }
+  
+  .btn-facebook:hover {
+    background-color: #2f71ca !important;
+    color: #ffffff;
+    border-color: #2f71ca !important;
+  }
+  
+  .btn-gmail {
+    background-color: #e05757;
+  }
+  
+  .btn-mail:hover {
+    background-color: #e86868 !important;
+    color: #ffffff;
+    border-color: #e86868 !important;
+  }
+  
+  .btn-register {
+    background: #efb350;
+    border-color: #efb350;
+  }
+  
+  .btn-register:hover {
+    background: #f0ba63 !important;
+    color: white !important;
+    border-color: #efb350;
+  }
+  
+  .text-register {
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #575454;
+    margin-top: 20px;
+  }
+  
+  .text-register-other {
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #575454;
+    margin-top: 20px;
+  }
+  
+  .text-register-other:after {
+    content: "";
+    position: absolute;
+    border-bottom: 2px #d8d8d8 solid;
+    /* height: 200px; */
+    width: 78px;
+    /* height: 23px; */
+    /* top: 27px; */
+    margin-top: 10px;
+    /* margin-right: 104px; */
+    right: 60px;
+    /* margin-right: 29px; */
+    /* -webkit-transform: translateY(-50%); */
+    /* transform: translateY(-50%); */
+  }
+  
+  .text-register-other:before {
+    content: "";
+    position: absolute;
+    border-bottom: 2px #d8d8d8 solid;
+    /* height: 200px; */
+    width: 78px;
+    /* height: 23px; */
+    /* top: 27px; */
+    margin-top: 10px;
+    /* margin-right: 104px; */
+    left: 60px;
+    /* margin-right: 29px; */
+    /* -webkit-transform: translateY(-50%); */
+    /* transform: translateY(-50%); */
+  }
+  

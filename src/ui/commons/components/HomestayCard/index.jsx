@@ -16,8 +16,13 @@ class CardHomestay extends React.Component {
         }
     }
 
+    componentWillUnmount(){
+        console.log('will mount')
+    }
+
     // async componentWillReceiveProps(nextProps) {
     //     let { homestay } = nextProps
+	// 	console.log("TCL: CardHomestay -> componentWillReceiveProps -> homestay", homestay)
     //     let images = homestay.images
     //     if (!homestay.images) return null;
     //     if (homestay && homestay.homestay_id >= 19793) {

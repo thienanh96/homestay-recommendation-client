@@ -1,7 +1,8 @@
 import {
   GET_POST_REQUEST,
   CREATE_POST_REQUEST,
-  DELETE_POST_REQUEST
+  DELETE_POST_REQUEST,
+  RATE_POST_REQUEST
 } from "../constants/communtity";
 
 
@@ -27,6 +28,15 @@ export const createPostsRequest = (homestayId, content, resolve, reject) => {
 export const deletePostsRequest = (postId, resolve, reject) => {
   return {
     type: DELETE_POST_REQUEST,
+    postId,
+    resolve, 
+    reject
+  }
+}
+
+export const ratePostRequest = (postId, resolve, reject) => {
+  return {
+    type: RATE_POST_REQUEST,
     postId,
     resolve, 
     reject

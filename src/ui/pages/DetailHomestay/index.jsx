@@ -20,7 +20,7 @@ import { connect } from "react-redux";
 import { compose } from 'redux'
 import history from '../../../lib/history'
 import './index.css'
-import { getDetailHomestayRequest, rateDetailHomestay, getSimilarHomestayRequest,updateHomestayRequest } from '../../../store/actions/detailHomestayAction'
+import { getDetailHomestayRequest, rateDetailHomestay, getSimilarHomestayRequest, updateHomestayRequest } from '../../../store/actions/detailHomestayAction'
 import SlideShow from '../../commons/components/SlideShow'
 import { changeStatusHeader } from '../../../store/actions/guiChangeAction'
 import { getCommentsRequest, createCommentRequest } from '../../../store/actions/commentAction'
@@ -64,10 +64,10 @@ class DetailHomestay extends React.Component {
             this.setState({
                 currentHomestayID: id
             })
-            if(params.get('type-get') === 'admin'){
-                this.props.getDetailHomestayRequest(parseInt(id),'admin')
+            if (params.get('type-get') === 'admin') {
+                this.props.getDetailHomestayRequest(parseInt(id), 'admin')
             } else {
-                this.props.getDetailHomestayRequest(parseInt(id),null)
+                this.props.getDetailHomestayRequest(parseInt(id), null)
             }
             this.props.getCommentsRequest(id)
             this.props.getSimilarHomestayRequest(id)
@@ -181,10 +181,10 @@ class DetailHomestay extends React.Component {
     }
 
     getNewHomestay(newHomestay) {
-		console.log("TCL: DetailHomestay -> getNewHomestay -> newHomestay", newHomestay)
+        console.log("TCL: DetailHomestay -> getNewHomestay -> newHomestay", newHomestay)
         if (newHomestay) {
             const pm = new Promise((resolve, reject) => {
-                this.props.updateHomestayRequest(this.state.currentHomestayID,newHomestay, resolve, reject)
+                this.props.updateHomestayRequest(this.state.currentHomestayID, newHomestay, resolve, reject)
             })
             pm.then(data => {
                 if (data && data['homestay_id']) {
@@ -210,7 +210,8 @@ class DetailHomestay extends React.Component {
     render() {
         const { homestay_info, host_info, me_rate } = this.props.detailHomestay
         const similarHomestays = this.props.similarHomestays
-        const { username, avatar, user_id } = this.props.myProfile
+        const { myProfile = { username: null, avatar: null, user_id: null } } = this.props
+        const { username, avatar, user_id } = myProfile
         const comments = this.props.comments
         if (!homestay_info) return null
         const dataRaw = comments.map(comment => {
