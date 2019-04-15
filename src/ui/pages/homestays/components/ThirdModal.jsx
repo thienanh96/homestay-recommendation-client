@@ -31,6 +31,7 @@ class ThirdModal extends Component {
 
 
     componentDidMount() {
+        if(!this.props.currentHomestay) return;
         const { amenities } = this.props.currentHomestay;
         let priceDetail = {}
         amenities.data.map(el => {

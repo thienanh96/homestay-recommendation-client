@@ -5,7 +5,7 @@ import {
 } from 'antd';
 import { connect } from "react-redux";
 import { getHomestayRequest } from '../../../../store/actions/homestayAction'
-import {approveHomestayRequest} from '../../../../store/actions/homestayAction'
+import { approveHomestayRequest, deleteHomestayRequest,deleteHomestaySimilarityRequest } from '../../../../store/actions/homestayAction'
 import '../index.css'
 import { reject } from "q";
 const count = 3;
@@ -66,14 +66,17 @@ class HomestayManagement extends React.Component {
         })
     }
 
-    deleteProfile(userId) {
+    deleteHomestay(homestayId) {
         const pm = new Promise((resolve, reject) => {
-            this.props.deleteProfileRequest(userId, resolve, reject)
+            this.props.deleteHomestayRequest(homestayId, resolve, reject)
         })
-        pm.then(profileId => {
-            message.success('Xóa tài khoản thành công!')
+        pm.then(() => {
+            this.props.deleteHomestaySimilarityRequest(homestayId)
+            message.success('Xóa Homestay thành công!')
         }, err => {
-            message.error('Xóa tài khoản thất bại!')
+            message.error('Xóa Homestay thất bại!')
+        }).catch(err => {
+            message.error('Xóa Homestay thất bại!')
         })
     }
 
@@ -95,12 +98,12 @@ class HomestayManagement extends React.Component {
     }
 
     approveHomestay(homestayId) {
-        const pm = new Promise((resolve,reject) => {
-            this.props.approveHomestayRequest(homestayId,resolve,reject)
+        const pm = new Promise((resolve, reject) => {
+            this.props.approveHomestayRequest(homestayId, resolve, reject)
         })
         return pm.then(res => {
             return message.success('Phê duyệt Homestay thành công!')
-        },err => {
+        }, err => {
             return message.error('Phê duyệt Homestay thất bại!')
         })
     }
@@ -123,7 +126,7 @@ class HomestayManagement extends React.Component {
                     itemLayout="horizontal"
                     dataSource={homestays}
                     renderItem={item => (
-                        <List.Item actions={[<Icon onClick={e => this.seeDetail(item.homestay_id)} style={{ fontSize: '23px' }} type="eye" />, <Icon onClick={e => this.deleteProfile(item.homestay_id)} style={{ color: 'red', fontSize: '23px' }} type="delete" />, item.is_allowed === 0 ? <Icon onClick={e => this.approveHomestay(item.homestay_id)} type="check-circle" style={{ fontSize: 23, color: 'green' }} /> : null]}>
+                        <List.Item actions={[<Icon onClick={e => this.seeDetail(item.homestay_id)} style={{ fontSize: '23px' }} type="eye" />, <Icon onClick={e => this.deleteHomestay(item.homestay_id)} style={{ color: 'red', fontSize: '23px' }} type="delete" />, item.is_allowed === 0 ? <Icon onClick={e => this.approveHomestay(item.homestay_id)} type="check-circle" style={{ fontSize: 23, color: 'green' }} /> : null]}>
                             <Skeleton avatar title={false} loading={startHomestayRequest} active>
                                 <List.Item.Meta
                                     // avatar={<Avatar src={item.avatar} />}
@@ -158,7 +161,9 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
     getHomestayRequest,
-    approveHomestayRequest
+    approveHomestayRequest,
+    deleteHomestayRequest,
+    deleteHomestaySimilarityRequest
 }
 export default HomestayManagement = connect(
     mapStateToProps,

@@ -21,6 +21,7 @@ import { compose } from 'redux'
 import history from '../../../lib/history'
 import './index.css'
 import { getDetailHomestayRequest, rateDetailHomestay, getSimilarHomestayRequest, updateHomestayRequest } from '../../../store/actions/detailHomestayAction'
+import {updateHomestaySimilarityRequest} from '../../../store/actions/homestayAction'
 import SlideShow from '../../commons/components/SlideShow'
 import { changeStatusHeader } from '../../../store/actions/guiChangeAction'
 import { getCommentsRequest, createCommentRequest } from '../../../store/actions/commentAction'
@@ -187,16 +188,20 @@ class DetailHomestay extends React.Component {
                 this.props.updateHomestayRequest(this.state.currentHomestayID, newHomestay, resolve, reject)
             })
             pm.then(data => {
-                if (data && data['homestay_id']) {
+				console.log("TCL: DetailHomestay -> getNewHomestay -> data", data)
+                if (data && data.homestay_id) {
                     message.success('Cập nhật homestay thành công!')
-                    // this.props.createHomestaySimilarityRequest(data['homestay_id'])
-                    return this.setState({ showModal: false })
+                    this.setState({ showModal: false })
+                    this.props.updateHomestaySimilarityRequest(this.state.currentHomestayID)
                 } else {
+                    console.log('that bai')
                     message.error('Cập nhật homestay thất bại')
                 }
             }, err => {
+				console.log("TCL: DetailHomestay -> getNewHomestay -> err", err)
                 return message.error('Cập nhật homestay thất bại')
             }).catch(err => {
+			console.log("TCL: DetailHomestay -> getNewHomestay -> errrr", err)
 
                 return message.error('Cập nhật homestay thất bại')
             })
@@ -210,7 +215,7 @@ class DetailHomestay extends React.Component {
     render() {
         const { homestay_info, host_info, me_rate } = this.props.detailHomestay
         const similarHomestays = this.props.similarHomestays
-        const { myProfile = { username: null, avatar: null, user_id: null } } = this.props
+        const { myProfile = { username: null, avatar: null, user_id: null } } = this.props.myProfile ? this.props : {myProfile: {}}
         const { username, avatar, user_id } = myProfile
         const comments = this.props.comments
         if (!homestay_info) return null
@@ -343,7 +348,8 @@ const mapDispatchToProps = {
     createCommentRequest,
     getSimilarHomestayRequest,
     createPostsRequest,
-    updateHomestayRequest
+    updateHomestayRequest,
+    updateHomestaySimilarityRequest
 }
 // export default connect(
 //     mapStateToProps,

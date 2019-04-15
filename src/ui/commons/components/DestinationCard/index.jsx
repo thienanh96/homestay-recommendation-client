@@ -16,9 +16,9 @@ class DestinationCard extends React.Component {
                 <div style={{ position: 'absolute', fontWeight: '600', fontSize: '28px', color: 'white', top: '30px', left: '27px' }}>
                     {cityName}
                 </div>
-                <div style={{ position: 'absolute', fontWeight: '600', fontSize: '18px', color: 'white', top: '68px', left: '27px' }}>
+                {/* <div style={{ position: 'absolute', fontWeight: '600', fontSize: '18px', color: 'white', top: '68px', left: '27px' }}>
                     {countHomestay} chỗ ở
-                </div>
+                </div> */}
             </div>
 
 

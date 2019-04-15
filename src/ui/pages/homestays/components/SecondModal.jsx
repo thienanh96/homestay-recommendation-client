@@ -28,12 +28,15 @@ class SecondModal extends Component {
             price_detail.data.map(el => {
                 priceDetail = {...priceDetail,...el}
             })
+            priceDetail['Thứ sáu - Chủ nhật'] = priceDetail['Thứ sáu - Chủ nhật'].replace(/đ/g,'')
+            priceDetail['Phí khách tăng thêm'] = priceDetail['Phí khách tăng thêm'].replace(/đ/g,'')
+            priceDetail['Số đêm tối thiểu'] = priceDetail['Số đêm tối thiểu'].replace(/đêm/g,'')
             this.props.form.setFieldsValue({
                 mondayToThursday: main_price,
                 firdayToSunday: priceDetail['Thứ sáu - Chủ nhật'],
                 extraPrice: priceDetail['Phí khách tăng thêm'],
                 minCountNight: priceDetail['Số đêm tối thiểu'],
-                cancelPolicy: priceDetail['Chính sách Huỷ']
+                cancelPolicy: priceDetail['Chính sách hủy']
             });
             this.props.form.validateFields((err, values) => {
 				console.log("TCL: SecondModal -> componentDidMount -> values", values)

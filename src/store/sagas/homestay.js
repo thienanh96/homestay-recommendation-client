@@ -8,11 +8,16 @@ import {
     CREATE_HOMESTAY_REQUEST,
     CREATE_HOMESTAY_SUCCESS,
     CREATE_HOMESTAY_SIMILARITY_REQUEST,
+    DELETE_HOMESTAY_SIMILARITY_REQUEST,
+    UPDATE_HOMESTAY_SIMILARITY_REQUEST,
     ADMIN_APPROVE_HOMESTAY_FAILURE,
     ADMIN_APPROVE_HOMESTAY_REQUEST,
-    ADMIN_APPROVE_HOMESTAY_SUCCESS
+    ADMIN_APPROVE_HOMESTAY_SUCCESS,
+    ADMIN_DELETE_HOMESTAY_FAILURE,
+    ADMIN_DELETE_HOMESTAY_REQUEST,
+    ADMIN_DELETE_HOMESTAY_SUCCESS
 } from "../constants/homestay";
-import { post, get, puts } from "../../client/index";
+import { post, get, puts, deletes } from "../../client/index";
 import { createQueryString } from '../../lib/utils'
 
 
@@ -29,9 +34,22 @@ export function* createHomestaySimilaritySaga() {
     yield takeEvery(CREATE_HOMESTAY_SIMILARITY_REQUEST, createHomestaySimilarity);
 }
 
+export function* deleteHomestaySimilaritySaga() {
+    yield takeEvery(DELETE_HOMESTAY_SIMILARITY_REQUEST, deleteHomestaySimilarity);
+}
+
+export function* updateHomestaySimilaritySaga() {
+    yield takeEvery(UPDATE_HOMESTAY_SIMILARITY_REQUEST, updateHomestaySimilarity);
+}
+
 export function* approveHomestaySaga() {
     yield takeEvery(ADMIN_APPROVE_HOMESTAY_REQUEST, approveHomestay);
 }
+
+export function* deleteHomestaySaga() {
+    yield takeEvery(ADMIN_DELETE_HOMESTAY_REQUEST, deleteHomestay);
+}
+
 
 
 
@@ -77,27 +95,76 @@ function* createHomestay(action) {
 
 function* createHomestaySimilarity(action) {
     const { homestayId } = action
-    yield call(createHomestaySimilarityAPI, homestayId);
+    try {
+        yield call(createHomestaySimilarityAPI, homestayId);
+    } catch (error) {
+        console.log("TCL: function*createHomestaySimilarity -> error", error)
+    }
+
 }
 
+function* updateHomestaySimilarity(action) {
+    const { homestayId } = action
+    try {
+        yield call(updateHomestaySimilarityAPI, homestayId);
+    } catch (error) {
+        console.log("TCL: function*updateHomestaySimilarity -> error", error)
+    }
+
+}
+
+function* deleteHomestaySimilarity(action) {
+    const { homestayId } = action
+    try {
+        yield call(deleteHomestaySimilarityAPI, homestayId);
+    } catch (error) {
+        console.log("TCL: function*deleteHomestaySimilarity -> error", error)
+    }
+
+}
+
+
+
 function* approveHomestay(action) {
-    const { homestayId,resolve,reject } = action
-    let response = yield call(approveHomestayAPI, homestayId);
-    if (response && response.status === 200) {
-        yield put({ type: ADMIN_APPROVE_HOMESTAY_SUCCESS, homestayId: homestayId})
-        resolve();
-    } else {
+    const { homestayId, resolve, reject } = action
+    try {
+        let response = yield call(approveHomestayAPI, homestayId);
+        if (response && response.status === 200) {
+            yield put({ type: ADMIN_APPROVE_HOMESTAY_SUCCESS, homestayId: homestayId })
+            resolve();
+        } else {
+            yield put({ type: ADMIN_APPROVE_HOMESTAY_FAILURE })
+            reject();
+        }
+    } catch (error) {
         yield put({ type: ADMIN_APPROVE_HOMESTAY_FAILURE })
         reject();
     }
+
 }
 
+function* deleteHomestay(action) {
+    const { homestayId, resolve, reject } = action
+    try {
+        let response = yield call(deleteHomestayAPI, homestayId);
+        if (response && response.status === 200) {
+            yield put({ type: ADMIN_DELETE_HOMESTAY_SUCCESS, homestayId: homestayId })
+            resolve();
+        } else {
+            yield put({ type: ADMIN_DELETE_HOMESTAY_FAILURE })
+            reject();
+        }
+    } catch (error) {
+        yield put({ type: ADMIN_DELETE_HOMESTAY_FAILURE })
+        reject();
+    }
 
+}
 
 
 
 function getHomestaysAPI(searchLocation, notAllowed) {
-	console.log("TCL: getHomestaysAPI -> searchLocation, notAllowed", searchLocation, notAllowed)
+    console.log("TCL: getHomestaysAPI -> searchLocation, notAllowed", searchLocation, notAllowed)
     if (notAllowed) {
         return get('/api/admin/homestays/get_not_allowed')
     } else {
@@ -115,8 +182,22 @@ function createHomestaySimilarityAPI(homestayId) {
     });
 }
 
+function deleteHomestaySimilarityAPI(homestayId) {
+    return deletes(`/api/homestay-similarity/delete/${homestayId}`);
+}
+
+function updateHomestaySimilarityAPI(homestayId) {
+    return puts(`/api/homestay-similarity/update`, {
+        homestay_id: homestayId
+    });
+}
+
 function approveHomestayAPI(homestayId) {
     return puts('/api/admin/homestay/approve/' + homestayId)
+}
+
+function deleteHomestayAPI(homestayId) {
+    return deletes('/api/admin/homestay/delete/' + homestayId)
 }
 
 

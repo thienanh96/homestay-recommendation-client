@@ -107,7 +107,7 @@ export default function reducer(state = initialState, action) {
         case RATE_DETAIL_HOMESTAY_FAILURE:
             return { ...state, startRateDetailHomestayRequest: false }
         case GET_SIMILAR_HOMESTAY_REQUEST:
-            return { ...state, startSimilarHomestayRequest: true }
+            return { ...state, startSimilarHomestayRequest: true, similarHomestays: [] }
         case GET_SIMILAR_HOMESTAY_SUCCESS:
             return { ...state, similarHomestays: action.homestays, startSimilarHomestayRequest: false }
         case GET_SIMIALR_HOMESTAY_FAILURE:

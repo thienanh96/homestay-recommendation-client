@@ -22,6 +22,7 @@ import CardHomestay from '../../commons/components/HomestayCard'
 import { getBestHomestayRequest, getConformHomstayRequest } from '../../../store/actions/homeAction'
 import { resolve } from "path";
 import './index.css'
+import { Link } from 'react-router-dom'
 import DestinationCard from '../../commons/components/DestinationCard'
 
 
@@ -35,35 +36,27 @@ class Homepage extends React.Component {
             topDestinations: [{
                 imgCover: 'https://cdn.luxstay.com/home/location/small/location_8_1546584483.png',
                 name: 'Hà Nội',
-                countHomestay: 800
             }, {
                 imgCover: 'https://cdn.luxstay.com/home/location/small/location_6_1546584469.png',
                 name: 'Hạ Long',
-                countHomestay: 800
             }, {
                 imgCover: 'https://cdn.luxstay.com/home/location/small/location_4_1546584448.png',
                 name: 'Hòa Bình',
-                countHomestay: 800
             }, {
                 imgCover: 'https://cdn.luxstay.com/home/location/small/location_2_1546584433.png',
-                name: 'Nha Trang',
-                countHomestay: 800
+                name: 'Khánh Hòa',
             }, {
                 imgCover: 'https://cdn.luxstay.com/home/location/small/location_7_1546584476.png',
                 name: 'Hồ Chí Minh',
-                countHomestay: 800
             }, {
                 imgCover: 'https://cdn.luxstay.com/home/location/small/location_5_1546584455.png',
                 name: 'Đà Nẵng',
-                countHomestay: 800
             }, {
                 imgCover: 'https://cdn.luxstay.com/home/location/small/location_3_1546584441.png',
-                name: 'Sa Pa',
-                countHomestay: 800
+                name: 'Lào Cai',
             }, {
                 imgCover: 'https://cdn.luxstay.com/home/location/small/location_1_1546584395.png',
                 name: 'Đà Nẵng',
-                countHomestay: 800
             }]
         }
     }
@@ -187,12 +180,17 @@ class Homepage extends React.Component {
                         </div>
                         <div style={{ width: '100%' }}>
                             {
-                                this.state.topDestinations.map(dest => <DestinationCard
-                                    imgSrc={dest.imgCover}
-                                    cityName={dest.name}
-                                    countHomestay={dest.countHomestay}
-                                    customStyle={{ width: '25%', padding: '10px' }}
-                                />)
+                                this.state.topDestinations.map(dest =>
+                                    <Link to={`/homestays?limit=9&offset=0&city=${dest.name}`}>
+                                        <DestinationCard
+                                            imgSrc={dest.imgCover}
+                                            cityName={dest.name}
+                                            countHomestay={dest.countHomestay}
+                                            customStyle={{ width: '25%', padding: '10px' }}
+                                        />
+                                    </Link>
+
+                                )
                             }
                         </div>
                     </div>

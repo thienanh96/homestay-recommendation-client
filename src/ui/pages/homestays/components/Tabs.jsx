@@ -50,7 +50,7 @@ class UpdateTabs extends Component {
         const { firstData, secondData, thirdData, forthData, images } = this.state
         console.log("TCL: UpdateTabs -> convertToFinalData -> firstData, secondData, thirdData, forthData", firstData, secondData, thirdData, forthData)
         let finalData = {}
-        finalData = { ...firstData, name: firstData.name }
+        finalData = firstData ? { ...firstData, name: firstData.name } : null
         let priceDetail = secondData ? {
             data: [
                 {
@@ -98,19 +98,19 @@ class UpdateTabs extends Component {
         let amenityAround = forthData ? {
             data: [
                 {
-                    "Ẩm thực": forthData.cuisine ? forthData.cuisine : ['Không có']
+                    "Ẩm thực": forthData.cuisine ? forthData.cuisine : 'Không có'
                 },
                 {
-                    "Mua sắm": forthData.shopping ? forthData.shopping : ['Không có']
+                    "Mua sắm": forthData.shopping ? forthData.shopping : 'Không có'
                 },
                 {
-                    "Giao thông": forthData.transport ? forthData.transport : ['Không có']
+                    "Giao thông": forthData.transport ? forthData.transport : 'Không có'
                 },
                 {
-                    "Giải trí": forthData.entertainment ? forthData.entertainment : ['Không có']
+                    "Giải trí": forthData.entertainment ? forthData.entertainment : 'Không có'
                 },
                 {
-                    "Cơ quan ban ngành": forthData.office ? forthData.office : ['Không có']
+                    "Cơ quan ban ngành": forthData.office ? forthData.office : 'Không có'
                 }
             ]
         } : null
@@ -197,7 +197,7 @@ class UpdateTabs extends Component {
                             getImageURL={(images) => {
                                 console.log("TCL: UpdateTabs -> render -> images", images)
                                 this.setState({
-                                    images: images.join(',')
+                                    images: images.join('$')
                                 })
                             }}
                         />

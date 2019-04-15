@@ -28,6 +28,7 @@ class UploadImages extends Component {
     }
 
     getCorrectFormatOfFiles(imageURLs) {
+        if(!imageURLs) return null;
         return imageURLs.map((imageURL, index) => {
             return {
                 uid: "-" + index + Date.now(),
