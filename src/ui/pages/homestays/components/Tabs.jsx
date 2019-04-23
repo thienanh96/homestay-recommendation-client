@@ -38,9 +38,7 @@ class UpdateTabs extends Component {
     }
 
     validateData(finalData) {
-        console.log("TCL: UpdateTabs -> validateData -> finalData", finalData)
         for (let value of Object.values(finalData)) {
-            console.log("TCL: UpdateTabs -> validateData -> key", value)
             if (!value) return false
         }
         return true

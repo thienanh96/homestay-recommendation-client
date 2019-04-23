@@ -67,7 +67,7 @@ class Homepage extends React.Component {
             offsetParams: 0,
             orderByParams: 'likes'
         })
-        this.props.getConformHomstayRequest(10, 0)
+        this.props.getConformHomstayRequest(20, 0)
     }
 
     // componentWillReceiveProps() {

@@ -115,16 +115,16 @@ function* ratePost(action) {
 
 
 
-function getPostsAPI(filter, limit, offset) {
+function getPostsAPI(filter, limit = 3, offset) {
     let api = '/api/posts/get'
-    if (filter) {
-        api += '?filter=' + filter
-    }
     if (limit) {
-        api += '&limit=' + limit
+        api += '?limit=' + limit
     }
     if (offset) {
         api += '&offset=' + offset
+    }
+    if (filter) {
+        api += '&filter=' + filter
     }
     return get(api)
 }
