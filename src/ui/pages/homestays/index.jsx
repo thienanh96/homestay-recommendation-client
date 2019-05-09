@@ -59,7 +59,7 @@ class Homestays extends React.Component {
             priceRangeParams: params.get('price_range')
         }, () => {
             this.setState({
-                defaultPagination: Math.round(parseInt(this.state.offsetParams) / parseInt(this.state.limitParams)) + 1
+                defaultPagination: Math.round(parseInt(this.state.offsetParams || 0) / parseInt(this.state.limitParams || 9)) + 1
             })
 
             this.props.getHomestayRequest(this.state)
@@ -214,7 +214,7 @@ class Homestays extends React.Component {
                     <div>
                         {
                             this.state.showModal && <Tabs
-                                listCity={['Hà Nội']}
+                                listCity={['Hà Nội','Hải Phòng','Ninh Bình','Nha Trang','Hồ Chí Minh','Đà Nẵng','Vũng Tàu','Thanh Hóa']}
                                 getData={this.getNewHomestay.bind(this)}
                                 close={() => { this.setState({ showModal: false }) }}
                                 action="create"

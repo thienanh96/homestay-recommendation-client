@@ -111,11 +111,10 @@ class ProfileUpdate extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { id } = this.props.initialInfo
-        if(!this.props.me){
+        if (!this.props.me) {
             this.props.history.replace('/')
             return null
         }
-        console.log("TCL: ProfileUpdate -> render -> id", id)
 
         const formItemLayout = {
             labelCol: {
@@ -215,14 +214,16 @@ class ProfileUpdate extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                    <Button
-                        type={'primary'}
-                        style={{ background: 'rgb(255, 153, 0)', border: 'none', height: '38px', fontSize: '14px', color: 'black', float: 'right' }}
-                        htmlType='submit'
-                        disabled={this.props.me.user_id ?  (this.props.me.user_id !== this.props.initialInfo.id) : false}
-                    >
-                        Cập nhật
+                    {
+                        this.props.me.user_id && this.props.me.user_id + '' === id + '' && <Button
+                            type={'primary'}
+                            style={{ background: 'rgb(255, 153, 0)', border: 'none', height: '38px', fontSize: '14px', color: 'black', float: 'right' }}
+                            htmlType='submit'
+                            disabled={this.props.me.user_id ? (this.props.me.user_id !== this.props.initialInfo.id) : false}
+                        >
+                            Cập nhật
                     </Button>
+                    }
                 </Form.Item>
             </Form>
         );

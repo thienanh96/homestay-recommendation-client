@@ -36,7 +36,7 @@ export default class AmenityAround extends React.Component {
         return (
             <div className='desc' style={{ ...customStyle }}>
                 <div style={{ width: '100%', fontSize: '20px', fontWeight: '600' }}>
-                    Tiện nghi
+                    Tiện nghi xung quanh
                 </div>
                 <div style={{ width: '100%', fontSize: '18px', marginTop: '30px' }}>
                     <Table

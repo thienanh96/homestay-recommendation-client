@@ -3,6 +3,7 @@ import { Row, Rate, Skeleton, Icon } from "antd";
 import { Link } from "react-router-dom";
 
 import "./style.css";
+import numeral from 'numeral';
 import { resolve } from "path";
 import { reject } from "q";
 
@@ -98,7 +99,7 @@ class CardHomestay extends React.Component {
                             </div>
                             <p className="title-homestay-card">{homestay.name}</p>
                             <div className="price-homestay-card">
-                                Từ {homestay.main_price}đ / người / đêm
+                                Từ {numeral(homestay.main_price).format('0,0')}đ / người / đêm
                         </div>
                             <div className="likes-homestay-card">
                                 <Icon style={{ float: 'left', fontSize: '20px' }} type="like" />

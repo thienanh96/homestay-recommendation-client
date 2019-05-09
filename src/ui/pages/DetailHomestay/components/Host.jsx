@@ -41,32 +41,35 @@ const data = [{
 export default class Host extends React.Component {
 
     render() {
-        const { username, avatar, joinDate, desc } = this.props;
+        const { username, avatar, joinDate, desc,hostId } = this.props;
         return (
             <div style={{ width: '100%' }}>
                 <div style={{ width: '100%', fontSize: '20px', fontWeight: '600' }}>
                     Chủ nhà {username}
                 </div>
-                <Row style={{marginTop: '20px'}}>
-                    <div style={{ width: '60px', float: 'left' }}>
-                        <img src={avatar} alt='' style={{ width: '100%', borderRadius: '50%' }}></img>
+                <Row style={{ marginTop: '20px' }}>
+                    <a style={{ width: '100%' }} href={`/profile/${hostId}?type=update-profile`}>
+                        <div style={{ width: '60px', float: 'left' }}>
+                            <img src={avatar} alt='' style={{ width: '100%', borderRadius: '50%' }}></img>
 
-                    </div>
-                    <div style={{ width: '230px', float: 'left', marginLeft: '10px',height: '60px',color: 'black',fontSize: '18px'}}>
-                        <div style={{ width: '100%', height: '50%', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',fontWeight: '600'  }}>
-                            <div>
-                                {username}
+                        </div>
+                        <div style={{ width: '230px', float: 'left', marginLeft: '10px', height: '60px', color: 'black', fontSize: '18px' }}>
+                            <div style={{ width: '100%', height: '50%', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', fontWeight: '600' }}>
+                                <div>
+                                    {username}
+                                </div>
+                            </div>
+                            <div style={{ width: '100%', height: '50%', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                <div>
+                                    {joinDate}
+                                </div>
                             </div>
                         </div>
-                        <div style={{ width: '100%', height: '50%', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            <div>
-                                {joinDate}
-                            </div>
+                        <div style={{ width: 'calc(100% - 300px)', float: 'right' }}>
+
                         </div>
-                    </div>
-                    <div style={{ width: 'calc(100% - 300px)', float: 'right' }}>
-                        
-                    </div>
+                    </a>
+
 
                 </Row>
             </div>

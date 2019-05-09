@@ -21,7 +21,7 @@ import { compose } from 'redux'
 import history from '../../../lib/history'
 import './index.css'
 import { getDetailHomestayRequest, rateDetailHomestay, getSimilarHomestayRequest, updateHomestayRequest } from '../../../store/actions/detailHomestayAction'
-import {updateHomestaySimilarityRequest} from '../../../store/actions/homestayAction'
+import { updateHomestaySimilarityRequest } from '../../../store/actions/homestayAction'
 import SlideShow from '../../commons/components/SlideShow'
 import { changeStatusHeader } from '../../../store/actions/guiChangeAction'
 import { getCommentsRequest, createCommentRequest } from '../../../store/actions/commentAction'
@@ -43,6 +43,7 @@ import { getHomestayRequest } from '../../../store/actions/homestayAction'
 
 import { reject } from "q";
 import Tabs from '../homestays/components/Tabs'
+import Link from "react-router-dom/Link";
 
 
 class DetailHomestay extends React.Component {
@@ -188,7 +189,7 @@ class DetailHomestay extends React.Component {
                 this.props.updateHomestayRequest(this.state.currentHomestayID, newHomestay, resolve, reject)
             })
             pm.then(data => {
-				console.log("TCL: DetailHomestay -> getNewHomestay -> data", data)
+                console.log("TCL: DetailHomestay -> getNewHomestay -> data", data)
                 if (data && data.homestay_id) {
                     message.success('Cập nhật homestay thành công!')
                     this.setState({ showModal: false })
@@ -198,10 +199,10 @@ class DetailHomestay extends React.Component {
                     message.error('Cập nhật homestay thất bại')
                 }
             }, err => {
-				console.log("TCL: DetailHomestay -> getNewHomestay -> err", err)
+                console.log("TCL: DetailHomestay -> getNewHomestay -> err", err)
                 return message.error('Cập nhật homestay thất bại')
             }).catch(err => {
-			console.log("TCL: DetailHomestay -> getNewHomestay -> errrr", err)
+                console.log("TCL: DetailHomestay -> getNewHomestay -> errrr", err)
 
                 return message.error('Cập nhật homestay thất bại')
             })
@@ -215,9 +216,10 @@ class DetailHomestay extends React.Component {
     render() {
         const { homestay_info, host_info, me_rate } = this.props.detailHomestay
         const similarHomestays = this.props.similarHomestays
-        const { myProfile = { username: null, avatar: null, user_id: null } } = this.props.myProfile ? this.props : {myProfile: {}}
+        const { myProfile = { username: null, avatar: null, user_id: null } } = this.props.myProfile ? this.props : { myProfile: {} }
         const { username, avatar, user_id } = myProfile
         const comments = this.props.comments
+        const totalComment = this.props.totalComment || 0;
         if (!homestay_info) return null
         const dataRaw = comments.map(comment => {
             return {
@@ -296,17 +298,19 @@ class DetailHomestay extends React.Component {
                         </div>
                         <div>
                             <Host
+                                hostId={host_info ? host_info.id: 0}
                                 username={host_info ? host_info.user_name : 'Ẩn danh'}
                                 avatar={host_info ? host_info.avatar : 'https://www.w3schools.com/howto/img_avatar.png'}
                                 joinDate={host_info ? host_info.join_date : 'Chưa xác định'}
                             />
+
                         </div>
                         <div>
                             <Comment
                                 myAvatarUrl={
                                     avatar ? avatar : "https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png"
                                 }
-                                numberOfComments={20}
+                                numberOfComments={dataComment.length ? dataComment.length : 0}
                                 customStyle={{ width: "800px", position: "absolute" }}
                                 dataComment={dataComment}
                                 onPressEnterComment={this.onPressEnterComment.bind(this)}
@@ -317,6 +321,7 @@ class DetailHomestay extends React.Component {
                     <Col sm={24} md={7}>
                         {
                             similarHomestays && <SimilarHomestays
+                                customStyle={{ paddingTop: 25 }}
                                 homestays={similarHomestays}
                                 currentHomestayID={this.props.match.params.id}
                             />
@@ -335,6 +340,7 @@ function mapStateToProps(state) {
     return {
         detailHomestay: state.detailHomestayReducer.detailHomestay,
         comments: state.commentsReducer.comments,
+        totalComment: state.commentsReducer.total,
         myProfile: state.authReducer.user,
         similarHomestays: state.detailHomestayReducer.similarHomestays
     }

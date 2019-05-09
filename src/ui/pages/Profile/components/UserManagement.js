@@ -64,13 +64,13 @@ class UserManagement extends React.Component {
         })
         pm.then(profileId => {
             message.success('Xóa tài khoản thành công!')
-        },err => {
+        }, err => {
             message.error('Xóa tài khoản thất bại!')
         })
     }
 
-    seeDetail(profileId){
-        if(profileId){
+    seeDetail(profileId) {
+        if (profileId) {
             this.props.history.push('/profile/' + profileId + '?type=update-profile')
         }
     }
@@ -101,7 +101,7 @@ class UserManagement extends React.Component {
                             <Skeleton avatar title={false} loading={startGetListProfileRequest} active>
                                 <List.Item.Meta
                                     avatar={<Avatar src={item.avatar} />}
-                                    title={<a href="https://ant.design">{item.user_name}</a>}
+                                    title={item.user_name}
                                     description={item.join_date}
                                 />
 

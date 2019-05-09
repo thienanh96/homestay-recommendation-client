@@ -47,8 +47,8 @@ export function* registerSaga() {
 function logoutApi() {
     return post("/api/auth/logout");
 }
-function registerApi(body){
-    return post('/api/auth/register',body)
+function registerApi(body) {
+    return post('/api/auth/register', body)
 }
 
 function* logout() {
@@ -56,7 +56,10 @@ function* logout() {
     yield put(unsetClient());
 
     // remove our token
-    localStorage.removeItem("token");
+    if (typeof window !== 'undefined') {
+        localStorage.removeItem("token");
+    }
+
 
     // redirect to the /login screen
     browserHistory.push("/");
@@ -86,7 +89,9 @@ function* loginFlow(username, password, resolve, reject) {
         yield put({ type: LOGIN_SUCCESS });
 
         // set a stringified version of our token to localstorage on our domain
-        localStorage.setItem("token", token);
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem("token", token);
+        }
 
         // redirect them to WIDGETS!
         resolve(token);
@@ -154,7 +159,7 @@ function* registerFlow(action) {
             reject(response.data)
         }
     } catch (error) {
-		console.log("TCL: function*registerFlow -> error", error)
+        console.log("TCL: function*registerFlow -> error", error)
         yield put({ type: REGISTER_FAILURE, error });
         if (typeof reject === "function") {
             reject(error);

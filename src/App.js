@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import {
-  BrowserRouter as Router,
+  // BrowserRouter as Router,
   Route,
   Switch,
   Ridirect,
@@ -24,29 +24,23 @@ import "./App.css";
 var store = getStore();
 
 export default class App extends Component {
+
+  componentWillMount() {
+    // if (!isServer) {
+    //   this.props.establishCurrentUser();
+    // }
+  }
   render() {
     return (
-      <Provider store={store}>
-        <Router>
-          <React.Fragment>
-            {/* <Link to="/user/register">Đăng nhập</Link>  */}
-            <Switch>
-              {/* <Route path="/register" component={Login} /> */}
-              <React.Fragment>
-                <LayoutWeb>
-                  <Switch>
-                    <Route exact path="/" component={Homepage} />
-                    <Route exact path="/homestays" component={Homestays} />
-                    <Route exact path="/homestays/:id" component={DetailHomestay} />
-                    <Route exact path="/community" component={Community} />
-                    <Route exact path="/profile/:id" component={Profile} />}
-                  </Switch>
-                </LayoutWeb>
-              </React.Fragment>
-            </Switch>
-          </React.Fragment>
-        </Router>
-      </Provider>
+      <LayoutWeb>
+        <Switch>
+          <Route exact path="/" component={Homepage} />
+          <Route exact path="/homestays" component={Homestays} />
+          <Route exact path="/homestays/:id" component={DetailHomestay} />
+          <Route exact path="/community" component={Community} />
+          <Route exact path="/profile/:id" component={Profile} />}
+      </Switch>
+      </LayoutWeb>
     );
   }
 }

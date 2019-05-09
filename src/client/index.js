@@ -1,18 +1,22 @@
 import axios from "axios";
 import { apiBase } from "./config";
 const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxOSwiZnVsbG5hbWUiOiJ0ZXN0dHR0dCIsImVtYWlsIjoidGVzdHRAZ21haWwuY29tIiwicGhvbmUiOiIwOTExMTExMTExIiwiaWF0IjoxNTQ5OTc3NTU3LCJleHAiOjE1NTAwNjM5NTd9.m-uZHxWKqM7QK6BkTraQkCBZ5_Tj2StHv8zD7BSS6Ug'
-let headers = new Headers();
+let headers = null
+if (typeof window !== 'undefined') {
+  headers = new Headers();
 
-headers.append("Content-Type", "application/json");
-headers.append("Accept", "application/json");
+  headers.append("Content-Type", "application/json");
+  headers.append("Accept", "application/json");
 
-headers.append("Access-Control-Allow-Origin", "*");
-headers.append("Access-Control-Allow-Credentials", "true");
+  headers.append("Access-Control-Allow-Origin", "*");
+  headers.append("Access-Control-Allow-Credentials", "true");
+}
+
 // headers.append('Authorization','Bearer ' + token)
 
 var request = axios.create({
   //   baseURL: apiBase,
-  headers
+  headers: headers !== null ? headers : {}
 });
 
 function validateData(data) {
@@ -38,7 +42,7 @@ function validateData(data) {
 // const methods = ["get", "put", "post", "delete", "patch"];
 
 export const get = (endpoint, config = {}) => {
-  if (localStorage.getItem("token")) {
+  if (typeof window !== 'undefined' && localStorage.getItem("token")) {
     config = {
       ...config,
       headers: {
@@ -55,7 +59,7 @@ export const post = (
     headers: {}
   }
 ) => {
-  if (localStorage.getItem("token")) {
+  if (typeof window !== 'undefined' && localStorage.getItem("token")) {
     config = {
       ...config,
       headers: {
@@ -88,7 +92,7 @@ export const puts = (
     headers: {}
   }
 ) => {
-  if (localStorage.getItem("token")) {
+  if (typeof window !== 'undefined' && localStorage.getItem("token")) {
     config = {
       ...config,
       headers: {
@@ -102,7 +106,7 @@ export const puts = (
 export const deletes = (endpoint, config = {
   headers: {}
 }) => {
-  if (localStorage.getItem("token")) {
+  if (typeof window !== 'undefined' && localStorage.getItem("token")) {
     config = {
       ...config,
       headers: {

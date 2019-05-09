@@ -35,7 +35,7 @@ export default class SimilarHomestays extends React.Component {
         const { homestays, customStyle } = this.props;
         return (
             <div style={{ ...customStyle }}>
-                <div style={{ width: '100%', fontSize: '20px', fontWeight: '600' }}>
+                <div style={{ width: '100%', fontSize: '25px', fontWeight: '600',marginBottom: 20 }}>
                     Homestay tương tự
                 </div>
                 {

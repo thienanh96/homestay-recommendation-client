@@ -212,7 +212,7 @@ export default class SlideShow extends React.Component {
                     prevTapped={this.previous}
                 />
                 <Carousel
-                    // autoplay
+                    autoplay
                     ref={node => (this.carousel = node)}
                     // afterChange={this.onChange}
                     {...props}

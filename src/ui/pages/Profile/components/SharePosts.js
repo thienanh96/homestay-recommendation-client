@@ -6,7 +6,7 @@ import { getHomestayRequest } from '../../../../store/actions/homestayAction'
 import { connect } from "react-redux";
 import CardHomestay from '../../../commons/components/HomestayCard'
 import SharePost from '../../Community/components/SharePost'
-import { getPostsRequest } from '../../../../store/actions/communityAction'
+import { getPostsRequest, ratePostRequest } from '../../../../store/actions/communityAction'
 import { deletePostsRequest } from '../../../../store/actions/communityAction'
 import { resolve, reject } from "q";
 
@@ -54,8 +54,12 @@ class SharePosts extends React.Component {
 
     }
 
+    ratePost(postId) {
+        this.props.ratePostRequest(postId, null, null)
+    }
+
     render() {
-        const { totalPosts, posts = { post: [], me_like: 0 }, meRate = null } = this.props
+        const { totalPosts, posts = { post: [], me_like: 0 }, meRate = null, me = {} } = this.props
         return (
             <div style={{ width: '100%', marginTop: '30px', padding: '15px' }}>
                 <div style={{ width: '100%', }}>
@@ -66,6 +70,8 @@ class SharePosts extends React.Component {
                             if (post.post.homestay.homestay_id) {
                                 images = post.post.homestay.images.split('$')
                             }
+                            let hasAction = me.user_id && me.user_id + '' === (post.post.user ? post.post.user.id + '' : '');
+                            console.log('loggg: ',hasAction)
                             return (
                                 <SharePost
                                     content={post.post.content}
@@ -77,9 +83,10 @@ class SharePosts extends React.Component {
                                     meRate={meRate}
                                     customStyle={{ marginBottom: '50px' }}
                                     imageCovers={images}
-                                    hasAction={true}
+                                    hasAction={hasAction}
                                     onClickDelete={e => this.onClickDelete(post.post.post_id)}
                                     meLikePost={post.me_like}
+                                    ratePost={e => this.ratePost(post.post.post_id)}
                                 />
                             )
                         })
@@ -110,7 +117,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
     getPostsRequest,
-    deletePostsRequest
+    deletePostsRequest,
+    ratePostRequest
 }
 export default SharePosts = connect(
     mapStateToProps,

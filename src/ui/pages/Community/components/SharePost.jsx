@@ -39,7 +39,7 @@ export default class SharePost extends React.Component {
                 <div style={{ width: '64px', height: '64px' }}>
                     <img style={{ width: '100%', borderRadius: '50%' }} alt='' src={avatar ? avatar : 'https://www.w3schools.com/howto/img_avatar2.png'}></img>
                 </div>
-                <div style={{ width: 'calc(100% - 160px)' }}>
+                <div style={{ width: 'calc(100% - 100px)' }}>
                     <div style={{ height: '50px', width: '100%' }}>
                         <div style={{ width: 'calc(100% - 160px)', height: '100%', float: 'left' }}>
                             <div className='share-post-userinfo'>
