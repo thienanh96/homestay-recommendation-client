@@ -86,7 +86,9 @@ class Register extends React.Component {
     };
 
     register = values => {
-        console.log("TCL: Register -> values", values)
+        if (!values['avatar']) {
+            values = { ...values, avatar: 'https://www.w3schools.com/howto/img_avatar2.png' }
+        }
         const pm = new Promise((resolve, reject) => {
             this.props.dispatch(registerRequest(values, resolve, reject));
         });

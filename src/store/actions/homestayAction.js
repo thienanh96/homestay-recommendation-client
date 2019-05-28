@@ -5,16 +5,18 @@ import {
   ADMIN_APPROVE_HOMESTAY_REQUEST,
   ADMIN_DELETE_HOMESTAY_REQUEST,
   UPDATE_HOMESTAY_SIMILARITY_REQUEST,
-  DELETE_HOMESTAY_SIMILARITY_REQUEST
+  DELETE_HOMESTAY_SIMILARITY_REQUEST,
+  ADMIN_LOCK_HOMESTAY_REQUEST
 } from "../constants/homestay";
 
 
 
-export const getHomestayRequest = (params, notAllowed) => {
+export const getHomestayRequest = (params, notAllowed,adminMode=null) => {
   return {
     type: GET_HOMESTAY_REQUEST,
     params,
-    notAllowed
+    notAllowed,
+    adminMode
   }
 }
 
@@ -52,6 +54,15 @@ export const deleteHomestaySimilarityRequest = (homestayId) => {
 export const approveHomestayRequest = (homestayId, resolve, reject) => {
   return {
     type: ADMIN_APPROVE_HOMESTAY_REQUEST,
+    homestayId,
+    resolve,
+    reject
+  }
+}
+
+export const lockHomestayRequest = (homestayId, resolve, reject) => {
+  return {
+    type: ADMIN_LOCK_HOMESTAY_REQUEST,
     homestayId,
     resolve,
     reject

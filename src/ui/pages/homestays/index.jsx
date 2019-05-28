@@ -28,6 +28,45 @@ import SearchBanner from "../../commons/components/SearchBanner";
 import { createQueryString } from '../../../lib/utils'
 import Tabs from './components/Tabs'
 
+const LIST_CITIES = [
+    'Hà Giang',
+    'Lào Cai',
+    'Sơn La',
+    'Hòa Bình',
+    'Thái Nguyên',
+    'Hải Phòng',
+    'Quảng Ninh',
+    'Bắc Nnh',
+    'Hà Nội',
+    'Vĩnh Phúc',
+    'Ninh Bình',
+    'Thanh Hóa',
+    'Nghệ An',
+    'Quảng Bình',
+    'Đà Nẵng',
+    'Thừa Thiên Huế',
+    'Quảng Nam',
+    'Quảng Ngãi',
+    'Bình Định',
+    'Gia Lai',
+    'Phú Yên',
+    'Đắc Lắk',
+    'Đắk Nông',
+    'Lâm Đồng',
+    'Ninh Thuận',
+    'Bình Thuận',
+    'Khánh Hòa',
+    'Bà Rịa Vũng Tàu',
+    'Tiền Giang',
+    'Vĩnh Long',
+    'Hồ  Chí Minh',
+    'Tây Ninh',
+    'Long An',
+    'Kiên Giang',
+    'Cần Thơ',
+    'Băngkok',
+]
+
 
 
 class Homestays extends React.Component {
@@ -82,7 +121,7 @@ class Homestays extends React.Component {
                 idsParams: params.get('ids'),
                 priceRangeParams: params.get('price_range')
             }, () => {
-                console.log('print state: ',this.state)
+                console.log('print state: ', this.state)
                 if (!isNaN(this.state.offsetParams) && !isNaN(this.state.limitParams)) {
                     this.setState({
                         defaultPagination: Math.round(parseInt(this.state.offsetParams) / parseInt(this.state.limitParams)) + 1
@@ -214,7 +253,7 @@ class Homestays extends React.Component {
                     <div>
                         {
                             this.state.showModal && <Tabs
-                                listCity={['Hà Nội','Hải Phòng','Ninh Bình','Nha Trang','Hồ Chí Minh','Đà Nẵng','Vũng Tàu','Thanh Hóa']}
+                                listCity={LIST_CITIES}
                                 getData={this.getNewHomestay.bind(this)}
                                 close={() => { this.setState({ showModal: false }) }}
                                 action="create"

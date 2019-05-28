@@ -25,9 +25,11 @@ class HeaderWeb extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showModalLogin: false
+            showModalLogin: false,
+            selectedKeys: ['1']
         };
     }
+    
     showModalLogin = () => {
         this.setState({ showModalLogin: true });
     };
@@ -63,6 +65,7 @@ class HeaderWeb extends React.Component {
                                             <Menu
                                                 //   theme="dark"
                                                 mode="horizontal"
+                                                // selectedKeys={['1']}
                                                 defaultSelectedKeys={["1"]}
                                                 style={{ lineHeight: "50px" }}
                                             >

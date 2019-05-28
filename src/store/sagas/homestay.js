@@ -15,7 +15,10 @@ import {
     ADMIN_APPROVE_HOMESTAY_SUCCESS,
     ADMIN_DELETE_HOMESTAY_FAILURE,
     ADMIN_DELETE_HOMESTAY_REQUEST,
-    ADMIN_DELETE_HOMESTAY_SUCCESS
+    ADMIN_DELETE_HOMESTAY_SUCCESS,
+    ADMIN_LOCK_HOMESTAY_FAILURE,
+    ADMIN_LOCK_HOMESTAY_REQUEST,
+    ADMIN_LOCK_HOMESTAY_SUCCESS
 } from "../constants/homestay";
 import { post, get, puts, deletes } from "../../client/index";
 import { createQueryString } from '../../lib/utils'
@@ -50,15 +53,19 @@ export function* deleteHomestaySaga() {
     yield takeEvery(ADMIN_DELETE_HOMESTAY_REQUEST, deleteHomestay);
 }
 
+export function* lockHomestaySaga() {
+    yield takeEvery(ADMIN_LOCK_HOMESTAY_REQUEST, lockHomestay);
+}
+
 
 
 
 
 function* getHomestays(action) {
     try {
-        const { params, notAllowed } = action
+        const { params, notAllowed, adminMode } = action
         const queryString = createQueryString(params)
-        let response = yield call(getHomestaysAPI, queryString, notAllowed);
+        let response = yield call(getHomestaysAPI, queryString, notAllowed,adminMode);
         console.log('TCL: function*searchHomestay -> response', response)
         if (response && response.status === 200) {
             yield put({ type: GET_HOMESTAY_SUCCESS, homestays: response.data.data, total: response.data.total })
@@ -124,6 +131,23 @@ function* deleteHomestaySimilarity(action) {
 }
 
 
+function* lockHomestay(action) {
+    const { homestayId, resolve, reject } = action
+    try {
+        let response = yield call(lockHomestayAPI, homestayId);
+        if (response && response.status === 200) {
+            yield put({ type: ADMIN_LOCK_HOMESTAY_SUCCESS, homestayId: homestayId, newStatus: response.data.new_status })
+            resolve(response.data.new_status);
+        } else {
+            yield put({ type: ADMIN_LOCK_HOMESTAY_FAILURE })
+            reject();
+        }
+    } catch (error) {
+        yield put({ type: ADMIN_LOCK_HOMESTAY_FAILURE })
+        reject();
+    }
+
+}
 
 function* approveHomestay(action) {
     const { homestayId, resolve, reject } = action
@@ -163,10 +187,10 @@ function* deleteHomestay(action) {
 
 
 
-function getHomestaysAPI(searchLocation, notAllowed) {
+function getHomestaysAPI(searchLocation, notAllowed,adminMode) {
     console.log("TCL: getHomestaysAPI -> searchLocation, notAllowed", searchLocation, notAllowed)
-    if (notAllowed) {
-        return get('/api/admin/homestays/get_not_allowed')
+    if (adminMode) {
+        return get(`/api/admin/homestays/get${searchLocation}&is_allowed=` + notAllowed)
     } else {
         return get(`/api/homestays${searchLocation}`);
     }
@@ -198,6 +222,10 @@ function approveHomestayAPI(homestayId) {
 
 function deleteHomestayAPI(homestayId) {
     return deletes('/api/admin/homestay/delete/' + homestayId)
+}
+
+function lockHomestayAPI(homestayId){
+    return puts('/api/admin/homestay/lock/' + homestayId)
 }
 
 

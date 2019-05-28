@@ -53,38 +53,36 @@ class Profile extends React.Component {
         }
     }
 
-    async loadOptions(inputValue) {
-        if (!inputValue || inputValue === "") return [];
-        const response = await get(
-            "/api/profile/getlist?name=" + inputValue
-        );
-        if (response && response.status === 200 && response.data && Array.isArray(response.data.dt)) {
-            const data = response.data.dt.map(el => {
-                return {
-                    id: el.id,
-                    label: el.user_name,
-                    value: el.user_name
-                };
-            });
-            return data;
-        }
-        return []
+    // async loadOptions(inputValue) {
+    //     if (!inputValue || inputValue === "") return [];
+    //     const response = await get(
+    //         "/api/profile/getlist?name=" + inputValue
+    //     );
+    //     if (response && response.status === 200 && response.data && Array.isArray(response.data.dt)) {
+    //         const data = response.data.dt.map(el => {
+    //             return {
+    //                 id: el.id,
+    //                 label: el.user_name,
+    //                 value: el.user_name
+    //             };
+    //         });
+    //         return data;
+    //     }
+    //     return []
 
-    }
+    // }
 
-    handleChangeOnSelect(user) {
-        if (user && user.id) {
-            this.props.history.push('/profile/' + user.id + '?type=update-profile')
-            this.setState({
-                searchedUser: user
-            })
-        }
+    // handleChangeOnSelect(user) {
+    //     if (user && user.id) {
+    //         this.props.history.push('/profile/' + user.id + '?type=update-profile')
+    //         this.setState({
+    //             searchedUser: user
+    //         })
+    //     }
 
-    }
+    // }
 
     componentWillReceiveProps(nextProps) {
-        console.log("TCL: Profile -> componentWillReceiveProps -> nextProps", nextProps)
-        console.log("TCL: Profile -> componentWillReceiveProps -> thisprops", this.props)
         if (
             this.props.location.pathname !== nextProps.location.pathname
         ) {
@@ -155,26 +153,19 @@ class Profile extends React.Component {
 
     render() {
         const { profile = {}, homestays, totalHomestays, me = {} } = this.props
-        if (!profile) return null
+        
+        if (!profile) return (
+            <div className='not-found' style={{height: window ? window.innerHeight: 1000}}>
+                <div style={{paddingTop: 50}}>
+                    404! User not found in system!
+                </div>
+            </div>
+        )
         return (
             <Row style={{ marginTop: '30px' }}>
                 <Col sm={1} md={4}>
                 </Col>
                 <Col sm={22} md={16}>
-                    <div style={{ paddingBottom: 30 }}>
-                        <AsyncSelect
-                            value={this.state.searchedUser}
-                            placeholder={
-                                "Nhập tên phượt thủ"
-                            }
-                            cacheOptions
-                            loadOptions={this.loadOptions}
-                            defaultOptions
-                            noOptionsMessage={() => "Nhập để tìm kiếm"}
-                            // isMulti
-                            onChange={data => this.handleChangeOnSelect(data)}
-                        />
-                    </div>
                     <div style={{ display: 'flex' }}>
                         <div style={{ width: 280 }}>
                             <Menu

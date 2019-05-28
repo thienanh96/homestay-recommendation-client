@@ -17,6 +17,7 @@ import {
 
 
 import { post, get, puts, deletes } from "../../client/index";
+import { CLIENT_SET } from "../constants/auth";
 
 
 // watcher saga: watches for actions dispatched to the store, starts worker saga
@@ -46,6 +47,7 @@ function* updateProfile(action) {
         console.log("TCL: function*updateProfile -> response", response)
         if (response && response.status === 200) {
             yield put({ type: UPDATE_PROFILE_SUCCESS })
+            yield put({ type: CLIENT_SET, token: response.data.new_token })
             resolve()
         } else {
             yield put({ type: UPDATE_PROFILE_FAILURE })
@@ -86,8 +88,8 @@ function* getProfile(action) {
 
 function* getListProfile(action) {
     try {
-        const { limit, offset } = action
-        let response = yield call(getListProfileAPI, limit, offset);
+        const { limit, offset, userId } = action
+        let response = yield call(getListProfileAPI, limit, offset, userId);
         console.log("TCL: function*getListProfile -> response", response)
         if (response && response.status === 200) {
             yield put({ type: GET_LIST_PROFILE_SUCCESS, profiles: response.data })
@@ -103,13 +105,14 @@ function* getListProfile(action) {
 
 function* deleteProfile(action) {
     try {
-        const { profileId } = action
+        const { profileId, resolve, reject } = action
         let response = yield call(deleteProfileAPI, profileId);
-        console.log("TCL: function*deleteProfile -> response", response)
         if (response && response.status === 200) {
             yield put({ type: DELETE_PROFILE_SUCCESS, profileId: profileId })
+            resolve(profileId);
         } else {
             yield put({ type: DELETE_PROFILE_FAILURE })
+            reject(reject)
         }
 
     } catch (error) {
@@ -131,8 +134,12 @@ function getProfileAPI(queryString) {
     return get('/api/profile/get' + queryString)
 }
 
-function getListProfileAPI(limit, offset) {
-    return get('/api/profile/getlist?limit=' + limit + '&offset=' + offset)
+function getListProfileAPI(limit, offset, user_id) {
+    let api = '/api/profile/getlist?limit=' + limit + '&offset=' + offset
+    if (user_id) {
+        api += '&user_id=' + user_id
+    }
+    return get(api)
 }
 
 function deleteProfileAPI(profileId) {

@@ -68,6 +68,16 @@ class FirstModal extends Component {
         });
     }
 
+    onSelectCity(opts){
+        this.props.form.validateFields((err, values) => {
+			values.city = opts;
+            if (err) {
+                return
+            }
+            return this.props.getValuesFromFirstModal(values)
+        });
+    }
+
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -124,6 +134,7 @@ class FirstModal extends Component {
                         ]
                     })(
                         <Select
+                            onSelect = {this.onSelectCity.bind(this)}
                             showSearch
                             style={{ width: "60%" }}
                             placeholder="Chọn thành phố"

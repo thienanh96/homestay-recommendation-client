@@ -42,7 +42,7 @@ export default function reducer(state = initialState, action) {
             return { ...state, startDeletePostsRequest: false, }
         case DELETE_POST_SUCCESS:
             let stateCopy = {
-                posts: state.posts.filter(el => el.post_id !== action.postId)
+                posts: state.posts.filter(el => el.post.post_id !== action.postId)
             }
             return { ...state, ...stateCopy, startDeletePostsRequest: false, }
         case RATE_POST_REQUEST:

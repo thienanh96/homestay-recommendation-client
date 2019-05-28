@@ -1,12 +1,14 @@
 import React from "react";
 
 import {
-    List, Avatar, Button, Skeleton, Icon, Pagination, message
+    List, Avatar, Button, Skeleton, Icon, Pagination, message, Modal
 } from 'antd';
+import { post, get, puts } from "../../../../client/index";
 import { connect } from "react-redux";
 import { getListProfileRequest, deleteProfileRequest } from '../../../../store/actions/profileAction'
 import '../index.css'
 import { reject } from "q";
+import AsyncSelect from "react-select/lib/Async";
 const count = 3;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`;
 
@@ -16,22 +18,30 @@ class UserManagement extends React.Component {
         loading: false,
         data: [],
         list: [],
+        searchedUser: null
     }
 
     componentDidMount() {
-        this.props.getListProfileRequest(8, 0)
+        this.props.getListProfileRequest(8, 0, null)
     }
 
-    getData = (callback) => {
-        // reqwest({
-        //     url: fakeDataUrl,
-        //     type: 'json',
-        //     method: 'get',
-        //     contentType: 'application/json',
-        //     success: (res) => {
-        //         callback(res);
-        //     },
-        // });
+    async loadOptions(inputValue) {
+        if (!inputValue || inputValue === "") return [];
+        const response = await get(
+            "/api/profile/getlist?name=" + inputValue
+        );
+        if (response && response.status === 200 && response.data && Array.isArray(response.data.dt)) {
+            const data = response.data.dt.map(el => {
+                return {
+                    id: el.id,
+                    label: el.user_name,
+                    value: el.user_name
+                };
+            });
+            return data;
+        }
+        return []
+
     }
 
     onLoadMore = () => {
@@ -69,11 +79,41 @@ class UserManagement extends React.Component {
         })
     }
 
+    confirmDelete(item) {
+        let userName = item.user_name ? item.user_name : 'Ẩn danh';
+        Modal.confirm({
+            title: 'Xác nhận',
+            content: `Bạn chắc chắn muốn xóa ${userName} ?`,
+            onOk: (e) => {
+                console.log("TCL: UserManagement -> confirmDelete -> e", e)
+                this.deleteProfile(item.id)
+                Modal.destroyAll()
+            },
+            onCancel: (e) => {
+                Modal.destroyAll()
+            },
+            okText: "Xóa",
+            cancelText: 'Hủy'
+        })
+    }
+
     seeDetail(profileId) {
         if (profileId) {
             this.props.history.push('/profile/' + profileId + '?type=update-profile')
         }
     }
+
+    handleChangeOnSelect(user) {
+        if (user && user.length !== 0) {
+            let lastUser = user[user.length - 1]
+            this.props.getListProfileRequest(8, 0, lastUser.id)
+        } else {
+            this.props.getListProfileRequest(8, 0, null)
+        }
+
+    }
+
+
 
     render() {
         const { initLoading, loading, list } = this.state;
@@ -90,6 +130,20 @@ class UserManagement extends React.Component {
 
         return (
             <div>
+                <div style={{ padding: 10 }}>
+                    <AsyncSelect
+                        // value={this.state.searchedUser}
+                        placeholder={
+                            "Nhập tên phượt thủ"
+                        }
+                        cacheOptions
+                        loadOptions={this.loadOptions}
+                        defaultOptions
+                        noOptionsMessage={() => "Nhập để tìm kiếm"}
+                        isMulti
+                        onChange={data => this.handleChangeOnSelect(data)}
+                    />
+                </div>
                 <List
                     className="demo-loadmore-list"
                     loading={startGetListProfileRequest}
@@ -97,7 +151,7 @@ class UserManagement extends React.Component {
                     loadMore={loadMore}
                     dataSource={listProfiles.dt}
                     renderItem={item => (
-                        <List.Item actions={[<Icon onClick={e => this.seeDetail(item.id)} style={{ fontSize: '23px' }} type="eye" />, <Icon onClick={e => this.deleteProfile(item.id)} style={{ color: 'red', fontSize: '23px' }} type="delete" />]}>
+                        <List.Item actions={[<Icon onClick={e => this.seeDetail(item.id)} style={{ fontSize: '23px' }} type="eye" />, <Icon onClick={e => this.confirmDelete(item)} style={{ color: 'red', fontSize: '23px' }} type="delete" />]}>
                             <Skeleton avatar title={false} loading={startGetListProfileRequest} active>
                                 <List.Item.Meta
                                     avatar={<Avatar src={item.avatar} />}

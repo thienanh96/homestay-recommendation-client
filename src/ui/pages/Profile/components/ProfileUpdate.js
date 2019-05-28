@@ -71,6 +71,9 @@ class ProfileUpdate extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                if (!values['avatar']) {
+                    values = { ...values, avatar: 'https://www.w3schools.com/howto/img_avatar2.png' }
+                }
                 this.props.getUpdatedInfo(values)
             }
         });

@@ -192,9 +192,10 @@ export default class SlideShow extends React.Component {
 
     render() {
         const { url_cover, style, contentSlides } = this.props;
+        console.log("TCL: SlideShow -> render -> contentSlides", contentSlides)
         const props = {
             dots: true,
-            infinite: true,
+            infinite: false,
             speed: 500,
             slidesToShow: this.state.slidesToShow,
             slidesToScroll: 1

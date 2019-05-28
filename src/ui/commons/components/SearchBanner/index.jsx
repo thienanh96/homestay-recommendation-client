@@ -20,7 +20,44 @@ import './index.css'
 import AsyncSelect from 'react-select/lib/Async';
 import makeAnimated from 'react-select/lib/animated';
 const Option = SelectDropdown.Option
-
+const LIST_CITIES = [
+    'Hà Giang',
+    'Lào Cai',
+    'Sơn La',
+    'Hòa Bình',
+    'Thái Nguyên',
+    'Hải Phòng',
+    'Quảng Ninh',
+    'Bắc Nnh',
+    'Hà Nội',
+    'Vĩnh Phúc',
+    'Ninh Bình',
+    'Thanh Hóa',
+    'Nghệ An',
+    'Quảng Bình',
+    'Đà Nẵng',
+    'Thừa Thiên Huế',
+    'Quảng Nam',
+    'Quảng Ngãi',
+    'Bình Định',
+    'Gia Lai',
+    'Phú Yên',
+    'Đắc Lắk',
+    'Đắk Nông',
+    'Lâm Đồng',
+    'Ninh Thuận',
+    'Bình Thuận',
+    'Khánh Hòa',
+    'Bà Rịa Vũng Tàu',
+    'Tiền Giang',
+    'Vĩnh Long',
+    'Hồ  Chí Minh',
+    'Tây Ninh',
+    'Long An',
+    'Kiên Giang',
+    'Cần Thơ',
+    'Băngkok',
+]
 
 class CitySearchContent extends React.Component {
     constructor(props) {
@@ -44,14 +81,9 @@ class CitySearchContent extends React.Component {
                 // onBlur={handleBlur}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-                <Option value="Hà Nội">Hà Nội</Option>
-                <Option value="Hải Phòng">Hải Phòng</Option>
-                <Option value="Ninh Bình">Ninh Bình</Option>
-                <Option value="Nha Trang">Khánh Hòa</Option>
-                <Option value="Hồ Chí Minh">TP HCM</Option>
-                <Option value="Đà Nẵng">Đà Nẵng</Option>
-                <Option value="Vũng Tàu">Vũng Tàu</Option>
-                <Option value="Thanh Hóa">Thanh Hóa</Option>
+                {
+                    LIST_CITIES.map(city => (<Option value={city}>{city}</Option>))
+                }
             </SelectDropdown>
         )
     }
@@ -168,7 +200,7 @@ class SearchBanner extends React.Component {
     }
 
     render() {
-        const { onSearchSubmit,customStyle} = this.props
+        const { onSearchSubmit, customStyle } = this.props
         const { showPricePopover } = this.state;
         return (
             <div className='search-banner-row' style={customStyle}>

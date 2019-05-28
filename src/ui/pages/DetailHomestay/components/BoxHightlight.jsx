@@ -10,7 +10,12 @@ export default class BoxHightlight extends React.Component {
 
     render() {
         const { content, customStyle } = this.props;
-        let newContent = content.split('$')
+        let newContent = null;
+        if(content.includes('$')){
+            newContent = content.split('$')
+        } else {
+            newContent = content.split('\n')
+        }
         return (
             <div className='box-hightlight' style={{ ...customStyle }}>
                 <div style={{ width: '100%', fontSize: '20px', fontWeight: '600',color: 'rgb(255, 153, 0)' }}>

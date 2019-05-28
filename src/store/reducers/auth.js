@@ -11,7 +11,7 @@ console.log("dataaa=====", data);
 const reducer = function clientReducer(state = initialSate, action) {
   switch (action.type) {
     case CLIENT_SET:
-      console.log('sagaaaaL ', action)
+      localStorage.setItem('token',action.token)
       return {
         user: jwtDecode(action.token),
         token: action.token

@@ -23,11 +23,11 @@ function validateData(data) {
   for (var prop in data) {
     let dataElement = data[prop];
     if (
-      dataElement == null ||
-      dataElement == undefined ||
-      dataElement == "null" ||
-      dataElement == "" ||
-      dataElement == "undefined"
+      dataElement === null ||
+      dataElement === undefined ||
+      dataElement === "null" ||
+      dataElement === "" ||
+      dataElement === "undefined"
     ) {
       delete data[prop];
     }

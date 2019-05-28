@@ -23,11 +23,12 @@ export const getProfileRequest = (params) => {
     }
 }
 
-export const getListProfileRequest = (limit, offset) => {
+export const getListProfileRequest = (limit, offset,userId) => {
     return {
         type: GET_LIST_PROFILE_REQUEST,
         limit,
-        offset
+        offset,
+        userId
     }
 }
 

@@ -55,6 +55,7 @@ class CardHomestay extends React.Component {
     }
     async componentWillMount() {
         let { homestay, customStyle } = this.props;
+		console.log("TCL: CardHomestay -> componentWillMount -> homestay", homestay)
         this.setState({
             loading: false
         })
@@ -65,6 +66,7 @@ class CardHomestay extends React.Component {
         }
         for (let homestayImage of images) {
             const size = await this.resizeImage(homestayImage)
+			console.log("TCL: CardHomestay -> componentWillMount -> size", size,homestay.name)
             if (size.width > size.height) {
                 return this.setState({
                     homestay: { ...homestay, images: homestayImage }
@@ -80,6 +82,7 @@ class CardHomestay extends React.Component {
     render() {
         const { customStyle } = this.props;
         const { homestay } = this.state
+		console.log("TCL: CardHomestay -> render -> homestay", homestay)
         if (!homestay) return null
         return (
             <Link to={`/homestays/${homestay.homestay_id}`}>

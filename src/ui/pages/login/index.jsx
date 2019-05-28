@@ -8,6 +8,7 @@ import { SubmissionError } from "redux-form";
 import { NavLink, withRouter } from "react-router-dom";
 import { TextInput } from "../../commons/input/InputField";
 import Register from '../Register'
+import { guiBase } from '../../../client/config'
 const FormItem = Form.Item;
 const formItemLayout = {
     labelCol: {
@@ -84,6 +85,9 @@ class Login extends React.Component {
 
                 self.props.dispatch(reset("Login"));
                 self.props.close();
+                if (window) {
+                    window.location.href = guiBase
+                }
             },
             err => {
                 return message.error('Sai tên tài khoản hoặc mật khẩu!')

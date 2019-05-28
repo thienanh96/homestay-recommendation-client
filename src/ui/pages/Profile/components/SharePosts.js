@@ -12,6 +12,9 @@ import { resolve, reject } from "q";
 
 
 class SharePosts extends React.Component {
+    state = {
+        previousFilter: null
+    }
 
     componentWillReceiveProps(nextProps) {
         console.log("TCL: SharePosts -> componentWillReceiveProps -> nextProps", nextProps)
@@ -32,13 +35,19 @@ class SharePosts extends React.Component {
         const myId = this.props.myId
         if (myId === 'me') {
             this.props.getPostsRequest('by-me', 3, 0)
+            this.setState({
+                previousFilter: 'by-me'
+            })
         } else if (!isNaN(myId)) {
+            this.setState({
+                previousFilter: myId
+            })
             this.props.getPostsRequest(myId, 3, 0)
         }
     }
 
     onChangePagination(page, pageSize) {
-        this.props.getPostsRequest('by-me', 3, parseInt(pageSize * (page - 1)))
+        this.props.getPostsRequest(this.state.previousFilter || this.props.myId, 3, parseInt(pageSize * (page - 1)))
     }
 
     onClickDelete(postId) {
@@ -46,7 +55,6 @@ class SharePosts extends React.Component {
             this.props.deletePostsRequest(postId, resolve, reject)
         })
         pm.then(postId => {
-            console.log("TCL: SharePosts -> onClickDelete -> postId", postId)
             message.success('Xóa thành công!')
         }, err => {
             message.error('Xóa thất bại!')
@@ -54,8 +62,14 @@ class SharePosts extends React.Component {
 
     }
 
-    ratePost(postId) {
-        this.props.ratePostRequest(postId, null, null)
+    ratePost(postId, currentMeLike) {
+        let destMeLike = null
+        if (currentMeLike === 0) {
+            destMeLike = 1
+        } else if (currentMeLike === 1) {
+            destMeLike = 0
+        }
+        this.props.ratePostRequest(postId, null, null, destMeLike)
     }
 
     render() {
@@ -71,7 +85,7 @@ class SharePosts extends React.Component {
                                 images = post.post.homestay.images.split('$')
                             }
                             let hasAction = me.user_id && me.user_id + '' === (post.post.user ? post.post.user.id + '' : '');
-                            console.log('loggg: ',hasAction)
+                            console.log('loggg: ', hasAction)
                             return (
                                 <SharePost
                                     content={post.post.content}
@@ -86,7 +100,7 @@ class SharePosts extends React.Component {
                                     hasAction={hasAction}
                                     onClickDelete={e => this.onClickDelete(post.post.post_id)}
                                     meLikePost={post.me_like}
-                                    ratePost={e => this.ratePost(post.post.post_id)}
+                                    ratePost={e => this.ratePost(post.post.post_id, post.post.me_like)}
                                 />
                             )
                         })

@@ -61,3 +61,10 @@ body {
   align-items: center;
 }
 
+.not-found  {
+  width: 100%;
+  font-size: 30px;
+  color: black;
+  text-align: center;
+}
+

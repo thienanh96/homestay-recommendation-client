@@ -34,11 +34,12 @@ export const deletePostsRequest = (postId, resolve, reject) => {
   }
 }
 
-export const ratePostRequest = (postId, resolve, reject) => {
+export const ratePostRequest = (postId, resolve, reject,currentLike) => {
   return {
     type: RATE_POST_REQUEST,
     postId,
     resolve, 
-    reject
+    reject,
+    currentLike
   }
 }

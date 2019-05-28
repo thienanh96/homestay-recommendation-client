@@ -44,7 +44,44 @@ import { getHomestayRequest } from '../../../store/actions/homestayAction'
 import { reject } from "q";
 import Tabs from '../homestays/components/Tabs'
 import Link from "react-router-dom/Link";
-
+const LIST_CITIES = [
+    'Hà Giang',
+    'Lào Cai',
+    'Sơn La',
+    'Hòa Bình',
+    'Thái Nguyên',
+    'Hải Phòng',
+    'Quảng Ninh',
+    'Bắc Nnh',
+    'Hà Nội',
+    'Vĩnh Phúc',
+    'Ninh Bình',
+    'Thanh Hóa',
+    'Nghệ An',
+    'Quảng Bình',
+    'Đà Nẵng',
+    'Thừa Thiên Huế',
+    'Quảng Nam',
+    'Quảng Ngãi',
+    'Bình Định',
+    'Gia Lai',
+    'Phú Yên',
+    'Đắc Lắk',
+    'Đắk Nông',
+    'Lâm Đồng',
+    'Ninh Thuận',
+    'Bình Thuận',
+    'Khánh Hòa',
+    'Bà Rịa Vũng Tàu',
+    'Tiền Giang',
+    'Vĩnh Long',
+    'Hồ  Chí Minh',
+    'Tây Ninh',
+    'Long An',
+    'Kiên Giang',
+    'Cần Thơ',
+    'Băngkok',
+]
 
 class DetailHomestay extends React.Component {
     constructor(props) {
@@ -210,6 +247,20 @@ class DetailHomestay extends React.Component {
         }
     }
 
+    getInitialSlideToShow(imageLength) {
+        console.log("TCL: DetailHomestay -> getInitialSlideToShow -> imageLength", imageLength)
+        if (!imageLength) {
+            return 1
+        }
+        if (imageLength >= 0 && imageLength < 2) {
+            return 1
+        }
+        if (imageLength >= 2 && imageLength <= 4) {
+            return imageLength
+        }
+        return 4
+    }
+
 
 
 
@@ -220,7 +271,13 @@ class DetailHomestay extends React.Component {
         const { username, avatar, user_id } = myProfile
         const comments = this.props.comments
         const totalComment = this.props.totalComment || 0;
-        if (!homestay_info) return null
+        if (!homestay_info) return (
+            <div className='not-found' style={{ height: window ? window.innerHeight : 1000 }}>
+                <div style={{ paddingTop: 50 }}>
+                    404! Homestay not found in system!
+                    </div>
+            </div>
+        )
         const dataRaw = comments.map(comment => {
             return {
                 author: comment.user.user_name,
@@ -243,12 +300,12 @@ class DetailHomestay extends React.Component {
                         contentSlides={images.map((imageUrl, index) => <ImageHomestay
                             imageUrl={imageUrl}
                         />)}
-                        initialSlideToShow={images.length > 3 ? 3 : 1}
+                        initialSlideToShow={this.getInitialSlideToShow(images.length)}
                     />
                 </Row>
                 {
                     this.state.showModal && <Tabs
-                        listCity={['Hà Nội']}
+                        listCity={LIST_CITIES}
                         getData={this.getNewHomestay.bind(this)}
                         close={() => { this.setState({ showModal: false }) }}
                         currentHomestay={homestay_info}
@@ -298,7 +355,7 @@ class DetailHomestay extends React.Component {
                         </div>
                         <div>
                             <Host
-                                hostId={host_info ? host_info.id: 0}
+                                hostId={host_info ? host_info.id : 0}
                                 username={host_info ? host_info.user_name : 'Ẩn danh'}
                                 avatar={host_info ? host_info.avatar : 'https://www.w3schools.com/howto/img_avatar.png'}
                                 joinDate={host_info ? host_info.join_date : 'Chưa xác định'}

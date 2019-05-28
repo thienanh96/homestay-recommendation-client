@@ -96,10 +96,9 @@ function* deletePost(action) {
 }
 
 function* ratePost(action) {
-    const { postId} = action
+    const { postId, currentLike } = action
     try {
-        let response = yield call(ratePostAPI, postId);
-        console.log("TCL: function*ratePost -> response", response)
+        let response = yield call(ratePostAPI, postId, currentLike);
         if (response && response.status === 200) {
             yield put({ type: RATE_POST_SUCCESS, typeRate: response.data.type_rate, postId: postId })
         } else {
@@ -140,9 +139,11 @@ function deletePostAPI(postId) {
     return deletes('/api/post/delete/' + postId)
 }
 
-function ratePostAPI(postId) {
-    return post('/api/post/rate',{
-        post_id: postId
+function ratePostAPI(postId, currentLike) {
+    console.log("TCL: ratePostAPI -> currentLike", currentLike)
+    return post('/api/post/rate', {
+        post_id: postId,
+        action: currentLike
     })
 }
 

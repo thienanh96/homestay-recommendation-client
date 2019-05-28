@@ -34,7 +34,8 @@ class Community extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            filter: null
+            filter: null,
+            currentPage: 1
         }
     }
 
@@ -43,13 +44,17 @@ class Community extends React.Component {
     }
 
     onChangePagination(page, pageSize) {
+        this.setState({
+            currentPage: page || 1
+        })
         this.props.getPostsRequest(this.state.filter, 3, parseInt(pageSize * (page - 1)))
     }
 
 
     handleChangeFilter(value) {
         this.setState({
-            filter: value
+            filter: value,
+            currentPage: 1
         })
         if (value === 'like') {
             this.props.getPostsRequest('like', 3, 0)
@@ -62,10 +67,17 @@ class Community extends React.Component {
         }
     }
 
-    ratePost(postId) {
-        console.log("TCL: Community -> ratePost -> postId", postId)
-        this.props.ratePostRequest(postId, null, null)
+    ratePost(postId, currentMeLike) {
+        console.log("TCL: Community -> ratePost -> currentMeLike", currentMeLike)
+        let destMeLike = null
+        if (currentMeLike === 0) {
+            destMeLike = 1
+        } else if (currentMeLike === 1) {
+            destMeLike = 0
+        }
+        console.log("TCL: Community -> ratePost -> destMeLike", destMeLike)
 
+        this.props.ratePostRequest(postId, null, null, destMeLike)
     }
 
 
@@ -98,7 +110,7 @@ class Community extends React.Component {
                                     customStyle={{ marginBottom: '50px' }}
                                     imageCovers={images}
                                     meLikePost={post.me_like}
-                                    ratePost={e => this.ratePost(post.post.post_id)}
+                                    ratePost={e => this.ratePost(post.post.post_id, post.me_like)}
                                 />
                             )
                         })
@@ -108,6 +120,7 @@ class Community extends React.Component {
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
                     <Pagination
                         defaultCurrent={1}
+                        current={this.state.currentPage}
                         total={totalPosts}
                         pageSize={3}
                         onChange={this.onChangePagination.bind(this)}

@@ -10,7 +10,10 @@ import {
     ADMIN_APPROVE_HOMESTAY_SUCCESS,
     ADMIN_DELETE_HOMESTAY_REQUEST,
     ADMIN_DELETE_HOMESTAY_FAILURE,
-    ADMIN_DELETE_HOMESTAY_SUCCESS
+    ADMIN_DELETE_HOMESTAY_SUCCESS,
+    ADMIN_LOCK_HOMESTAY_FAILURE,
+    ADMIN_LOCK_HOMESTAY_REQUEST,
+    ADMIN_LOCK_HOMESTAY_SUCCESS
 } from "../constants/homestay";
 // reducer with initial state
 const initialState = {
@@ -40,6 +43,16 @@ export default function reducer(state = initialState, action) {
         case ADMIN_APPROVE_HOMESTAY_SUCCESS:
             let homestayId = action.homestayId;
             let newHomestays = state.homestays.filter(hs => hs.homestay_id + '' !== homestayId + '')
+            return { ...state, homestays: newHomestays }
+        case ADMIN_LOCK_HOMESTAY_SUCCESS:
+            homestayId = action.homestayId;
+            let newStatus = action.newStatus
+            newHomestays = state.homestays.map(hs => {
+                if(hs.homestay_id + '' === homestayId + ''){
+                    hs.status = newStatus
+                }
+                return hs
+            })
             return { ...state, homestays: newHomestays }
         case ADMIN_APPROVE_HOMESTAY_FAILURE:
             return { ...state }
