@@ -167,26 +167,26 @@ class UpdateTabs extends Component {
                 centered={true}
             >
                 <Tabs defaultActiveKey="1" onChange={this.onChangeTabs.bind(this)}>
-                    <TabPane tab="Thông tin chung" key="1">
+                    <TabPane tab="Thông tin chung" key="1" forceRender={true}>
                         <FirstModal
                             listCity={listCity}
                             currentHomestay={currentHomestay}
                             getValuesFromFirstModal={this.getValuesFromFirstModal.bind(this)}
                         />
                     </TabPane>
-                    <TabPane tab="Giá" key="2">
+                    <TabPane tab="Giá" key="2" forceRender={true}>
                         <SecondModal
                             currentHomestay={currentHomestay}
                             getValuesFromSecondModal={this.getValuesFromSecondModal.bind(this)}
                         />
                     </TabPane>
-                    <TabPane tab="Tiện nghi" key="3">\
+                    <TabPane tab="Tiện nghi" key="3" forceRender={true}>
                     <ThirdModal
                             currentHomestay={currentHomestay}
                             getValuesFromThirdModal={this.getValuesFromThirdModal.bind(this)}
                         />
                     </TabPane>
-                    <TabPane tab="Tiện nghi xung quanh và ảnh" key="4">\
+                    <TabPane tab="Tiện nghi xung quanh và ảnh" key="4" forceRender={true}>
                     <ForthModal
                             currentHomestay={currentHomestay}
                             getValuesFromForthModal={this.getValuesFromForthModal.bind(this)}

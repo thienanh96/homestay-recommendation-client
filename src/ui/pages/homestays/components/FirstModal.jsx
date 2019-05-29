@@ -33,7 +33,7 @@ class FirstModal extends Component {
             this.props.form.validateFields((err, values) => {
                 console.log("TCL: FirstModal -> onValuesChange -> values", values)
                 if (err) {
-                    return
+                    return this.props.getValuesFromFirstModal(null)
                 }
                 return this.props.getValuesFromFirstModal(values)
             });

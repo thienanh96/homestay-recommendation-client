@@ -41,7 +41,7 @@ class SecondModal extends Component {
             this.props.form.validateFields((err, values) => {
 				console.log("TCL: SecondModal -> componentDidMount -> values", values)
                 if (err) {
-                    return;
+                    return this.props.getValuesFromSecondModal(null);
                 }
                 return this.props.getValuesFromSecondModal(values)
             });

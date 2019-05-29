@@ -51,7 +51,7 @@ class ForthModal extends Component {
             this.props.form.validateFields((err, values) => {
                 console.log("TCL: ForthModal -> componentDidMount -> values", values)
                 if (err) {
-                    return;
+                    return this.props.getValuesFromForthModal(null);
                 }
                 return this.props.getValuesFromForthModal({
                     ...values, images: images.split('$')
