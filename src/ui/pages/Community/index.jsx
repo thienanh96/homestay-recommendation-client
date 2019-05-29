@@ -68,14 +68,12 @@ class Community extends React.Component {
     }
 
     ratePost(postId, currentMeLike) {
-        console.log("TCL: Community -> ratePost -> currentMeLike", currentMeLike)
         let destMeLike = null
         if (currentMeLike === 0) {
             destMeLike = 1
         } else if (currentMeLike === 1) {
             destMeLike = 0
         }
-        console.log("TCL: Community -> ratePost -> destMeLike", destMeLike)
 
         this.props.ratePostRequest(postId, null, null, destMeLike)
     }
@@ -102,6 +100,7 @@ class Community extends React.Component {
                                 <SharePost
                                     content={post.post.content}
                                     avatar={post.post.user ? post.post.user.avatar : null}
+                                    userId={post.post.user ? post.post.user.id: null}
                                     username={post.post.user ? post.post.user.user_name : null}
                                     datePost={post.post.created_at}
                                     homestay={post.post.homestay}

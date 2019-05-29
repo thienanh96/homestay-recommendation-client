@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '9000:80'
+    environment:
+      - NODE_ENV=production
+    networks:
+      - "myNetwork"
+networks:
+  myNetwork:
+    external: true

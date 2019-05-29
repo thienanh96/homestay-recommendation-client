@@ -12,12 +12,6 @@ import moment from 'moment'
 import 'moment/locale/vi';
 moment.locale('vi')
 
-const imageCovers = [
-    'https://tour.dulichvietnam.com.vn/uploads/tour/thung-lung-muong-hoa.jpg.jpg',
-    'https://fantasea.vn/wp-content/uploads/2018/10/sapa.jpg',
-    'https://travel.com.vn/Images/destination/tf_160905050651_358438.jpg',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwNJrQ4prjV9NgGiTEITJ2yfowkj-yBBuuPGsZTeGd3ZnnUeNIxQ'
-]
 
 export default class SharePost extends React.Component {
 
@@ -32,12 +26,14 @@ export default class SharePost extends React.Component {
     }
 
     render() {
-        const { content, avatar, username, datePost, homestay = {}, countLike, customStyle, imageCovers, hasAction, onClickDelete, ratePost, meLikePost } = this.props;
+        const { content, avatar, username, datePost, homestay = {},userId, countLike, customStyle, imageCovers, hasAction, onClickDelete, ratePost, meLikePost } = this.props;
         console.log("TCL: SharePost -> render -> datePost", datePost)
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between', ...customStyle }}>
                 <div style={{ width: '64px', height: '64px' }}>
-                    <img style={{ width: '100%', borderRadius: '50%' }} alt='' src={avatar ? avatar : 'https://www.w3schools.com/howto/img_avatar2.png'}></img>
+                    <Link style={{ width: '100%' }} to={`/profile/${userId}?type=update-profile`}>
+                        <img style={{ width: '100%', borderRadius: '50%' }} alt='' src={avatar ? avatar : 'https://www.w3schools.com/howto/img_avatar2.png'}></img>
+                    </Link>
                 </div>
                 <div style={{ width: 'calc(100% - 100px)' }}>
                     <div style={{ height: '50px', width: '100%' }}>
@@ -67,7 +63,7 @@ export default class SharePost extends React.Component {
                                             </div>
                                         <div style={{ width: '20%', textAlign: 'center' }} onClick={ratePost}>
                                             {
-                                                meLikePost === 0 && <Icon type="heart" style={{ fontSize: '32px',cursor: 'pointer' }} />
+                                                meLikePost === 0 && <Icon type="heart" style={{ fontSize: '32px', cursor: 'pointer' }} />
                                             }
                                             {
                                                 meLikePost === 1 && <Icon type="heart" theme='filled' style={{ fontSize: '32px', cursor: 'pointer' }} />

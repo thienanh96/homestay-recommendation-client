@@ -69,7 +69,7 @@ class SecondModal extends Component {
     onValuesChange() {
         this.props.form.validateFields((err, values) => {
             if (err) {
-                return;
+                return this.props.getValuesFromSecondModal(null)
             }
             return this.props.getValuesFromSecondModal(values)
         });

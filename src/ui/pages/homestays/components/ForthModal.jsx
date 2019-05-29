@@ -81,7 +81,7 @@ class ForthModal extends Component {
     onValuesChange() {
         this.props.form.validateFields((err, values) => {
             if (err) {
-                return;
+                return this.props.getValuesFromForthModal(null);
             }
             return this.props.getValuesFromForthModal({
                 ...values, images: this.state.imagesURL

@@ -120,7 +120,7 @@ class UploadImages extends Component {
                         return onSuccess(response => {});
                     }}
                 >
-                    {fileList.length >= 3 ? null : uploadButton}
+                    {fileList.length >= 12 ? null : uploadButton}
                 </Upload>
                 <Modal
                     visible={previewVisible}

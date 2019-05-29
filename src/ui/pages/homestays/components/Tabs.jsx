@@ -113,14 +113,12 @@ class UpdateTabs extends Component {
             ]
         } : null
         finalData = { ...finalData, main_price: secondData ? (secondData.mondayToThursday ? secondData.mondayToThursday : 0) : null, price_detail: priceDetail, amenities: amenity, amenities_around: amenityAround, images }
-        if (this.props.action === 'create') {
-            const validateResult = this.validateData(finalData)
-            if (!validateResult) {
-                this.setState({
-                    isLoading: false
-                })
-                return message.error('Thông tin không hợp lệ!')
-            }
+        const validateResult = this.validateData(finalData)
+        if (!validateResult) {
+            this.setState({
+                isLoading: false
+            })
+            return message.error('Thông tin không hợp lệ!')
         }
 
         return this.props.getData(finalData)

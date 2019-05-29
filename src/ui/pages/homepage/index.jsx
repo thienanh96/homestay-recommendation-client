@@ -122,7 +122,7 @@ class Homepage extends React.Component {
 
 
     render() {
-        const { bestHomestays, conformHomestays } = this.props
+        const { bestHomestays, conformHomestays} = this.props
         console.log("TCL: Homepage -> render -> conformHomestays", conformHomestays)
         return (
             <Row>

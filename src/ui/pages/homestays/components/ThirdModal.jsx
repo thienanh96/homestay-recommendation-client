@@ -80,7 +80,7 @@ class ThirdModal extends Component {
     onValuesChange() {
         this.props.form.validateFields((err, values) => {
             if (err) {
-                return;
+                return this.props.getValuesFromThirdModal(null);
             }
             return this.props.getValuesFromThirdModal(values)
         });

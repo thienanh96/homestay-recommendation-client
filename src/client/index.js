@@ -15,7 +15,7 @@ if (typeof window !== 'undefined') {
 // headers.append('Authorization','Bearer ' + token)
 
 var request = axios.create({
-  //   baseURL: apiBase,
+  // baseURL: apiBase,
   headers: headers !== null ? headers : {}
 });
 

@@ -42,7 +42,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "NODE_ENV=production  node ./server/index.js"
+    "serve": "NODE_ENV=production  node ./main-server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -53,7 +53,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://localhost:8000",
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
