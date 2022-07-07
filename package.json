@@ -17,7 +17,7 @@
     "ignore-styles": "^5.0.1",
     "jwt-decode": "^2.2.0",
     "md5-file": "^4.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "morgan": "^1.9.1",
     "numeral": "^2.0.6",
     "react": "^16.8.4",
